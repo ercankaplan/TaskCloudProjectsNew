@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="ef3ba9ede9564b558d3662159b6a4fd7" Name="Diagram1" ZoomLevel="85">
+        <EntityTypeShape EntityType="TaskCloudModel.ActionCode" Width="1.5" PointX="3" PointY="0.75" />
+        <EntityTypeShape EntityType="TaskCloudModel.AppSettings" Width="1.5" PointX="9.75" PointY="1.125" />
+        <EntityTypeShape EntityType="TaskCloudModel.Category" Width="1.5" PointX="11.75" PointY="1.125" />
+        <EntityTypeShape EntityType="TaskCloudModel.Conversation" Width="1.5" PointX="12.75" PointY="4.125" />
+        <EntityTypeShape EntityType="TaskCloudModel.Department" Width="1.5" PointX="0.75" PointY="13.75" />
+        <EntityTypeShape EntityType="TaskCloudModel.EmailRequest" Width="1.5" PointX="12.75" PointY="7.125" />
+        <EntityTypeShape EntityType="TaskCloudModel.Permission" Width="1.5" PointX="5.25" PointY="8" />
+        <EntityTypeShape EntityType="TaskCloudModel.PriorityType" Width="1.5" PointX="12.75" PointY="9.125" />
+        <EntityTypeShape EntityType="TaskCloudModel.PrivacyType" Width="1.5" PointX="12.75" PointY="12.125" />
+        <EntityTypeShape EntityType="TaskCloudModel.Profession" Width="1.5" PointX="13.75" PointY="1.125" />
+        <EntityTypeShape EntityType="TaskCloudModel.ProxyUser" Width="1.5" PointX="14.75" PointY="4.125" />
+        <EntityTypeShape EntityType="TaskCloudModel.ResultType" Width="1.5" PointX="5.75" PointY="15.125" />
+        <EntityTypeShape EntityType="TaskCloudModel.Role" Width="1.5" PointX="0.75" PointY="4.375" />
+        <EntityTypeShape EntityType="TaskCloudModel.SMSRequest" Width="1.5" PointX="14.75" PointY="7.125" />
+        <EntityTypeShape EntityType="TaskCloudModel.StateType" Width="1.5" PointX="14.75" PointY="9.125" />
+        <EntityTypeShape EntityType="TaskCloudModel.TaskCategory" Width="1.5" PointX="14.75" PointY="12.125" />
+        <EntityTypeShape EntityType="TaskCloudModel.TaskResponse" Width="1.5" PointX="12.25" PointY="14.625" />
+        <EntityTypeShape EntityType="TaskCloudModel.Title" Width="1.5" PointX="10.875" PointY="7.25" />
+        <EntityTypeShape EntityType="TaskCloudModel.UserCalender" Width="1.5" PointX="3" PointY="4.25" />
+        <EntityTypeShape EntityType="TaskCloudModel.UserSettings" Width="1.5" PointX="3" PointY="14.25" />
+        <EntityTypeShape EntityType="TaskCloudModel.WorkCalender" Width="1.5" PointX="16.75" PointY="10.125" />
+        <AssociationConnector Association="TaskCloudModel.FK_Permission_ActionCode" />
+        <EntityTypeShape EntityType="TaskCloudModel.UserRole" Width="1.5" PointX="3.375" PointY="17.75" />
+        <EntityTypeShape EntityType="TaskCloudModel.UserProfile" Width="1.5" PointX="3.375" PointY="7.75" />
+        <EntityTypeShape EntityType="TaskCloudModel.TaskPersonnel" Width="1.5" PointX="7.625" PointY="11.75" />
+        <EntityTypeShape EntityType="TaskCloudModel.Reference" Width="1.5" PointX="9" PointY="6.875" />
+        <AssociationConnector Association="TaskCloudModel.FK_Reference_Title" />
+        <EntityTypeShape EntityType="TaskCloudModel.TaskResponseAttachment" Width="1.5" PointX="10.375" PointY="20.625" />
+        <EntityTypeShape EntityType="TaskCloudModel.PersonnelReference" Width="1.5" PointX="15.625" PointY="17.625" />
+        <EntityTypeShape EntityType="TaskCloudModel.TaskTemplate" Width="1.5" PointX="0.75" PointY="7.75" />
+        <AssociationConnector Association="TaskCloudModel.FK_PersonnelReference_Reference" />
+        <EntityTypeShape EntityType="TaskCloudModel.TaskType" Width="1.5" PointX="8.375" PointY="14.75" />
+        <EntityTypeShape EntityType="TaskCloudModel.Meeting" Width="1.5" PointX="16.375" PointY="0.75" />
+        <EntityTypeShape EntityType="TaskCloudModel.UserSignImg" Width="1.5" PointX="3.375" PointY="11.75" />
+        <EntityTypeShape EntityType="TaskCloudModel.Task" Width="1.5" PointX="3.375" PointY="22" />
+        <EntityTypeShape EntityType="TaskCloudModel.TaskBy" Width="1.5" PointX="5.75" PointY="5.75" />
+        <AssociationConnector Association="TaskCloudModel.FK_PersonnelReference_Task" />
+        <AssociationConnector Association="TaskCloudModel.FK_TaskPersonnel_Task" />
+        <EntityTypeShape EntityType="TaskCloudModel.TaskCodeType" Width="1.5" PointX="14.375" PointY="14.75" />
+        <EntityTypeShape EntityType="TaskCloudModel.TaskSource" Width="1.5" PointX="0.75" PointY="17.75" />
+        <EntityTypeShape EntityType="TaskCloudModel.Personnel" Width="1.5" PointX="5.375" PointY="1" />
+        <AssociationConnector Association="TaskCloudModel.FK_PersonnelReference_Personnel" />
+        <AssociationConnector Association="TaskCloudModel.FK_TaskPersonnel_Personnel1" />
+        <EntityTypeShape EntityType="TaskCloudModel.Attachment" Width="1.5" PointX="7" PointY="18.375" />
+        <AssociationConnector Association="TaskCloudModel.FK_TaskResponseAttachment_Attachment" />
+        <EntityTypeShape EntityType="TaskCloudModel.TaskAttachment" Width="1.5" PointX="9.25" PointY="18" />
+        <AssociationConnector Association="TaskCloudModel.FK_TaskAttachment_Attachment" />
+        <EntityTypeShape EntityType="TaskCloudModel.TaskRequest" Width="1.5" PointX="13" PointY="23.5" />
+        <EntityTypeShape EntityType="TaskCloudModel.UserGroup" Width="1.5" PointX="11.375" PointY="3.75" />
+        <EntityTypeShape EntityType="TaskCloudModel.Users" Width="1.5" PointX="0.75" PointY="13.375" />
+        <AssociationConnector Association="TaskCloudModel.FK_Task_Users" />
+        <AssociationConnector Association="TaskCloudModel.FK_TaskRequest_Task" />
+        <AssociationConnector Association="TaskCloudModel.FK_TaskResponse_TaskRequest" />
+        <AssociationConnector Association="TaskCloudModel.FK_UserCalender_Users" />
+        <AssociationConnector Association="TaskCloudModel.FK_UserSettings_Users" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

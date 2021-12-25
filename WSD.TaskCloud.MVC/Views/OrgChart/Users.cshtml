@@ -1,0 +1,66 @@
+﻿
+@using WSD.TaskCloud.Contracts.EF
+@model IEnumerable<Users>
+
+
+<script>
+
+    function OpenAddUserWin() {
+
+
+        $.post('@Url.Action("AddUser", "OrgChart")', {},
+                 function (data) {
+                     var tWindowElement = $('#adduserwindow');
+                     tWindowElement.data('kendoWindow').content(data);
+                     tWindowElement.data('kendoWindow').title("Kullanıcı Tanımı");
+                     tWindowElement.data('kendoWindow').center().open();
+                 }
+                , 'html');
+    }
+
+    function onCloseAddUserWin() {
+
+    }
+
+
+</script>
+
+@(Html.Kendo().Grid<Users>()
+        .Name("gridUsers")
+        .HtmlAttributes(new { style = "height:100%" })
+        .Columns(columns =>
+        {
+            //columns.Bound(o => o.Logo).ClientTemplate(("<img src=\"data:image / png; base64,${Image64}\"/>")).Width(50).Title("Resim");
+            columns.Bound(o => o.Image64).ClientTemplate(("#if (Image64 != null){#<img src=\"data:image / png; base64,${Image64}\"/>#} " + "else {# <img src=\"../../Content/img/no-avatar.jpg\"width=\"35\"></div> #}#")).Width(50).Title("Resim");
+            columns.Bound(o => o.UserName).Title("Kullanıcı Adı");
+            columns.Bound(o => o.Profile.RegistryNum).Title("Kullanıcı No");
+            columns.Bound(o => o.Profile.FirstName).Title("Adı");
+            columns.Bound(o => o.Profile.LastName).Title("Soyadı");
+            columns.Bound(o => o.IsActive).Title("Durum");
+            columns.Bound(o => o.LastLoginDate).Format("{0:dd/MM/yyyy}").Title("Son Giriş Tarihi");
+
+        })
+
+        .DataSource(dataSource => dataSource
+               .Ajax()
+                .Read(read => read.Action("Users_Read", "OrgChart"))
+        .PageSize(10)
+        .ServerOperation(false)
+        )
+        .Scrollable().Pageable()
+)
+
+@(Html.Kendo().Window()
+    .Name("adduserwindow")
+    .Title("Kullanıcılar")
+    .Content(@<text>
+
+    </text>)
+    .Draggable()
+    .Resizable()
+    .Width(800)
+    .Height(600)
+    .Actions(actions => actions.Pin().Minimize().Maximize().Close())
+    .Events(ev => ev.Close("onCloseAddUserWin"))
+    .HtmlAttributes(new { @style = "display: none;" })
+)

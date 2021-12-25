@@ -1,0 +1,74 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using WSD.TaskCloud.MVC.ClientContracts
+@model GeneralDefinition
+
+
+
+<script type="text/javascript">
+
+
+
+    $(document).ready(function () {
+
+        showDetails('TaskType');
+
+    });
+
+
+
+    function rowClick(e) {
+
+        var gview = $("#grid").data("kendoGrid");
+
+        var selectedItem = gview.dataItem(gview.select());
+
+        $('#dvTypeList').load('@Url.Action("GetTypeList", "GeneralDefinitions")', 'tName=' + selectedItem.TypeName);
+    }
+
+
+    function showDetails(type) {
+
+        $('#dvTypeList').load('@Url.Action("GetTypeList", "GeneralDefinitions")', 'tName=' + type);
+    }
+
+</script>
+<div class="row rowStyle">
+    <fieldset>
+        <div class="row row-type1">
+            <div class="col-md-2 paddingFixer">
+                @(Html.Kendo().Grid<GeneralDefinition>()
+        .Name("grid")
+        .Columns(columns =>
+        {
+
+            columns.Bound(c => c.TypeName).Width(150);
+        })
+        .Selectable()
+        .HtmlAttributes(new { style = "width:100%;" })
+        .Pageable(p => p.Enabled(false))
+        .Events(events => events.Change("rowClick"))
+        .DataSource(dataSource => dataSource.Ajax()
+                                  .Read(read => read.Action("GetGeneralTypes", "GeneralDefinitions"))
+
+    )
+
+
+
+
+
+                )
+            </div>
+           <div class="col-md-10 paddingFixer">
+               <div id="dvTypeList">
+
+               </div>
+           </div>
+        </div>
+    </fieldset>
+</div>
+
+

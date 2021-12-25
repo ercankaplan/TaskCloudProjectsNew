@@ -1,0 +1,534 @@
+﻿@using WSD.TaskCloud.Contracts.EF;
+@{
+    Users mode = (Users)ViewBag.CurrentUser;
+}
+@{
+    var imgSrc = "";
+    if (mode.Logo != null)
+    {
+        var base64 = Convert.ToBase64String(mode.Logo);
+        imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+    }
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Task Cloud</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1254" />
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-9" />
+    <meta http-equiv="Content-Type" content="text/html; charset=x-mac-turkish" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta content="Task Cloud" name="description">
+    <meta content="Ercan Kaplan" name="author">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2016.1.226/kendo.common.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2016.1.226/kendo.default.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2016.1.226/kendo.default.mobile.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2016.1.226/kendo.mobile.all.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2016.1.226/kendo.dataviz.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2016.1.226/kendo.blueopal.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2016.1.226/kendo.dataviz.blueopal.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/css/font-awesome.min.css")" rel="stylesheet" type="text/css">
+    <link href="@Url.Content("~/Content/css/simple-line-icons.min.css")" rel="stylesheet" type="text/css">
+    <link href="@Url.Content("~/Content/css/bootstrap.min.css")" rel="stylesheet" type="text/css">
+    <link href="@Url.Content("~/Content/css/bootstrap-switch.min.css")" rel="stylesheet" type="text/css">
+    <link href="@Url.Content("~/Content/css/components.min.css")" rel="stylesheet" id="style_components" type="text/css">
+    <link href="@Url.Content("~/Content/css/layout.min.css")" rel="stylesheet" type="text/css">
+    <link href="@Url.Content("~/Content/css/blue.min.css")" rel="stylesheet" type="text/css" id="style_color">
+    <link href="@Url.Content("~/Content/css/custom.min.css")" rel="stylesheet" type="text/css">
+    <link href="~/Content/css/toastr.min.css" rel="stylesheet" />
+
+    <script src="@Url.Content("~/Content/js/jquery.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/js/jquery.unobtrusive-ajax.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/bootstrap.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/js/kendo/2016.1.226/jszip.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/kendo/2016.1.226/kendo.all.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/kendo/2016.1.226/kendo.aspnetmvc.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/kendo/2016.1.226/kendo.culture.tr-TR.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/kendo/2016.1.226/kendo.messages.tr-TR.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/kendo.modernizr.custom.js")"></script>
+    <link href="@Url.Content("~/Content/css/custom.css")" rel="stylesheet" />
+
+    <script src="@Url.Content("~/Content/js/main.js")"></script>
+    <script src="~/Content/js/toastr.min.js"></script>
+    <script src="~/Scripts/jquery.signalR-1.1.4.min.js"></script>
+    <script src="~/signalR/hubs"></script>
+    <script>
+        $( document ).ready(function() {
+            var chat = $.connection.chat;
+
+            chat.client.send = function (message) {
+                showrightBottom(message);
+            };
+
+            chat.client.taskadd = function (count) {
+                taskAdd("Yeni Task Atandı.");
+                $("#taskCount").html(count);
+            };
+
+            $.connection.hub.start().done(function () {
+                chat.server.register(1,'seko');
+                $('#send').click(function () {
+                    chat.server.taskadd($('#msg').val());
+                });
+            });
+        });
+
+        $(function () {
+            kendo.culture("tr-TR");
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "positionClass": "toast-bottom-right",
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "300000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+        });
+        function updateWindow() {
+            var mainWindow = $("#contentWND").data("kendoWindow");
+            mainWindow.center().open();
+            mainWindow.title("Profil Güncelleme");
+            mainWindow.setOptions({height : 270});
+            $('#contentWNDDiv').load('@Url.Action("Update", "Account")');
+        }
+    </script>
+
+    <script>
+
+
+
+        var cachebaseURL =  '@Url.Action("Index", "Cache")'.replace('Index','');
+
+
+        function GridErrorHandler(e) {
+
+
+            var errormessage = 'Genel Hata';
+
+            if (e.errors) {
+
+                $.each(e.errors, function (key, value) {
+                    if ('errors' in value) {
+                        $.each(value.errors, function () {
+                            errormessage += this + "\n";
+                        });
+                    }
+                });
+            }
+
+            e.preventDefault();
+            $.post('@Url.Action("MessagePopup", "Home")', { msg: errormessage, typ: 1 },
+            function (data) {
+                var errorWindowElement = $('#ErrorWindow');
+                errorWindowElement.data('kendoWindow').content(data);
+                errorWindowElement.data('kendoWindow').title("Hata");
+                errorWindowElement.data('kendoWindow').center().open();
+            }
+           , 'html');
+
+        }
+        function searchSuccess(e) {
+            var mainWindow = $("#contentWND").data("kendoWindow");
+            mainWindow.title("Profil Güncelleme");
+            mainWindow.setOptions({height : 500});
+            mainWindow.setOptions({width : 1200});
+            mainWindow.center().open();
+            $('#contentWNDDiv').html(e);
+        }
+        function searchFailure() {
+            // $('#contentWNDDiv').load('@Url.Action("Update", "Account")');
+        }
+        function ShowMessage(msgText, msgType) {
+
+            var title = '';
+
+            if (@WSD.TaskCloud.MVC.ClientContracts.EnumMessageType.Error.GetHashCode() == msgType)
+                title = 'Error';
+            else if(@WSD.TaskCloud.MVC.ClientContracts.EnumMessageType.Info.GetHashCode() == msgType)
+                title = 'Info';
+            else if(@WSD.TaskCloud.MVC.ClientContracts.EnumMessageType.Warning.GetHashCode() == msgType)
+                title = 'Warning';
+
+            $.post('@Url.Action("MessagePopup", "Home")', { msg: msgText, typ: msgType },
+                     function (data) {
+                         var tWindowElement = $('#messagepopupwindow');
+                         tWindowElement.data('kendoWindow').content(data);
+                         tWindowElement.data('kendoWindow').title(title);
+                         tWindowElement.data('kendoWindow').center().open();
+                     }
+                    , 'html');
+        }
+
+        //$.ajaxSetup({
+        //    "error": function(jqXHR, status, thrownError) {
+
+        //        var responseText = jQuery.parseJSON(jqXHR.responseText);
+
+        //        var errorData = $.parseJSON(xhr.responseText);
+        //        var errorMessages = [];
+        //        //this ugly loop is because List<> is serialized to an object instead of an array
+        //        for (var key in errorData)
+        //        {
+        //            errorMessages.push(errorData[key]);
+        //        }
+        //        $('#result').html(errorMessages.join("<br />"));
+        //    }
+        //});
+
+
+
+        $(document).ajaxError(function (event, jqXHR, ajaxSettings, thrownError) {
+
+
+            var err = thrownError;
+            var obj
+
+            try {
+                obj = jQuery.parseJSON(jqXHR.responseText);
+            } catch (e) {
+
+                try {
+                    var errorData = $.parseJSON(jqXHR.responseText);
+                    var errorMessages = [];
+                    //this ugly loop is because List<> is serialized to an object instead of an array
+                    for (var key in errorData)
+                    {
+                        errorMessages.push(errorData[key]);
+                    }
+                    obj = errorMessages.join("<br />")
+                } catch (e2)
+                {
+                    obj = thrownError
+                }
+
+
+
+            }
+
+
+            $.post('@Url.Action("MessagePopup", "Home")',{msg:obj,typ:1},
+            function (data) {
+                var errorWindowElement = $('#messagepopupwindow');
+                errorWindowElement.data('kendoWindow').content(data);
+                errorWindowElement.data('kendoWindow').title("Hata");
+                errorWindowElement.data('kendoWindow').center().open();
+
+            }
+           , 'html');
+        });
+
+
+    </script>
+
+    <script src="@Url.Content("~/Scripts/JsHelper.js")" type="text/javascript"></script>
+    <style>
+        .fa {
+            display: inline-block;
+            font: normal normal normal 14px/1 FontAwesome;
+            font-size: inherit;
+            text-rendering: auto;
+            -webkit-font-smoothing: antialiased;
+        }
+    </style>
+
+</head>
+<body class="page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-sidebar-closed">
+
+    @(Html.Kendo().Window()
+    .Name("messagepopupwindow")
+    .Title("messagepopupwindow")
+    .Content(@<text>
+
+    </text>)
+    .Draggable()
+    .Resizable()
+    .Width(600)
+    .Actions(actions => actions.Close())
+    .HtmlAttributes(new { @style = "display: none;" })
+    )
+
+
+    @{
+        Html.Kendo().Window()
+            .Name("ErrorWindow")
+            .Draggable(true)
+            .Resizable(resizing => resizing.Enabled(false))
+            .Modal(true)
+            .Actions(o => o.Close())
+            .Width(400)
+            .Height(160)
+            .Visible(false)
+            .Content(@<text>
+                Content is here!
+            </text>)
+                .Render();
+    }
+
+    @(Html.Kendo().Window()
+    .Name("contentWND")
+    .Title("")
+    .Content(@<text>
+        <div id="contentWNDDiv">
+
+        </div>
+    </text>)
+    .Draggable()
+    .Width(900)
+    .Height(400)
+    .Visible(false)
+    .Actions(actions => actions.Close())
+    .Events(ev => ev.Close("onCloseContentWND").Open("onOpenContentWND"))
+    )
+    <div class="page-header navbar navbar-fixed-top">
+
+        <div id="divLoading">
+            <div id="divLoadinginner">
+                <center>
+                    <div id="divloadingimg">
+                        <img src="~/Content/img/loading.gif" />
+                    </div>
+                    <br />
+                    <strong><span id="divloadingText">Yükleniyor, lütfen bekleyiniz...</span></strong>
+                </center>
+            </div>
+            <div id="divloadingfooter"></div>
+        </div>
+        <div id="freezingBack">
+
+        </div>
+        <div class="page-header-inner ">
+
+            <div class="page-logo">
+                <a href="/">
+                    <img src="~/Content/images/logo2.png" alt="logo" class="logo-default" height="50" />
+                </a>
+                <div class="menu-toggler sidebar-toggler">
+                </div>
+            </div>
+            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"> </a>
+            <div class="page-top">
+                <div class="top-menu2" style="text-align:center">
+                    <ul class="nav navbar-nav pull-left">
+                        <li class="dropdown dropdown-user">
+
+                        </li>
+                        <li class="dropdown dropdown-user">
+                            <a href="/" class="dropdown-toggle">
+                                <i class="icon-home"></i>
+                            </a>
+                        </li>
+                        <li class="dropdown dropdown-user">
+                            <a href="@Url.Action("MyTask", "Taskbox")" class="dropdown-toggle">
+                                <span class="username username-hide-on-mobile"> TALEPLERİM </span>
+                            </a>
+                        </li>
+                        <li class="dropdown dropdown-user">
+                            <a href="@Url.Action("Index", "Taskbox")" class="dropdown-toggle">
+                                <span class="username username-hide-on-mobile"> GELEN </span>
+                            </a>
+                        </li>
+                        <li class="dropdown dropdown-user">
+                            <a href="/" class="dropdown-toggle">
+                                <em class="icon-envelope-alt"></em>
+                                <div class="badge badge-danger" id="taskCount">21</div>
+                                </a>
+
+                        </li>
+                        <li>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-circle btn-outline red dropdown-toggle" style="border-color:#fff !important" data-toggle="dropdown">
+
+                                    <span class="badge badge-danger"><i class="icon-plus"></i></span>
+
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    @foreach (TaskType item in CacheHelper.GetCacheItem<TaskType>().Where(x => x.UpperTaskTypeID == null))
+                                    {
+
+                                        <li><a style="text-transform: capitalize;" href='@Url.Action("Compose", "TaskBox",new { gorevTipi= @item.TaskTypeID })'><span>@item.Name</span></a></li>
+
+                                    }
+                                </ul>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+                <div align="center" id="searchDiv">
+                    @using (Ajax.BeginForm("SearchTask", "Task", "", new AjaxOptions { HttpMethod = "Post", OnSuccess = "searchSuccess", OnFailure = "searchFailure" }, new { @class = "search-form search-form-expanded", id = "searchForm" }))
+                    {
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Arama..." name="desc">
+                            <span class="input-group-btn">
+                                <a href="javascript:;" class="btn submit">
+                                    <i class="icon-magnifier"></i>
+                                </a>
+                            </span>
+                        </div>
+                    }
+                </div>
+                <div class="top-menu">
+                    <ul class="nav navbar-nav pull-right">
+                        <li class="dropdown dropdown-user">
+                            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                @if (mode.Logo != null)
+                                {
+                                    <img src="@imgSrc" class="img-circle" />
+                                }
+                                else
+                                {
+                                    <img src="~/Content/img/no-avatar.jpg" class="img-circle" width="35" />
+                                }
+                                <span class="username username-hide-on-mobile">@Html.FirstCharToUpper(mode.Profile.FirstName) @Html.FirstCharToUpper(mode.Profile.LastName) </span>
+                                <i class="fa fa-angle-down"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-default">
+                                <li>
+
+                                    <a href='@Url.Action("MyProfile", "OrgChart")' style="cursor:pointer;">
+                                        <i class="icon-user"></i>Hesabım
+                                    </a>
+
+                                </li>
+                                <li>
+                                    <a onclick="sekoti()">
+                                        <i class="icon-envelope-open"></i>Mesajlar
+                                        <span class="badge badge-danger"> 3 </span>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+                        <li class="dropdown dropdown-user">
+                            <a href="/Account/LogOff" class="dropdown-toggle">
+                                <span class="username username-hide-on-mobile"> Çıkış </span>
+                                <i class="icon-logout"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"> </div>
+    <div class="page-container">
+        <!-- BEGIN SIDEBAR -->
+        <div class="page-sidebar-wrapper">
+            <div class="page-sidebar navbar-collapse collapse">
+                <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+                    <li class="nav-item start active open">
+                        <a href="/" class="nav-link nav-toggle">
+                            <i class="icon-home"></i>
+                            <span class="title">Anasayfa</span>
+                            <span class="arrow open"></span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item start active ">
+                        <a href="/Personnel/Personnels" class="nav-link ">
+                            <i class="icon-archive"></i>
+                            <span class="title">Personel</span>
+                        </a>
+                    </li>
+                    <li class="nav-item start active ">
+                        <a href="/Reference/References" class="nav-link ">
+                            <i class="icon-archive"></i>
+                            <span class="title">Referans</span>
+                        </a>
+                    </li>
+                    <li class="nav-item start active ">
+                        <a href="/GeneralDefinitions/Index" class="nav-link ">
+                            <i class="icon-book"></i>
+                            <span class="title">Genel Tanımlar</span>
+                        </a>
+                    </li>
+                    <li class="nav-item start active">
+                        <a href="/FileBox/Index" class="nav-link ">
+                            <i class="icon-file"></i>
+                            <span class="title">Dosyalarım</span>
+                        </a>
+                    </li>
+                    <li class="nav-item start active">
+                        <a href="/Calendar/Index" class="nav-link ">
+                            <i class="icon-calendar"></i>
+                            <span class="title">Takvim</span>
+                        </a>
+                    </li>
+                    <li class="nav-item start active">
+                        <a href="/Conversation/Index" class="nav-link ">
+                            <i class="icon-phone"></i>
+                            <span class="title">Yorumlar</span>
+                        </a>
+                    </li>
+                    <li class="nav-item start active">
+                        <a href="/Search/Index" class="nav-link ">
+                            <i class="icon-search"></i>
+                            <span class="title">Arama</span>
+                        </a>
+                    </li>
+                    <li class="nav-item start active">
+                        <a href="/OrgChart/Index" class="nav-link ">
+                            <i class="icon-file"></i>
+                            <span class="title">Organizasyon</span>
+                        </a>
+                    </li>
+
+                </ul>
+                <!-- END SIDEBAR MENU -->
+            </div>
+            <!-- END SIDEBAR -->
+        </div>
+        <!-- END SIDEBAR -->
+        <!-- BEGIN CONTENT -->
+        <div class="page-content-wrapper">
+            <!-- BEGIN CONTENT BODY -->
+            <div class="page-content">
+                @RenderBody()
+
+
+            </div>
+            <!-- END CONTENT BODY -->
+        </div>
+        <!-- END CONTENT -->
+
+    </div>
+    <div class="page-footer">
+        <div class="page-footer-inner">
+            @DateTime.Now.Year &copy; Task Cloud
+        </div>
+        <div class="scroll-to-top">
+            <i class="icon-arrow-up"></i>
+        </div>
+    </div>
+
+    <!-- END FOOTER -->
+    <!--[if lt IE 9]>
+    <script src="../assets/global/plugins/respond.min.js")"></script>
+        <script src="../assets/global/plugins/excanvas.min.js" )"></script>
+        <![endif]-->
+    <!-- BEGIN CORE PLUGINS -->
+    <script src="@Url.Content("~/Content/js/js.cookie.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/js/bootstrap-hover-dropdown.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/js/jquery.slimscroll.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/js/jquery.blockui.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/js/bootstrap-switch.min.js")" type="text/javascript"></script>
+    <!-- END CORE PLUGINS -->
+    <!-- BEGIN THEME GLOBAL SCRIPTS -->
+    <script src="@Url.Content("~/Content/js/app.min.js")" type="text/javascript"></script>
+    <!-- END THEME GLOBAL SCRIPTS -->
+    <!-- BEGIN THEME LAYOUT SCRIPTS -->
+    <script src="@Url.Content("~/Content/js/layout.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/js/quick-sidebar.min.js")" type="text/javascript"></script>
+</body>
+</html>

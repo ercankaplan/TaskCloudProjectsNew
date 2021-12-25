@@ -1,0 +1,129 @@
+﻿@using WSD.TaskCloud.Contracts.DataContracts
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+
+        $(document).on('mouseenter', '.employee-title', function () {
+            $(this).find(":input").show();
+            $(this).find(":button").show();
+        }).on('mouseleave', '.employee-title', function () {
+            $(this).find(":input").hide();
+            $(this).find(":button").hide();
+        });
+
+
+    });
+
+
+
+
+    function onSelect(e) {
+
+        var x = e.item;
+
+    }
+
+    function onDataBound(e) {
+
+
+        var x = e.node;
+
+    }
+
+    function SelectRow(rwdata) {
+
+
+        var x = rwdata;
+
+    }
+
+    function removeNode() {
+
+        var treeview = $("#treeview").data("kendoTreeView");
+        var selectedNode = treeview.select();
+        treeview.remove(selectedNode);
+    }
+
+    function appendNode() {
+        debugger;
+
+        var treeview = $("#treeview").data("kendoTreeView");
+        var selectedNode = treeview.select();
+
+        if (selectedNode.length == 0) {
+            selectedNode = null;
+        }
+
+        treeview.append({
+            text: $("#appendNodeText").val()
+        }, selectedNode);
+
+    }
+
+    function onKeyPressed(e) {
+        debugger;
+        if (kendo.keys.ENTER == e.keyCode)
+            appendNode();
+    }
+
+    function AddUser() {
+
+
+    }
+
+
+</script>
+
+
+
+
+
+
+
+<script id="TreeViewTemplate" type="text/kendo-ui-template">
+    <div class="divbutton">
+        <div class="employee-title">
+            <span>
+                #: item.text #
+            </span>
+            <input id="appendNodeText" value="Node" onkeypress="onKeyPressed(event)" class="k-textbox" style="display: none;">
+            <button class="k-button" id="appendNodeToSelected" onclick="appendNode();" style="display: none;">Append</button>
+            <button class="k-button" id="removeNode" onclick="removeNode()" style="display: none;">Remove</button>
+        </div>
+
+
+
+        <div style="margin-left:30px;">
+            <div style="float:left;text-align:center">
+                <div class="employee-photo" style="background-image:url(/Images/demo/1.jpg);"></div>
+                <div>Title</div>
+                <div>Name</div>
+            </div>
+            <div class="employee-photo" onclick="OpenAddUserToDepartmentWin()" style="background-image:url(/Images/add-account-icon.png);float:left" />
+        </div>
+    </div>
+</script>
+
+
+
+@(
+
+     Html.Kendo().TreeView()
+                 .Name("treeview")
+                 .TemplateId("TreeViewTemplate")
+                 .Events(e => e.Select("onSelect"))
+                 .HtmlAttributes(new { })
+                 .BindTo((IEnumerable<NodeViewModel>)ViewBag.TreeSource, (Kendo.Mvc.UI.Fluent.NavigationBindingFactory<TreeViewItem> mappings) =>
+                 {
+                     mappings.For<NodeViewModel>(binding => binding.ItemDataBound((item, node) =>
+                     {
+                         item.Id = node.Id.ToString();
+                         item.Text = node.Name;
+                         item.Expanded = node.Expanded;
+                         System.Diagnostics.Debug.Write(node.Name);
+                         //item.ImageUrl = node.
+                     })
+             .Children(node => node.Children));
+                 })
+)

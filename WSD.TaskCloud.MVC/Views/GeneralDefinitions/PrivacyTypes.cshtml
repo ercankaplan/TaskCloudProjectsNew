@@ -1,0 +1,41 @@
+﻿@using WSD.TaskCloud.Contracts.EF
+@model List<PrivacyType>
+
+
+@(Html.Kendo().Grid<PrivacyType>()
+    .Name("gridPrivacyType")
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.Name);
+        columns.Command(command => { command.Destroy().Text("Kaydı Sil"); }).Width(100);
+    })
+    .ToolBar(toolBar =>
+    {
+        toolBar.Create().Text("Yeni Kayıt");
+        toolBar.Save().SaveText("Değişiklikleri Kaydet").CancelText("Değişiklikleri İptal Et");
+    })
+    .Editable(editable => editable.Mode(GridEditMode.InCell))
+    .Pageable()
+    .Sortable()
+    .Scrollable()
+    .HtmlAttributes(new { style = "height:550px;" })
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Read(o => o.Action("PrivacyTypes_Read", "GeneralDefinitions"))
+        .Batch(true)
+        .PageSize(20)
+        .Events(events => events.Error("GridErrorHandler"))
+        .Model(model =>
+        {
+
+            model.Id(p => p.PrivacyTypeID);
+            model.Field(p => p.PrivacyTypeID).Editable(false);
+
+        })
+        .Create(o => o.Action("PrivacyTypes_Create", "GeneralDefinitions"))
+        .Update(o => o.Action("PrivacyTypes_Update", "GeneralDefinitions"))
+        .Destroy(o => o.Action("PrivacyTypes_Destroy", "GeneralDefinitions"))
+    )
+)
+
+

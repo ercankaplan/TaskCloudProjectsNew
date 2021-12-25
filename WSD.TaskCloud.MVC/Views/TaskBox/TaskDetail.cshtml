@@ -1,0 +1,380 @@
+﻿
+
+@using WSD.TaskCloud.Contracts.EF
+
+@model TaskRequest
+
+<script>
+
+
+
+    function GetResponseView(tID) {
+        $('#dvRespose').load('@Url.Action("ResponseView", "TaskBox")', 'taskRequestID=' + tID);
+    }
+
+    function GetForwardView(tID)
+    {
+        $('#dvRespose').load('@Url.Action("ForwardView", "TaskBox")', 'taskRequestID=' + tID);
+    }
+
+    function GetConversationView(tID)
+    {
+        $('#dvRespose').load('@Url.Action("ConversationView", "TaskBox")', 'taskRequestID=' + tID);
+    }
+
+    function GetPDFPopUpView(trID)
+    {
+        var uri = '@Url.Action("PDFPopUp", "TaskBox")' + "?taskRequestID=" + trID;
+
+        window.open(uri, '_blank');
+
+        @*$.post('@Url.Action("PDFPopUp", "TaskBox")', { taskRequestID: trID },
+                function (data) {
+                    var mainWindow = $('#PDFpopupwindow');
+
+                    mainWindow.data('kendoWindow').content(data);
+                    mainWindow.data('kendoWindow').title("Talep İndir");
+                    mainWindow.data('kendoWindow').center().open();
+                }
+               , 'html');*@
+
+    }
+
+    function OpenResponseDetail(id) {
+        debugger;
+
+        if ($('#' + id).css('display') == 'none') {
+
+            $('#' + id).css("display", "block");
+            $('#' + id).load('@Url.Action("ResponseDetail", "TaskBox")', 'taskResponseID=' + id);
+
+
+        }
+        else {
+
+            $('#' + id).css("display", "none");
+
+        }
+
+
+    }
+
+
+</script>
+
+
+
+<style>
+    .txtDescription {
+        width: 600px;
+        max-width: 600px;
+        height: 40px;
+        max-height: 40px;
+        background-color: white;
+        color: black;
+    }
+
+
+    .myDiv {
+        padding: 20px;
+        margin-bottom: 20px;
+        background-color: #fff;
+        border: 1px solid transparent;
+        border-radius: 3px;
+        -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+        margin-bottom: 20px;
+        border-color: #ddd;
+        color: #333333;
+        text-align: initial;
+    }
+</style>
+<div id="dvRespose"></div>
+<div class="myDiv">
+    <span> @Html.GetTaskTypeName(MvcHtmlString.Create(Model.Task.TypeID.ToString()))</span>
+    <br />
+    <span><b>KONU:</b>@Html.DisplayFor(model => model.Subject)</span>
+   
+
+    <div class="clearfix">
+
+        <p class="pull-left m0">
+           
+    @if (Model.CC == true)
+    {
+        <span>
+            <b>CC : @WSD.TaskCloud.MVC.HelperClasses.CurrentUser.Profile.FullName</b>
+        </span>
+        <br />
+    }
+            
+            <span class="text-muted mr">Kimden:</span><a href="javascript:void(0);">@Html.DisplayFor(model => model.TaskFrom)</a>
+            <br />
+            <span class="text-muted mr">Tarih:</span><span>@Html.DisplayFor(model => model.Optime)</span>
+        </p>
+        <p class="pull-right m0">
+
+
+            <a href="javascript:void(0);" onclick="GetResponseView('@Model.TaskRequestID');"><span>Cevapla</span></a>
+            <br />
+            <a href="javascript:void(0);" onclick="GetForwardView('@Model.TaskRequestID');"><span>İlet</span></a>
+            <br />
+            <a href="javascript:void(0);" onclick="GetConversationView('@Model.TaskRequestID');"><span>Yorum Yaz</span></a>
+            <br />
+            <a href="javascript:void(0);" onclick="GetPDFPopUpView('@Model.TaskRequestID');"><span><img class="filepage" /></span></a>
+           
+           
+
+        </p>
+
+    </div>
+    <hr>
+
+    <p class="pull-left m0">
+
+        @Html.Raw(Model.Task.Description)
+        <hr>
+        @if (Model.Task.LegacyTask != null)
+        {   <div style="background-color:lightgrey;">
+            <span>Önceki Talep</span>
+            @Html.Raw(Model.Task.LegacyTask.Description)
+            <hr>
+        </div>
+        }
+    </p>
+    <div class="clearfix">
+        <p class="pull-left m0" style="text-align:left;margin-left:10px;">
+            <span class="text-muted mr">Dosya Ekleri:</span>
+            <br />
+            @foreach (var item in Model.Task.Attachments)
+            {
+
+
+                <a href='~/TaskBox/GetAttachmentByID?ID=@item.AttachmentID'>
+                    <img class="@item.Extend" />
+                    <span class="text-muted mr">@item.Name</span>
+                </a>
+                <br />
+
+
+            }
+        </p>
+        <p class="pull-right m0">
+
+            <span class="text-muted mr">Referanslar:</span>
+            <br />
+            @if (Model.Task.PersonelData != null)
+            {
+                foreach (var item in Model.Task.PersonelData.References)
+                {
+
+                    if (@item.Attachments.Count() > 0)
+                    {
+                        <a href='~/TaskBox/GetAttachmentByID?ID=@item.Attachments[0].AttachmentID'>
+                            <img class="@item.Attachments[0].Extend" />
+                            <span class="text-muted mr">@item.FullName</span>
+                        </a>
+                    }
+                    else
+                    {
+
+                        <span class="text-muted mr">@item.FullName</span>
+                    }
+
+                    <br />
+
+
+                }
+            }
+
+        </p>
+    </div>
+
+    <hr />
+
+    <div class="clearfix">
+        <ul>
+            @foreach (var item in Model.Task.TaskRequest)
+            {
+                foreach (var response in item.TaskResponse)
+                {
+
+                    <li class="responseitem" onclick="OpenResponseDetail('@response.TaskResponseID');">
+
+                        <div >
+                            <div class="pull-left m0">
+                                <strong><a href="javascript:void(0);">@response.ResponseFrom.ToUpper()</a></strong>&nbsp;&nbsp;
+                            </div>
+                            <div style="text-align:initial;">
+                                @Html.Raw(response.SummaryPlain)
+                            </div>
+                            <div style="float:right">
+                                @if (response.Attachments.Count() > 0)
+                                {
+                                    <img class="attachment" />
+                                }
+                                
+                            </div>
+                            <div style="float:right;margin-top:" >
+                                <span>  @response.Optime </span>
+                            </div>
+
+                        </div>
+                        <div id="@response.TaskResponseID" style="display:none">
+
+                        </div>
+
+                    </li>
+
+
+                   
+                }
+
+            }
+        </ul>
+    </div>
+
+</div>
+
+
+
+
+@(Html.Kendo().Window()
+    .Name("PDFpopupwindow")
+    .Title("Talep İndir")
+    .Content(@<text>
+
+    </text>)
+    .Draggable()
+    .Width(900)
+    .Height(1200)
+    
+    .Actions(actions => actions.Close())
+    .HtmlAttributes(new { @style = "display: none;" })
+)
+
+
+
+
+
+<style>
+
+    
+        
+    
+
+.responseitem {
+    position: relative;
+    padding: 7px 2px 7px;
+    margin-bottom: -1px;
+    box-sizing: border-box;
+    list-style: none;
+    border-top: 1px solid #E6E8EB;
+    border-bottom: 1px solid #E6E8EB;
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent;
+     
+
+    font-family: "Open Sans","lucida grande","Segoe UI",arial,verdana,"lucida sans unicode",tahoma,sans-serif;
+    font-size: 13px;
+    color: #3d464d;
+    font-weight: normal;
+
+   
+ 
+    vertical-align:middle;
+}
+.responseitem--is-selected, .responseitem:hover {
+    background-color: rgba(204,230,250,0.5);
+    border-top-color: #cce6fa;
+    border-bottom-color: #cce6fa;
+}
+
+    
+
+   clearfix li {
+        cursor: pointer;
+        cursor: hand;
+       
+    }
+
+    .pdf {
+        background-image: url(../../Images/fileicons/pdf-icon.png);
+        background-position: center left;
+        background-repeat: no-repeat;
+        padding-left: 35px;
+        height: 35px;
+        display: inline-block;
+        padding-top: 10px;
+    }
+
+    .txt {
+        background-image: url(../../Images/fileicons/txt-icon.png);
+        background-position: center left;
+        background-repeat: no-repeat;
+        padding-left: 35px;
+        height: 35px;
+        display: inline-block;
+        padding-top: 10px;
+    }
+
+    .xlsx {
+        background-image: url(../../Images/fileicons/xlsx-icon.png);
+        background-position: center left;
+        background-repeat: no-repeat;
+        padding-left: 35px;
+        height: 35px;
+        display: inline-block;
+        padding-top: 10px;
+    }
+
+    .png {
+        background-image: url(../../Images/fileicons/png-icon.png);
+        background-position: center left;
+        background-repeat: no-repeat;
+        padding-left: 35px;
+        height: 35px;
+        display: inline-block;
+        padding-top: 10px;
+    }
+
+     .doc {
+        background-image: url(../../Images/fileicons/doc-icon.png);
+        background-position: center left;
+        background-repeat: no-repeat;
+        padding-left: 35px;
+        height: 35px;
+        display: inline-block;
+        padding-top: 10px;
+    }
+
+    .attachment {
+        background-image: url(../../Images/fileicons/attachment-icon.png);
+        background-position: center left;
+        background-repeat: no-repeat;
+        padding-left: 35px;
+        height: 35px;
+        display: inline-block;
+        padding-top: 10px;
+    }
+
+    .rar {
+        background-image: url(../../Images/fileicons/rar-icon.png);
+        background-position: center left;
+        background-repeat: no-repeat;
+        padding-left: 35px;
+        height: 35px;
+        display: inline-block;
+        padding-top: 10px;
+    }
+
+    .filepage {
+        background-image: url(../../Images/fileicons/page-icon.png);
+        background-position: center left;
+        background-repeat: no-repeat;
+        padding-left: 35px;
+        height: 25px;
+        display: inline-block;
+        padding-top: 50px;
+    }
+</style>

@@ -1,0 +1,86 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using WSD.TaskCloud.Contracts.EF
+@using WSD.TaskCloud.Contracts.DataContracts.TaskBox
+
+
+
+<div class="row rowStyle" align="center">
+    <fieldset>
+        <div class="row row-type1">
+            <div class="col-md-12 form-group paddingFixer0">
+
+                <div style="float:left">
+                   
+
+                    <ul class="mb-boxes nav nav-pills nav-stacked" style="text-align:left">
+                        @foreach (TaskBoxMenuItem item in ViewData["TaskBoxMenuItems"] as List<TaskBoxMenuItem>)
+                        {
+                            <li>
+                                <a href="javascript:void(0);" onclick="LoadContent('@item.TaskTypeID')">
+                                    <span>@item.Name</span>
+                                    @if (@item.UnreadCount > 0)
+                                    {
+                                        <span class="label label-danger pull-right">@item.UnreadCount</span>
+                                    }
+                                </a>
+                            </li>
+
+
+
+
+                        }
+
+                    </ul>
+
+                </div>
+
+                <div id="dvContent" style="float:left; width:90%; padding:2px; min-width:85%">
+
+                </div>
+
+
+
+
+            </div>
+        </div>
+    </fieldset>
+</div>
+
+
+
+
+
+
+
+
+<script>
+
+    $(document).ready(function () {
+
+        LoadContent(22);
+
+    });
+
+
+    function LoadContent(tID) {
+
+        debugger;
+        $('#dvContent').load('@Url.Action("Inbox", "TaskBox")','typeID=' + tID );
+
+        }
+
+    function LoadCompose(e) {
+
+
+        $('#dvContent').load('@Url.Action("Compose", "TaskBox")');
+
+    }
+
+
+
+</script>

@@ -1,0 +1,291 @@
+﻿
+
+
+
+@using WSD.TaskCloud.Contracts.DataContracts.Task
+
+@model TaskRequestModel
+
+
+
+@(Html.Kendo().Window()
+    .Name("userswindow")
+    .Title("Kullanıcılar")
+    .Content(@<text>
+
+    </text>)
+    .Draggable()
+    .Resizable()
+    .Width(600)
+    .Actions(actions => actions.Close())
+    .Events(ev => ev.Close("RefreshGridAssignedUser").Open("onOpenContentWND"))
+    .HtmlAttributes(new { @style = "display: none;" })
+)
+
+
+<style>
+    .myDiv {
+        padding: 20px;
+        margin-bottom: 20px;
+        background-color: #fff;
+        border: 1px solid transparent;
+        border-radius: 3px;
+        -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+        margin-bottom: 20px;
+        border-color: #ddd;
+        color: #333333;
+    }
+</style>
+
+
+<script>
+
+    function OpenAssignUserWin() {
+
+
+        $.post('@Url.Action("AssignUsers", "TaskBox")', {},
+                 function (data) {
+                     var tWindowElement = $('#userswindow');
+                     tWindowElement.data('kendoWindow').content(data);
+                     tWindowElement.data('kendoWindow').title("Görev Atama");
+                     tWindowElement.data('kendoWindow').center().open();
+                 }
+                , 'html');
+    }
+
+
+    function OnUploadError(e) {
+        debugger;
+
+        var text = e.XMLHttpRequest.responseText;
+
+        ShowMessage(text, 1);
+
+
+    }
+
+    function RefreshGridAssignedUser() {
+        onCloseContentWND();
+        var tree = $("#treeviewAssignedUsers").data("kendoTreeView");
+        expandNextLevel();
+
+    }
+
+    function expandNextLevel() {
+        setTimeout(function () {
+            var treeview = $("#treeviewAssignedUsers").data("kendoTreeView");
+            var b = $('.k-item .k-plus').length;
+            treeview.expand(".k-item");
+            treeview.trigger('dataBound');
+            if (b > 0) {
+                expandNextLevel();
+            }
+
+        }, 200);
+    }
+
+    function OpenAssignUserWin() {
+
+
+        $.post('@Url.Action("AssignUsers", "Task")', {},
+                 function (data) {
+                     var tWindowElement = $('#userswindow');
+                     tWindowElement.data('kendoWindow').content(data);
+                     tWindowElement.data('kendoWindow').title("Görev Atama");
+                     tWindowElement.data('kendoWindow').center().open();
+                 }
+                , 'html');
+    }
+</script>
+
+<div class="row rowStyle">
+    <fieldset>
+        <div class="row row-type1">
+            <div style="text-transform: capitalize;">
+                <h4 style="text-transform: capitalize;">@Html.GetTaskTypeName(MvcHtmlString.Create(Model.TaskTypeID.ToString()))</h4>
+                @Html.HiddenFor(model => model.TaskTypeID)
+            </div>
+            <div class="col-md-8">
+
+                @(Html.Kendo().Editor()
+      .Name("editor")
+      .HtmlAttributes(new { style = "height:640px" })
+      .Resizable(resizable => resizable.Content(true).Toolbar(true))
+      .ImageBrowser(imageBrowser => imageBrowser
+          .Image("~/Content/UserFiles/Images/{0}")
+          .Read("Read", "ImageBrowser")
+          .Create("Create", "ImageBrowser")
+          .Destroy("Destroy", "ImageBrowser")
+          .Upload("Upload", "ImageBrowser")
+          .Thumbnail("Thumbnail", "ImageBrowser")
+      )
+      .Value(@<text>
+        <p>
+            <img src="@Url.Content("~/Images/logo.png")" alt="TKGM logo" style="display:block;margin-left:auto;margin-right:auto;" />
+        </p>
+        <p>
+            Kendo UI Editor allows your users to edit HTML in a familiar, user-friendly way.<br />
+            In this version, the Editor provides the core HTML editing engine, which includes basic text formatting, hyperlinks, lists,
+            and image handling. The widget <strong>outputs identical HTML</strong> across all major browsers, follows
+            accessibility standards and provides API for content manipulation.
+        </p>
+        <p>Features include:</p>
+        <ul>
+            <li>Text formatting &amp; alignment</li>
+            <li>Bulleted and numbered lists</li>
+            <li>Hyperlink and image dialogs</li>
+            <li>Cross-browser support</li>
+            <li>Identical HTML output across browsers</li>
+            <li>Gracefully degrades to a <code>textarea</code> when JavaScript is turned off</li>
+        </ul>
+        <p>
+            Read <a href="http://docs.telerik.com/kendo-ui">more details</a> or send us your
+            <a href="http://www.telerik.com/forums">feedback</a>!
+        </p>
+    </text>)
+                )<div class="row row-type1 row-sep5" style="height:50px;">
+    <div class="col-md-12 paddingFixer0">
+        <div style="position:absolute;right:0px;">
+            <input type="submit" value="Gönder" style="width:200px;" class="btn-info btn" />
+        </div>
+    </div>
+</div>
+            </div>
+            <div class="col-md-4 paddingFixer0">
+
+                <div class="myDiv" style="min-height:200px;">
+                    <div class="row  rowStyle row-type1">
+                        <h4>Task Detail</h4>
+                        <div class="col-md-12 row-sep5">
+                            <div class="col-md-4 row-sep">
+                                @Html.StarredLabelFor(m => m.PriorityID)
+                            </div>
+                            <div class="col-md-8 paddingFixer0 row-sep">
+                                @(Html.Kendo().DropDownList()
+                                  .Name("PriorityID")
+                                  .DataTextField("Name")
+                                  .DataValueField("PriorityTypeID")
+                                  .DataSource(source =>
+                                  {
+                                      source.Read(read =>
+                                      {
+                                          read.Action("_GetPriority", "TaskBox");
+                                      });
+                                  })
+                                  .HtmlAttributes(new { @class = "TextBoxDropDown" })
+                                )
+                            </div>
+
+                        </div>
+                        <div class="col-md-12 row-sep5">
+                            <div class="col-md-4 row-sep">
+                                @Html.StarredLabelFor(m => m.PrivacyID)
+                            </div>
+                            <div class="col-md-8 paddingFixer0 row-sep">
+                                @(Html.Kendo().DropDownList()
+          .Name("PrivacyID")
+          .DataTextField("Name")
+          .DataValueField("PrivacyTypeID")
+          .DataSource(source =>
+          {
+              source.Read(read =>
+              {
+                  read.Action("_GetPrivacy", "TaskBox");
+              });
+          })
+           .HtmlAttributes(new { @class = "TextBoxDropDown" })
+                                )
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="myDiv" style="min-height:200px;">
+                    <div class="row rowStyle">
+                        <div class="row row-type1">
+                            <div class="col-md-12 row-sep5">
+                                <div class="col-md-12 row-sep">
+                                    <a href="javascript:void(0);" onclick="OpenAssignUserWin();"><span>Kişiler</span></a>
+                                </div>
+                                <div class="col-md-12 paddingFixer0 row-sep">
+
+                                    <script id="fileTemplate" type="text/x-kendo-template">
+                                        <div>
+                                            <p>Name: #=name#</p>
+                                            <p>Size: #=size# bytes</p>
+                                            <p>Extension: #=files[0].extension#</p>
+                                            <button type='button' class='k-upload-action' style='position: absolute; top: 0; right: 0;'></button>
+                                        </div>
+                                    </script>
+
+
+                                    @*@(Html.Kendo().TreeView()
+                                            .Name("treeviewAssignedUsers")
+                                            .DataTextField("text")
+                                            .AutoBind(true)
+                                            .BindTo(newtree, (NavigationBindingFactory<TreeViewItem> mappings) =>
+                                            {
+                                                mappings.For<TreeSchema>(binding => binding.ItemDataBound((item, category) =>
+                                                {
+                                                    item.Text = category.text;
+                                                })
+                                                    .Children(category => category.child));
+
+                                                mappings.For<TreeSchema>(binding => binding.ItemDataBound((item, subCategory) =>
+                                                {
+                                                    item.Text = subCategory.text;
+                                                }));
+                                            })
+                                        )*@
+                                    <div id="treeviewAssignedUsers"></div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="myDiv" style="min-height:200px;">
+                    <div class="row rowStyle">
+                        <div class="row row-type1">
+                            <div class="col-md-12 row-sep5">
+                                <div class="col-md-12 row-sep">
+                                    @Html.StarredLabelFor(m => m.TaskAttachedFiles)
+                                </div>
+                                <div class="col-md-12 paddingFixer0 row-sep">
+
+                                    <script id="fileTemplate" type="text/x-kendo-template">
+                                        <div>
+                                            <p>Name: #=name#</p>
+                                            <p>Size: #=size# bytes</p>
+                                            <p>Extension: #=files[0].extension#</p>
+                                            <button type='button' class='k-upload-action' style='position: absolute; top: 0; right: 0;'></button>
+                                        </div>
+                                    </script>
+
+                                    <div class="k-content">
+                                        @(Html.Kendo().Upload()
+                                .Name("files")
+                                .Messages(m => m.Select("Dosya Seç"))
+                                .Async(async => async.Save("AttachFile", "Task")
+                                .Remove("RemoveFile", "Task")
+                                .SaveField("files")
+
+                                )
+                                .Events(evn => evn.Error("OnUploadError"))
+                                .Multiple(true)
+                                 .HtmlAttributes(new { style = "width: 100%;" })
+                                        )
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
+
+
+

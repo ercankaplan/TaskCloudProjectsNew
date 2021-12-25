@@ -1,0 +1,41 @@
+﻿@using WSD.TaskCloud.Contracts.EF
+@model List<Title>
+
+
+@(Html.Kendo().Grid<Title>()
+    .Name("gridTitle")
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.Name);
+        columns.Command(command => { command.Destroy().Text("Kaydı Sil"); }).Width(100);
+    })
+    .ToolBar(toolBar =>
+    {
+        toolBar.Create().Text("Yeni Kayıt");
+        toolBar.Save().SaveText("Değişiklikleri Kaydet").CancelText("Değişiklikleri İptal Et");
+    })
+    .Editable(editable => editable.Mode(GridEditMode.InCell))
+    .Pageable()
+    .Sortable()
+    .Scrollable()
+    .HtmlAttributes(new { style = "height:550px;" })
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Read(o => o.Action("Titles_Read", "GeneralDefinitions"))
+        .Batch(true)
+        .PageSize(20)
+        .Events(events => events.Error("GridErrorHandler"))
+        .Model(model =>
+        {
+
+            model.Id(p => p.TitleID);
+            model.Field(p => p.TitleID).Editable(false);
+
+        })
+        .Create(o => o.Action("Titles_Create", "GeneralDefinitions"))
+        .Update(o => o.Action("Titles_Update", "GeneralDefinitions"))
+        .Destroy(o => o.Action("Titles_Destroy", "GeneralDefinitions"))
+    )
+)
+
+

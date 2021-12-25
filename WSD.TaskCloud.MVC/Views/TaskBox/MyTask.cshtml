@@ -1,0 +1,183 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model WSD.TaskCloud.Contracts.DataContracts.TaskBox.MyTaskFilter
+@using WSD.TaskCloud.Contracts.EF
+
+<script>
+    $(document).ready(function () {
+
+        $('#FilterSubject').bind('input', function () {
+            FilterMyTask();
+        });
+        $('#FilterDescription').bind('input', function () {
+            FilterMyTask();
+        });
+        
+
+    });
+
+
+
+    function FilterMyTask() {
+
+        debugger;
+
+        var grid = $("#gridMyTask").data("kendoGrid");
+
+        fields = new Array();
+        var i = 0;
+
+        var fname = $('#FilterSubject')[0].value;
+
+        if (fname != null && fname != '') {
+            fields[i] = { field: "Subject", operator: "contains", value: fname };
+            i++;
+        }
+        var lname = $('#FilterDescription')[0].value;
+        if (lname != null && lname != '') {
+            fields[i] = { field: "Description", operator: "contains", value: lname };
+            i++;
+        }
+
+
+        var tit = $('#FilterTaskTypeID').data("kendoDropDownList").value();
+        if (parseInt(tit) > 0) {
+            fields[i] = { field: "TypeID", operator: "eq", value: parseInt(tit) };
+            i++;
+        }
+
+        var tit2 = $('#FilterTaskResultID').data("kendoDropDownList").value();
+        if (parseInt(tit2) > 0) {
+            fields[i] = { field: "ResultID", operator: "eq", value: parseInt(tit) };
+           
+        }
+
+        if (fields.length > 0) {
+            grid.dataSource.filter(fields);
+        } else {
+            grid.dataSource.filter({});
+        }
+
+    }
+
+    </script>
+
+<div class="row">
+    <div style="padding-left:10px;padding-right:10px;float:left;width:100%;">
+        @(Html.Kendo().Grid<Task>()
+        .Name("gridMyTask")
+        .Scrollable(s => s.Height("auto"))
+        .Columns(columns =>
+        {
+            columns.Bound(o => o.TaskID).Visible(false);
+            columns.Bound(o => o.OptimeText).Hidden(true).Width(100).ClientGroupHeaderTemplate("<span style='margin-left:20px;'>#= value #</span>");
+            columns.Bound(o => o.TaskNo).Width(100);
+            columns.Bound(o => o.Subject).ClientTemplate(
+                    @"<div>#: Subject #</div>
+                    <br/>
+                    <div>#: Summary #</div>")
+              .Width(500);
+
+            columns.Bound(o => o.TypeID).ClientTemplate("<div>#=GetItemTextValue(TypeID,'GetTaskTypeText')#</div>").Width(100);
+            columns.Bound(o => o.PriorityID).ClientTemplate("<div>#=GetItemTextValue(PriorityID,'GetPriority')#</div>").Width(100);
+            columns.Bound(o => o.AtananSayisi).Width(50).ClientTemplate("<a href='javascript:void(0);' >#= AtananSayisi #</a>");
+            columns.Bound(o => o.StateID).ClientTemplate("<div>#=GetItemTextValue(StateID,'GetTaskStateText')#</div>").Width(100);
+            columns.Bound(o => o.ResultID).ClientTemplate("<div>#=GetItemTextValue(ResultID,'GetTaskResultText')#</div>").Width(100);
+            columns.Bound(p => p.StartDate).Format("{0:dd/MM/yyyy}").Width(100);
+            columns.Bound(p => p.FinishDate).Format("{0:dd/MM/yyyy}").Width(100);
+            //columns.Command(command => command.Custom("Guncelle").Click("GuncellePersonel")).Width(100);
+
+        })
+        .ToolBar(toolbar =>
+        {
+        toolbar.Template(@<text>
+            <div class="row row-type1">
+                <div class="col-md-5 col-md-offset-1 row-sep">
+                    <div class="col-md-4 paddingFixer row-sep">
+                        @Html.StarredLabelFor(m => m.Subject)
+                    </div>
+                    <div class="col-md-8 paddingFixer row-sep">
+                        @(Html.TextBox("FilterSubject", "", new { @class = "TextBoxClass", style = "max-width:310px", autocomplete = "off" }))
+                    </div>
+                </div>
+                <div class="col-md-5 row-sep">
+                    <div class="col-md-4 paddingFixer row-sep">
+                        @Html.StarredLabelFor(m => m.Description)
+                    </div>
+                    <div class="col-md-8 paddingFixer row-sep">
+                        @(Html.TextBox("FilterDescription", "", new { @class = "TextBoxClass", style = "max-width:310px", autocomplete = "off" }))
+                    </div>
+                </div>
+            </div>
+            <div class="row row-type1">
+                <div class="col-md-5 col-md-offset-1 row-sep">
+                    <div class="col-md-4 paddingFixer row-sep">
+                        @Html.StarredLabelFor(m => m.TaskTypeID)
+                    </div>
+                    <div class="col-md-8 paddingFixer row-sep">
+
+                        @(Html.Kendo().DropDownList()
+                                    .Name("FilterTaskTypeID")
+                                    .OptionLabel("Tümü")
+                                    .DataTextField("Name")
+                                    .DataValueField("TaskTypeID")
+                                    .AutoBind(false)
+                                    .Events(e => e.Change("FilterMyTask"))
+                                   .HtmlAttributes(new { @class = "TextBoxDropDown", style = "max-width:310px" })
+                                    .DataSource(ds =>
+                                    {
+                                        ds.Read("_GetTaskTypes", "TaskBox");
+                                    })
+                        )
+                    </div>
+                </div>
+                <div class="col-md-5 row-sep">
+                    <div class="col-md-4 paddingFixer row-sep">
+                        @Html.StarredLabelFor(m => m.TaskResult)
+                    </div>
+                    <div class="col-md-8 paddingFixer row-sep">
+                       @(Html.Kendo().DropDownList()
+                                    .Name("FilterTaskResultID")
+                                    .OptionLabel("Tümü")
+                                    .DataTextField("Name")
+                                    .DataValueField("TaskResultID")
+                                    .AutoBind(false)
+                                    .Events(e => e.Change("FilterMyTask"))
+                                   .HtmlAttributes(new { @class = "TextBoxDropDown", style = "max-width:310px" })
+                                    .DataSource(ds =>
+                                    {
+                                        ds.Read("_GetResultTypes", "TaskBox");
+                                    })
+                    )
+                    </div>
+                </div>
+            </div>
+        </text>);
+        })
+        .DataSource(dataSource => dataSource
+                                .Ajax()
+                                .Read(read => read.Action("MyTask_Read", "TaskBox"))
+                                .Events(events => events.Error("GridErrorHandler"))
+                                .PageSize(20)
+                                .Group(groups => groups.Add(p => p.OptimeText))
+                    )
+                     .Pageable(pager => pager
+            .PageSizes(new[] { 10, 25, 50 }))
+        .Scrollable()
+        .Groupable()
+        .Sortable(sortable => sortable
+            .AllowUnsort(true)
+            .SortMode(GridSortMode.MultipleColumn))
+        )
+
+
+
+    </div>
+
+
+
+</div>

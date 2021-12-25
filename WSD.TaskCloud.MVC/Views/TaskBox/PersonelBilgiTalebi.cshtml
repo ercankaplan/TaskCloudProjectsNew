@@ -1,0 +1,937 @@
+﻿
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<TreeSchema> newtree = new List<TreeSchema>();
+}
+
+
+
+@using WSD.TaskCloud.Contracts.DataContracts
+@using WSD.TaskCloud.Contracts.DataContracts.Task
+@using WSD.TaskCloud.Contracts.EF
+@using Kendo.Mvc.UI.Fluent
+@model TaskRequestModel
+
+
+
+@using (Ajax.BeginForm("PersonelBilgiTalebiKaydet", "Task", new AjaxOptions { InsertionMode = InsertionMode.Replace, HttpMethod = "Post", UpdateTargetId = "dvResult" }))
+{
+    <div class="row rowStyle">
+        <fieldset>
+            <div class="row row-type1">
+                <div style="text-transform: capitalize;">
+                    <h4 style="text-transform: capitalize;">@Html.GetTaskTypeName(MvcHtmlString.Create(Model.TaskTypeID.ToString()))</h4>
+                    @Html.HiddenFor(model => model.BaseTaskTypeID)
+                </div>
+                <div class="col-md-8">
+                    <div class="row row-type1 row-sep5">
+                        <div class="col-md-12 paddingFixer0 row-sep">
+                            <div class="col-md-2 paddingFixer0 row-sep">
+                                @Html.StarredLabelFor(m => m.TaskTypeID)
+                            </div>
+                            <div class="col-md-10 paddingFixer0 row-sep">
+                                @(Html.Kendo().DropDownList()
+        .Name("TaskTypeID")
+        .DataTextField("Name")
+        .DataValueField("TaskTypeID")
+        .OptionLabel("Seçiniz")
+        .DataSource(source =>
+        {
+            source.Read(read =>
+            {
+                read.Action("_GetSubTaskTypes", "Task", new { baseTypeID = Model.BaseTaskTypeID });
+            });
+        })
+        .HtmlAttributes(new { @class = "TextBoxDropDown" })
+                                )
+                            </div>
+                        </div>
+                    </div>
+                    <!--Personel Bilgi Talebi-->
+                    @if (Model.BaseTaskTypeID == (byte)EnumTaskTypes.PersonelTalebi)
+                    {
+                        <div class="row row-type1 row-sep5">
+                            <div class="col-md-6 paddingFixer0 row-sep">
+
+                                <div class="col-md-4 paddingFixer0 row-sep">
+                                    @Html.StarredLabelFor(m => m.IlgiliPersonel.ProfessionNumber)
+
+                                </div>
+                                <div class="col-md-8 paddingFixer0 row-sep">
+                                    @(Html.TextBoxFor(i => i.IlgiliPersonel.ProfessionNumber, new { @class = "TextBoxClass", autocomplete = "off" }))
+                                    @(Html.HiddenFor(i => i.IlgiliPersonel.PersonnelID))
+
+
+                                </div>
+                                <div class="col-md-4 paddingFixer0 row-sep">
+                                    @Html.StarredLabelFor(m => m.IlgiliPersonel.FirstName)
+                                </div>
+                                <div class="col-md-8 paddingFixer0 row-sep">
+                                    @(Html.TextBoxFor(i => i.IlgiliPersonel.FirstName, new { @class = "TextBoxClass", autocomplete = "off" }))
+                                </div>
+                                <div class="col-md-4 paddingFixer0 row-sep">
+                                    @Html.StarredLabelFor(m => m.IlgiliPersonel.LastName)
+                                </div>
+                                <div class="col-md-8 paddingFixer0 row-sep">
+                                    @(Html.TextBoxFor(i => i.IlgiliPersonel.LastName, new { @class = "TextBoxClass", autocomplete = "off" }))
+                                </div>
+                                <div class="col-md-4 paddingFixer0 row-sep">
+                                    @Html.StarredLabelFor(m => m.IlgiliPersonel.DepartmentID)
+                                </div>
+                                <div class="col-md-8 paddingFixer0 row-sep">
+                                    @(Html.Kendo().DropDownList()
+.Name("IlgiliPersonel.DepartmentID")
+.DataTextField("Name")
+.DataValueField("DepartmentID")
+.OptionLabel("Seçiniz")
+.DataSource(source =>
+{
+    source.Read(read =>
+    {
+        read.Action("_GetDepartments", "Task");
+    });
+})
+.HtmlAttributes(new { @class = "TextBoxDropDown" })
+                                    )
+                                </div>
+                                <div class="col-md-4 paddingFixer0 row-sep">
+                                    @Html.StarredLabelFor(m => m.IlgiliPersonel.TitleID)
+                                </div>
+                                <div class="col-md-8 paddingFixer0 row-sep">
+                                    @(Html.Kendo().DropDownList()
+.Name("IlgiliPersonel.TitleID")
+.DataTextField("Name")
+.DataValueField("TitleID")
+.OptionLabel("Seçiniz")
+.DataSource(source =>
+{
+    source.Read(read =>
+    {
+        read.Action("_GetTitles", "Task");
+    });
+})
+.HtmlAttributes(new { @class = "TextBoxDropDown" })
+                                    )
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 paddingFixer0  row-sep">
+
+                                <div class="col-md-4 row-sep">
+                                    <a href="javascript:void(0);" onclick="OpenReferenceWin();"><span>Referans Ekle</span></a>
+                                </div>
+                                <div class="col-md-8 paddingFixer0 row-sep">
+
+
+                                    @(Html.Kendo().Grid<Reference>()
+.Name("gridPersonnelReferences")
+.Columns(columns =>
+{
+
+    columns.Bound(p => p.TitleID).Title("Ünvan").ClientTemplate("<div>#=GetItemTextValue(TitleID,'GetTitle')#</div>");
+    columns.Bound(p => p.FullName);
+    columns.Bound(p => p.AttachedReferenceFile.FileName);
+    columns.Command(command => { command.Destroy().Text(""); }).Width(100);
+})
+.Sortable()
+.Scrollable()
+
+.HtmlAttributes(new { style = "height:130px;" })
+.DataSource(dataSource => dataSource
+.Ajax()
+.Read(o => o.Action("PersonnelReferences_Read", "Task"))
+
+.Batch(true)
+.ServerOperation(false)
+.Events(events => events.Error("GridErrorHandler"))
+.Model(model =>
+{
+
+    model.Id(p => p.ReferenceID);
+    model.Field(p => p.ReferenceID).Editable(false);
+
+})
+.Destroy(o => o.Action("PersonnelReferences_Destroy", "Task"))
+)
+                                    )
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <!--end of personel bilgi talebi-->
+                    }
+                    else if (Model.BaseTaskTypeID == (byte)EnumTaskTypes.Toplanti)
+                    {
+                        <div class="row row-type1 row-sep5">
+                            <div class="col-md-6 paddingFixer0 row-sep">
+
+                                <div class="col-md-4 paddingFixer0 row-sep">
+                                    @Html.StarredLabelFor(m => m.MeetingStartDate)
+
+                                </div>
+                                <div class="col-md-8 paddingFixer0 row-sep">
+                                    @Html.Kendo().DateTimePickerFor(model => model.MeetingStartDate).HtmlAttributes(new { style = "width:10%;", @class = "TextBoxDateTime" })
+
+
+                                </div>
+                                <div class="col-md-4 paddingFixer0 row-sep">
+                                    @Html.StarredLabelFor(m => m.MeetingFinishDate)
+
+                                </div>
+                                <div class="col-md-8 paddingFixer0 row-sep">
+                                    @Html.Kendo().DateTimePickerFor(model => model.MeetingFinishDate).HtmlAttributes(new { style = "width:10%;", @class = "TextBoxDateTime" })
+
+
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <div class="row row-type1 row-sep5">
+                        <div class="col-md-12 paddingFixer0 row-sep">
+                            <div class="col-md-2 paddingFixer0 row-sep">
+                                @Html.StarredLabelFor(m => m.Subject)
+                            </div>
+                            <div class="col-md-10 paddingFixer0 row-sep">
+                                @(Html.TextBoxFor(i => i.Subject, new { @class = "TextBoxClass", autocomplete = "off" }))
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-type1 row-sep5">
+                        <div class="col-md-12 paddingFixer0 row-sep">
+                            <div class="col-md-2 paddingFixer0 row-sep">
+
+                            </div>
+                            <div class="col-md-10 paddingFixer0 row-sep">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-type1 row-sep5">
+                        <div class="col-md-12 paddingFixer0">
+                            <div class="col-md-12 paddingFixer0 row-sep">
+                                @(Html.Kendo().Editor()
+                                .Tools(t => t.CustomButton(cb => cb.Name("custom").ToolTip("Insert a horizontal rule").Exec(@<text>
+                                    function(e) {
+
+                                debugger;
+                                    var editor = $(this).data("kendoEditor");
+                                var element = $(editor.body).find(".pdf-allpage");
+                                element.append("<div id='pagediv1' class='pdf-page size-a4'><p></p></div>");
+                                    
+                                }
+                                </text>))
+                                     .CustomTemplate(ct => ct.Template("<label for='templateTool' style='vertical-align:right;'>Template:</label> <select id='templateTool' style='width:100%;'></select>"))
+                                )
+                                .Name("TaskDescription")
+                                .HtmlAttributes(new { style = "height:455px;text-transform:uppercase;" })
+                                .Resizable(resizable => resizable.Content(true).Toolbar(true))
+                                .ImageBrowser(imageBrowser => imageBrowser
+                                .Image("~/Content/UserFiles/Images/{0}")
+                                .Read("Read", "ImageBrowser")
+                                .Create("Create", "ImageBrowser")
+                                .Destroy("Destroy", "ImageBrowser")
+                                .Upload("Upload", "ImageBrowser")
+                                .Thumbnail("Thumbnail", "ImageBrowser")
+                                )
+                                .Value(@<text>
+                                    @*<div class="pdf-allpage">
+                                        <div id="pagediv0" class="pdf-page size-a4">
+                                            
+                                            <p>
+
+                                            </p>
+                                        </div>
+                                    </div>*@
+                                    @*<style>
+                                        .pdf-page {
+                                            margin: 10px auto;
+                                            box-sizing: border-box;
+                                            box-shadow: 0 5px 10px 0 rgba(0,0,0,.3);
+                                            background-color: #fff;
+                                            color: #333;
+                                            position: relative;
+                                            padding: 2.5cm 2.5cm 2.5cm 2.5cm;
+                                            text-transform: uppercase;
+                                            overflow:hidden;
+                                            font-size: 12pt; 
+                                        }
+                                        .size-a4 {
+                                            width: 8.3in;
+                                            max-height:8.3in;
+                                            height: 11.7in;
+                                            max-height:11.7in;
+                                        }
+                                        .pdf-allpage {
+                                            margin: 0 auto;
+                                            box-sizing: border-box;
+                                            box-shadow: 0 5px 10px 0 rgba(0,0,0,.3);
+                                            background-color: lightgrey;
+                                            color: #333;
+                                            position: relative;
+                                            width: 8.3in;
+                                        }
+                                    </style>*@
+                                </text>)
+)
+</div>
+
+                        </div>
+                    </div>
+
+                    <div class="myDiv">
+                        <div class="row rowStyle">
+                            <div class="row row-type1">
+                                <div class="col-md-12 row-sep5">
+                                    <div class="col-md-12 row-sep">
+                                        @Html.StarredLabelFor(m => m.TaskAttachedFiles)
+                                    </div>
+                                    <div class="col-md-12 paddingFixer0 row-sep">
+                                        <div id="example">
+                                            <script id="fileTemplate" type="text/x-kendo-template">
+                                                @*<span class='k-progress'></span>
+                                                    <div class='file-wrapper'>
+                                                        <span class='file-icon #=addExtensionClass(files[0].extension)#'></span>
+                                                        <h4 class='file-heading file-name-heading'>#=name#</h4>
+                                                        <h4 class='file-heading file-size-heading'>#=size# bytes</h4>
+                                                        <button type='button' class='k-upload-action'></button>
+                                                    </div>*@
+                                                <div>
+
+                                                    <span class="k-progress" style="width: 100%;"></span>
+
+                                                    <span class="k-filename" title="#=name#">#=name#</span>
+                                                    <strong class="k-upload-status">
+
+                                                        <button type="button" value="#=name#" onclick="ViewCancel(this)" class="attachmentview"></button>
+                                                        <button type="button" class="k-button k-button-bare k-upload-action"><span class="k-icon k-i-close k-delete" title="Kaldır"></span></button>
+                                                    </strong>
+
+                                                </div>
+                                            </script>
+
+
+                                            <div class="k-content">
+                                                @(Html.Kendo().Upload()
+                                .Name("files")
+                                .Messages(m => m.Select("Dosya Seç"))
+                                 .TemplateId("fileTemplate")
+                                .Async(async => async.Save("AttachFile", "Task")
+                                            .Remove("RemoveFile", "Task")
+                                            .SaveField("files")
+
+                                )
+                                .Events(evn => evn.Error("OnUploadError"))
+
+                                .Multiple(true)
+                                 .HtmlAttributes(new { style = "width: 100%;" })
+                                                )
+                                            </div>
+
+
+                                        </div>
+
+                                        @*<div class="k-content">
+                                                        @(Html.Kendo().Upload()
+                                            .Name("files")
+                                            .Messages(m => m.Select("Dosya Seç"))
+
+                                            .Async(async => async.Save("AttachFile", "Task")
+                                                        .Remove("RemoveFile", "Task")
+                                                        .SaveField("files")
+
+
+                                            )
+                                            .Events(evn => evn.Error("OnUploadError"))
+                                            //.TemplateId("fileTemplate")
+                                            .Multiple(true)
+                                             .HtmlAttributes(new { style = "width: 100%;" })
+                                                        )
+                                                    </div>*@
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-type1 row-sep5" style="height:50px;">
+                        <div class="col-md-12 paddingFixer0">
+                            <div style="position:absolute;right:210px;">
+                                @Html.LabelFor(m => m.SaveAsTemplate) @Html.CheckBoxFor(model => model.SaveAsTemplate)
+                            </div>
+                            <div style="position:absolute;right:0px;">
+                                <input type="submit" value="Gönder" style="width:200px;" class="btn-info btn" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 paddingFixer0">
+                    <div class="myDiv" style="min-height:200px;">
+                        <div class="row rowStyle">
+                            <fieldset>
+                                <div class="row row-type1">
+                                    <div class="col-md-12 row-sep5">
+                                        <div class="col-md-4 row-sep">
+                                            @Html.StarredLabelFor(m => m.StartDate)
+                                        </div>
+                                        <div class="col-md-8 paddingFixer0 row-sep">
+                                            @Html.Kendo().DatePickerFor(model => model.StartDate).HtmlAttributes(new { style = "width: 100px;", @class = "TextBoxDateTime" })
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-12 row-sep5">
+                                        <div class="col-md-4 row-sep">
+                                            @Html.StarredLabelFor(m => m.Deadline)
+                                        </div>
+                                        <div class="col-md-8 paddingFixer0 row-sep">
+                                            @Html.Kendo().DatePickerFor(model => model.Deadline).HtmlAttributes(new { style = "width: 100px;", @class = "TextBoxDateTime" })
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-12 row-sep5">
+                                        <div class="col-md-4 row-sep">
+                                            @Html.StarredLabelFor(m => m.PriorityID)
+                                        </div>
+                                        <div class="col-md-8 paddingFixer0 row-sep">
+                                            @(Html.Kendo().DropDownList()
+                                              .Name("PriorityID")
+                                              .DataTextField("Name")
+                                              .DataValueField("PriorityTypeID")
+                                              .DataSource(source =>
+                                              {
+                                                  source.Read(read =>
+                                                  {
+                                                      read.Action("_GetPriority", "TaskBox");
+                                                  });
+                                              })
+                                              .HtmlAttributes(new { @class = "TextBoxDropDown" })
+                                            )
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-12 row-sep5">
+                                        <div class="col-md-4 row-sep">
+                                            @Html.StarredLabelFor(m => m.PrivacyID)
+                                        </div>
+                                        <div class="col-md-8 paddingFixer0 row-sep">
+                                            @(Html.Kendo().DropDownList()
+                                              .Name("PrivacyID")
+                                              .DataTextField("Name")
+                                              .DataValueField("PrivacyTypeID")
+                                              .DataSource(source =>
+                                              {
+                                                  source.Read(read =>
+                                                  {
+                                                      read.Action("_GetPrivacy", "TaskBox");
+                                                  });
+                                              })
+                                                .HtmlAttributes(new { @class = "TextBoxDropDown" })
+                                            )
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-12 row-sep5">
+                                        <div class="col-md-4 row-sep">
+                                            @Html.StarredLabelFor(m => m.ByID)
+                                        </div>
+                                        <div class="col-md-8 paddingFixer0 row-sep">
+                                            @(Html.Kendo().DropDownList()
+                                              .Name("ByID")
+                                              .DataTextField("Name")
+                                              .DataValueField("TaskByID")
+                                              .DataSource(source =>
+                                              {
+                                                  source.Read(read =>
+                                                  {
+                                                      read.Action("_GetTaskByID", "TaskBox");
+                                                  });
+                                              })
+                                                .HtmlAttributes(new { @class = "TextBoxDropDown" })
+                                            )
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+
+                    <div class="myDiv" style="min-height:200px;">
+                        <div class="row rowStyle">
+                            <div class="row row-type1">
+                                <div class="col-md-12 row-sep5">
+                                    <div class="col-md-12 row-sep">
+                                        <a href="javascript:void(0);" onclick="OpenAssignUserWin();"><span>Kişiler</span></a>
+                                    </div>
+                                    <div class="col-md-12 paddingFixer0 row-sep">
+
+                                        <script id="fileTemplate" type="text/x-kendo-template">
+                                            <div>
+                                                <p>Name: #=name#</p>
+                                                <p>Size: #=size# bytes</p>
+                                                <p>Extension: #=files[0].extension#</p>
+                                                <button type='button' class='k-upload-action' style='position: absolute; top: 0; right: 0;'></button>
+                                            </div>
+                                        </script>
+
+
+                                        @*@(Html.Kendo().TreeView()
+                                                .Name("treeviewAssignedUsers")
+                                                .DataTextField("text")
+                                                .AutoBind(true)
+                                                .BindTo(newtree, (NavigationBindingFactory<TreeViewItem> mappings) =>
+                                                {
+                                                    mappings.For<TreeSchema>(binding => binding.ItemDataBound((item, category) =>
+                                                    {
+                                                        item.Text = category.text;
+                                                    })
+                                                        .Children(category => category.child));
+
+                                                    mappings.For<TreeSchema>(binding => binding.ItemDataBound((item, subCategory) =>
+                                                    {
+                                                        item.Text = subCategory.text;
+                                                    }));
+                                                })
+                                            )*@
+                                        <div id="treeviewAssignedUsers"></div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="myDiv" style="min-height:200px;">
+
+
+                        <div class="row rowStyle">
+                            <fieldset>
+                                <legend>Talep Kaynağı</legend>
+                                <div class="row row-type1">
+                                    <div class="col-md-12 row-sep5">
+                                        <div class="col-md-4 row-sep">
+                                            @Html.StarredLabelFor(m => m.TaskSourceData.Visible)
+                                        </div>
+                                        <div class="col-md-8 paddingFixer0 row-sep">
+                                            @(Html.CheckBoxFor(i => i.TaskSourceData.Visible))
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-12 row-sep5">
+                                        <div class="col-md-4 row-sep">
+                                            @Html.StarredLabelFor(m => m.TaskSourceData.ProfessionNumber)
+                                        </div>
+                                        <div class="col-md-8 paddingFixer0 row-sep">
+                                            @(Html.TextBoxFor(i => i.TaskSourceData.ProfessionNumber, new { @class = "TextBoxClass", autocomplete = "off" }))
+                                            @(Html.HiddenFor(i => i.TaskSourceData.PersonnelID))
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-12 row-sep5">
+                                        <div class="col-md-4 row-sep">
+                                            @Html.StarredLabelFor(m => m.TaskSourceData.Organization)
+                                        </div>
+                                        <div class="col-md-8 paddingFixer0 row-sep">
+                                            @(Html.TextBoxFor(i => i.TaskSourceData.Organization, new { @class = "TextBoxClass", autocomplete = "off" }))
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-12 row-sep5">
+                                        <div class="col-md-4 row-sep">
+                                            @Html.StarredLabelFor(m => m.TaskSourceData.Title)
+                                        </div>
+                                        <div class="col-md-8 paddingFixer0 row-sep">
+                                            @(Html.TextBoxFor(i => i.TaskSourceData.Title, new { @class = "TextBoxClass", autocomplete = "off" }))
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-12 row-sep5">
+                                        <div class="col-md-4 row-sep">
+                                            @Html.StarredLabelFor(m => m.TaskSourceData.FirstName)
+                                        </div>
+                                        <div class="col-md-8 paddingFixer0 row-sep">
+                                            @(Html.TextBoxFor(i => i.TaskSourceData.FirstName, new { @class = "TextBoxClass", autocomplete = "off" }))
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-12 row-sep5">
+                                        <div class="col-md-4 row-sep">
+                                            @Html.StarredLabelFor(m => m.TaskSourceData.LastName)
+                                        </div>
+                                        <div class="col-md-8 paddingFixer0 row-sep">
+                                            @(Html.TextBoxFor(i => i.TaskSourceData.LastName, new { @class = "TextBoxClass", autocomplete = "off" }))
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </fieldset>
+                        </div>
+
+
+
+                    </div>
+
+
+
+                </div>
+            </div>
+        </fieldset>
+    </div>
+}
+
+<div id="dvResult"></div>
+
+
+
+
+@(Html.Kendo().Window()
+    .Name("userswindow")
+    .Title("Kullanıcılar")
+    .Content(@<text>
+
+    </text>)
+    .Draggable()
+    .Resizable()
+    .Width(500)
+    .Height(650)
+    .Actions(actions => actions.Close())
+    .Events(ev => ev.Close("RefreshGridAssignedUser").Open("onOpenContentWND"))
+    .HtmlAttributes(new { @style = "display: none; overflow-y: hidden; overflow-x: hidden;" })
+)
+
+
+@(Html.Kendo().Window()
+    .Name("referencewindow")
+    .Title("Referanslar")
+    .Content(@<text>
+
+    </text>)
+    .Draggable()
+    .Width(500)
+    .Height(350)
+    .Actions(actions => actions.Close())
+    .Events(ev => ev.Close("RefreshGridRefrences").Open("onOpenContentWND"))
+    .HtmlAttributes(new { @style = "display: none;" })
+)
+
+
+
+<script>
+    var itemList;
+    $(document).ready(function () {
+
+        $('#IlgiliPersonel_ProfessionNumber').bind('blur', CheckPersonel);
+
+        $('#TaskSourceData_ProfessionNumber').bind('blur', CheckPersonelAsSource);
+
+
+        @*$("#templateTool").kendoDropDownList({
+            dataTextField: "Name",
+            dataValueField: "TaskTemplateID",
+            dataSource: {
+                transport: {
+                    read: {
+                        dataType: "jsonp",
+                        url: '@Url.Action("_GetUserTemplate", "Task")',
+                        data: { "typeid": '@Model.BaseTaskTypeID' }
+
+                        }
+                }
+            }
+        });*@
+
+        $("#templateTool").kendoDropDownList({
+            autoBind: false,
+            dataTextField: 'Name',
+            dataValueField: 'TaskTemplateID',
+            optionLabel: 'Seçiniz',
+            dataSource: {
+                transport: {
+                    read: {
+                        url: '@Url.Action("_GetUserTemplate", "Task", new { typeid = @Model.BaseTaskTypeID })',
+                        dataType: 'json',
+                        type: 'GET'
+                    }
+                }
+            },
+
+            change: function (e) {
+
+
+                var value = this.value();
+
+                $.post('@Url.Action("GetTemplate", "Task")', { tmpID: value },
+               function (data) {
+                   $("#TaskDescription").data("kendoEditor").value(data);
+               }
+              , 'html');
+
+
+
+
+            }
+        });
+
+
+
+    });
+
+    function CheckPersonel() {
+        var sNo = $('#IlgiliPersonel_ProfessionNumber')[0].value;
+
+        $.post('@Url.Action("_GetPersonnel", "Task")', { sicilNo: sNo },
+                      function (data) {
+
+
+                          if (data != null & data != '') {
+                              document.getElementById("IlgiliPersonel_FirstName").value = data["FirstName"];
+                              document.getElementById("IlgiliPersonel_LastName").value = data["LastName"];
+                              document.getElementById("IlgiliPersonel_PersonnelID").value = data["PersonnelID"];
+
+                              var dropdownlistDepartment = $("#IlgiliPersonel_DepartmentID").data("kendoDropDownList");
+                              dropdownlistDepartment.value(data["DepartmentID"]);
+
+                              var dropdownlistTitle = $("#IlgiliPersonel_TitleID").data("kendoDropDownList");
+                              dropdownlistTitle.value(data["TitleID"]);
+
+
+                              $('#IlgiliPersonel_FirstName').attr('readonly', true);
+                              $('#IlgiliPersonel_LastName').attr('readonly', true);
+
+
+                              dropdownlistDepartment.readonly();
+                              dropdownlistTitle.readonly();
+                          }
+                          else {
+
+                              document.getElementById("IlgiliPersonel_FirstName").value = '';
+                              document.getElementById("IlgiliPersonel_LastName").value = '';
+                              document.getElementById("IlgiliPersonel_PersonnelID").value = '';
+
+
+                              var dropdownlistDepartment = $("#IlgiliPersonel_DepartmentID").data("kendoDropDownList");
+                              dropdownlistDepartment.value(0);
+
+                              var dropdownlistTitle = $("#IlgiliPersonel_TitleID").data("kendoDropDownList");
+                              dropdownlistTitle.value(0);
+
+
+
+                              $('#IlgiliPersonel_FirstName').attr('readonly', false);
+                              $('#IlgiliPersonel_LastName').attr('readonly', false);
+
+
+
+                              dropdownlistDepartment.readonly(false);
+                              dropdownlistTitle.readonly(false);
+
+
+
+                          }
+
+
+                      }, 'json');
+
+
+    }
+
+    function CheckPersonelAsSource() {
+        var sNo = $('#TaskSourceData_ProfessionNumber')[0].value;
+
+        $.post('@Url.Action("_GetPersonnel", "Task")', { sicilNo: sNo },
+                      function (data) {
+
+                          debugger;
+                          if (data != null & data != '') {
+                              document.getElementById("TaskSourceData_FirstName").value = data["FirstName"];
+                              document.getElementById("TaskSourceData_LastName").value = data["LastName"];
+                              document.getElementById("TaskSourceData_PersonnelID").value = data["PersonnelID"];
+
+                              $('#TaskSourceData_FirstName').attr('readonly', true);
+                              $('#TaskSourceData_LastName').attr('readonly', true);
+
+                          }
+                          else {
+
+                              document.getElementById("TaskSourceData_FirstName").value = '';
+                              document.getElementById("TaskSourceData_LastName").value = '';
+                              document.getElementById("TaskSourceData_PersonnelID").value = '';
+
+
+                              $('#TaskSourceData_FirstName').attr('readonly', false);
+                              $('#TaskSourceData_LastName').attr('readonly', false);
+
+
+                          }
+
+
+                      }, 'json');
+
+
+    }
+
+    function OnUploadError(e) {
+        debugger;
+
+        var text = e.XMLHttpRequest.responseText;
+
+        ShowMessage(text, 1);
+
+
+    }
+
+
+
+    function OpenAssignUserWin() {
+
+        var t = '@Model.TaskTypeID';
+        debugger;
+
+        $.post('@Url.Action("AssignUsers", "Task")', { taskTypeID: t },
+                 function (data) {
+                     var tWindowElement = $('#userswindow');
+                     tWindowElement.data('kendoWindow').content(data);
+                     tWindowElement.data('kendoWindow').title("Görev Atama");
+                     tWindowElement.data('kendoWindow').center().open();
+                 }
+                , 'html');
+    }
+
+    function onCheckAssignedUsers(e) {
+
+        debugger;
+
+        var data = $('#treeview').data('kendoTreeView').dataItem(e.node);
+
+
+        $.post('@Url.Action("AddAssignedUsers", "Task")', { id: data.id, isChecked: data.checked },
+                    function (data) {
+
+                    }
+                   , 'html');
+
+    }
+
+    function OpenReferenceWin() {
+        $.post('@Url.Action("AddPersonnelReferece", "Task")', {},
+                 function (data) {
+                     var tWindowElement = $('#referencewindow');
+                     tWindowElement.data('kendoWindow').content(data);
+                     tWindowElement.data('kendoWindow').title("Referans Ekle");
+                     tWindowElement.data('kendoWindow').center().open();
+                 }
+                , 'html');
+    }
+
+    function onCloseAssignWin() {
+
+
+    }
+
+    function CloseReferansWin() {
+
+        var tWindowElement = $('#referencewindow');
+        tWindowElement.data('kendoWindow').close();
+        RefreshGridRefrences();
+
+    }
+
+
+
+    function RefreshGridRefrences() {
+        onCloseContentWND();
+
+        $('#gridPersonnelReferences').data('kendoGrid').dataSource.read();
+        $('#gridPersonnelReferences').data('kendoGrid').refresh();
+    }
+
+    function RefreshGridAssignedUser() {
+        onCloseContentWND();
+        var tree = $("#treeviewAssignedUsers").data("kendoTreeView");
+
+        expandNextLevel();
+
+    }
+
+    function expandNextLevel() {
+        setTimeout(function () {
+            var treeview = $("#treeviewAssignedUsers").data("kendoTreeView");
+            var b = $('.k-item .k-plus').length;
+            treeview.expand(".k-item");
+            treeview.trigger('dataBound');
+            if (b > 0) {
+                expandNextLevel();
+            }
+
+        }, 200);
+    }
+
+    function ViewCancel(a) {
+
+        debugger;
+        var vw = false;
+        if (a.className == 'attachmentview') {
+            vw = false;
+            a.className = 'attachmentviewcancel';
+        }
+        else {
+            vw = true;
+            a.className = 'attachmentview';
+        }
+
+        $.post('@Url.Action("SetAttachmentView", "Task")', { fileName: a.value, view: vw },
+              function (data) {
+
+              }
+             , 'html');
+
+
+
+
+    }
+
+
+</script>
+
+<style>
+    .myDiv {
+        padding: 20px;
+        margin-bottom: 20px;
+        background-color: #fff;
+        border: 1px solid transparent;
+        border-radius: 3px;
+        -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+        margin-bottom: 20px;
+        border-color: #ddd;
+        color: #333333;
+    }
+
+    .attachmentview {
+        background-image: url(../../Images/fileicons/eye.png);
+        background-position: center left;
+        background-repeat: no-repeat;
+        padding-left: 35px;
+        height: 15px;
+        display: inline-block;
+        padding-top: 15px;
+    }
+
+    .attachmentviewcancel {
+        background-image: url(../../Images/fileicons/eye-cancel.png);
+        background-position: center left;
+        background-repeat: no-repeat;
+        padding-left: 35px;
+        height: 15px;
+        display: inline-block;
+        padding-top: 15px;
+    }
+</style>
+
+

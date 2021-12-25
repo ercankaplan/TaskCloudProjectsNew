@@ -1,0 +1,35 @@
+﻿@{
+    Layout = null;
+}
+@model List<WSD.TaskCloud.Contracts.EF.Task>
+<div>
+    <div class="row rowStyle paddingFixer0" align="center">
+        <fieldset>
+            <div class="row row-type1 paddingFixer0">
+                <div class="col-md-12 col-sm-12 paddingFixer0 row-sep">
+@(Html.Kendo().Grid<WSD.TaskCloud.Contracts.EF.Task>(Model)
+                        .Name("Grid")
+                        .Columns(columns =>
+                        {
+                            columns.Bound(p => p.TaskID).Title("Task ID");
+                            columns.Bound(p => p.TaskNo).Title("Task No");
+                            columns.Bound(p => p.Description).Title("Açıklama");
+                            columns.Bound(p => p.UserID).Title("Kullanıcı");
+                        })
+                        .HtmlAttributes(new { style = "height: 450px;" })
+                        .Pageable(pageable => pageable
+                           .Input(true)
+                           .Numeric(false)
+                         )
+                        .Sortable()
+                        .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .PageSize(20)
+                            .ServerOperation(false)
+                         )
+)
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>

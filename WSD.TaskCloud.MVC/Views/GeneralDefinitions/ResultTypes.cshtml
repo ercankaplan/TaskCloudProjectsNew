@@ -1,0 +1,63 @@
+﻿@using WSD.TaskCloud.Contracts.EF
+@model List<ResultType>
+
+<style>
+    .customer-photo {
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background-size: 32px 35px;
+        background-position: center center;
+        vertical-align: middle;
+        line-height: 32px;
+        box-shadow: inset 0 0 1px #999, inset 0 0 10px rgba(0,0,0,.2);
+        margin-left: 5px;
+    }
+
+    .customer-name {
+        display: inline-block;
+        vertical-align: middle;
+        line-height: 32px;
+        padding-left: 3px;
+    }
+</style>
+
+@(Html.Kendo().Grid<ResultType>()
+    .Name("gridResultType")
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.Name);
+        columns.Bound(p=> p.Name).ClientTemplate(@"<div class='customer-photo' style='background-image:url(~/Images/demo/res1.ico);'></div>").Width(240);
+        columns.Command(command => { command.Destroy().Text("Kaydı Sil"); }).Width(100);
+    })
+    .ToolBar(toolBar =>
+    {
+        toolBar.Create().Text("Yeni Kayıt");
+        toolBar.Save().SaveText("Değişiklikleri Kaydet").CancelText("Değişiklikleri İptal Et");
+    })
+    .Editable(editable => editable.Mode(GridEditMode.InCell))
+    .Pageable()
+    .Sortable()
+    .Scrollable()
+    .HtmlAttributes(new { style = "height:550px;" })
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Read(o => o.Action("ResultTypes_Read", "GeneralDefinitions"))
+        .Batch(true)
+        .PageSize(20)
+        .Events(events => events.Error("GridErrorHandler"))
+        .Model(model =>
+        {
+
+            model.Id(p => p.ResultTypeID);
+            model.Field(p => p.ResultTypeID).Editable(false);
+
+        })
+        .Create(o => o.Action("ResultTypes_Create", "GeneralDefinitions"))
+        .Update(o => o.Action("ResultTypes_Update", "GeneralDefinitions"))
+        .Destroy(o => o.Action("ResultTypes_Destroy", "GeneralDefinitions"))
+    )
+)
+
+

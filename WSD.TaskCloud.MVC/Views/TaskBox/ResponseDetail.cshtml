@@ -1,0 +1,39 @@
+﻿
+@using WSD.TaskCloud.Contracts.EF
+
+@model TaskResponse
+
+<div class="myDiv">
+    
+
+    <p class="pull-left m0">
+
+        @Html.Raw(Model.Description)
+        <hr>
+
+    </p>
+    <div class="clearfix">
+        <p class="pull-left m0" style="text-align:left;margin-left:10px;">
+            <span class="text-muted mr">Dosya Ekleri:</span>
+            <br />
+            @foreach (var item in Model.Attachments)
+            {
+
+
+                <a href='~/TaskBox/GetAttachmentByID?ID=@item.AttachmentID'>
+                    <img class="@item.Extend" />
+                    <span class="text-muted mr">@item.Name</span>
+                </a>
+                <br />
+
+
+            }
+        </p>
+    </div>
+
+ 
+
+    
+
+</div>
+

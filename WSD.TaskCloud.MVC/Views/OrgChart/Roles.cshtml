@@ -1,0 +1,41 @@
+﻿@using WSD.TaskCloud.Contracts.EF
+@model List<Role>
+
+
+@(Html.Kendo().Grid<Role>()
+    .Name("gridRole")
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.Name);
+        columns.Command(command => { command.Destroy().Text("Kaydı Sil"); }).Width(250);
+    })
+    .ToolBar(toolBar =>
+    {
+        toolBar.Create().Text("Yeni Role Ekle");
+        toolBar.Save().CancelText("Değişiklikleri İptal Et").SaveText("Değişiklikleri Kaydet");
+    })
+    .Editable(editable => editable.Mode(GridEditMode.InCell))
+    .Pageable()
+    .Sortable()
+    .Scrollable()
+    .HtmlAttributes(new { style = "height:550px;" })
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Read(o => o.Action("Roles_Read", "OrgChart"))
+        .Batch(true)
+        .PageSize(20)
+        .Events(events => events.Error("GridErrorHandler"))
+        .Model(model =>
+        {
+
+            model.Id(p => p.RoleID);
+            model.Field(p => p.RoleID).Editable(false);
+
+        })
+        .Create(o => o.Action("Roles_Create", "OrgChart"))
+        .Update(o => o.Action("Roles_Update", "OrgChart"))
+        .Destroy(o => o.Action("Roles_Destroy", "OrgChart"))
+    )
+)
+
+

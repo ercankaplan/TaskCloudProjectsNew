@@ -1,0 +1,818 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using WSD.TaskCloud.Contracts.DataContracts.TaskBox
+@using WSD.TaskCloud.Contracts.EF
+
+@*<link href="@Url.Content("~/Content/dash.css")" rel="stylesheet" type="text/css">
+
+
+
+
+<div class="demo-wrapper">
+
+    <div class="page todos">
+        <h2 class="page-title">My Todos</h2>
+        <ul contenteditable>
+            Content!
+        </ul>
+        <div class="close-button">x</div>
+    </div>
+
+    <div class="page random-page">
+        <h2 class="page-title">Some Awesome App!</h2>
+        <div class="close-button">x</div>
+    </div>
+
+    <div class="dashboard clearfix">
+        <div class="col1 clearfix">
+            @foreach (var item in (@ViewData["DashboardMenuItems"] as List<TaskBoxMenuItem>))
+            {
+                if (@item.Order == 0)
+                {
+                    <div class="big todos-thumb" data-page="todos">
+                        <p>
+                            @item.Name
+                            <span class="todos-thumb-span">@item.UnreadCount adet talep</span>
+                        </p>
+                    </div>
+                }
+                else if (@item.Order == 3)
+                {
+
+                    <div class="small lock-thumb">
+                        <span class="icon-font center" aria-hidden="true" data-icon="&#xe00d;"></span>
+                        <p>@item.Name</p>
+                    </div>
+                }
+                else if (@item.Order == 4)
+                {
+                    <div class="small last cpanel-thumb" data-page="random-page">
+                        <span class="icon-font" aria-hidden="true" data-icon="&#xe016;"></span>
+                        <p>@item.Name</p>
+                    </div>
+                }
+                else if (@item.Order == 9)
+                {
+                    <div class="big notes-thumb" data-page="random-page">
+                        <span class="icon-font" aria-hidden="true" data-icon="&#xe000;"></span>
+                        <p>@item.Name</p>
+                    </div>
+                }
+
+            }
+        </div>
+        <div class="col2 clearfix">
+            @foreach (var item in (@ViewData["DashboardMenuItems"] as List<TaskBoxMenuItem>))
+            {
+                if (@item.Order == 1)
+                {
+                    <div class="big calculator-thumb" data-page="random-page"><span class="icon-font" aria-hidden="true" data-icon="&#xe017;">
+                        </span><p>@item.Name</p></div>
+                }
+                else if (@item.Order == 5)
+                {
+                    <div class="big organizer-thumb" data-page="random-page"><span class="icon-font" aria-hidden="true" data-icon="&#xe015;"></span><p>@item.Name</p></div>
+                }
+                else if (@item.Order == 9)
+                {
+                    <div class="big news-thumb" data-page="random-page"><span class="icon-font" aria-hidden="true" data-icon="&#xe00f;"></span><p>@item.Name</p></div>
+                }
+
+            }
+        </div>
+        <div class="col3 clearfix">
+            @foreach (var item in (@ViewData["DashboardMenuItems"] as List<TaskBoxMenuItem>))
+            {
+                if (@item.Order == 2)
+                {
+                    
+                        <div class="small alarm-thumb" data-page="random-page">
+                            <span class="icon-font" aria-hidden="true" data-icon="&#xe001;"></span><p> Photos</p>
+                        </div>
+                }
+                else if (@item.Order == 6)
+                {
+                    <div class="big photos-thumb" data-page="random-page">
+                        <span class="icon-font" aria-hidden="true" data-icon="&#xe009;">@item.Name</span>
+                    </div>
+                }
+                else if (@item.Order == 7)
+                {
+                    <div class="small last favorites-thumb" data-page="random-page">
+                    <span class="icon-font" aria-hidden="true" data-icon="&#xe018;">@item.Name</span>
+                    </div>
+                }
+                else if (@item.Order == 10)
+                {
+                    <div class="big games-thumb" data-page="random-page"><span class="icon-font" aria-hidden="true" data-icon="&#xe002;"></span><p>@item.Name</p></div>
+                }
+
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    function showDashBoard() {
+        for (var i = 1; i <= 3; i++) {
+            $('.col' + i).each(function () {
+                $(this).addClass('fadeInForward-' + i).removeClass('fadeOutback');
+            });
+        }
+    }
+
+    function fadeDashBoard() {
+        for (var i = 1; i <= 3; i++) {
+            $('.col' + i).addClass('fadeOutback').removeClass('fadeInForward-' + i);
+        }
+    }
+
+    // fadeDashBoard();
+
+    $(".lock-thumb").click(function () {
+        fadeDashBoard();
+        $('.login-screen').addClass('slidePageInFromLeft').removeClass('slidePageBackLeft');
+    });
+
+    $('#unlock-button').click(function () {
+        $('.login-screen').removeClass('slidePageInFromLeft').addClass('slidePageBackLeft');
+        showDashBoard();
+    });
+
+    $('.big, .small').each(function () {
+        var $this = $(this),
+            page = $this.data('page');
+        $this.on('click', function () {
+            $('.page.' + page).addClass('openpage');
+            fadeDashBoard();
+        })
+    });
+    $('.close-button').click(function () {
+        $(this).parent().addClass('slidePageLeft')
+              .one('webkitAnimationEnd oanimationend msAnimationEnd animationend', function (e) {
+                  $(this).removeClass('slidePageLeft').removeClass('openpage');
+              });
+        showDashBoard();
+    });
+
+</script>*@
+
+<div class="row" style="padding:.75em 1em;">
+
+
+
+    @foreach (var item in @ViewData["DashboardMenuItems"] as List<TaskBoxMenuItem>)
+    {
+        @*<div class="dashboard-item" style="width:@ViewBag.DivCount%;">*@
+            <div class="dashboard-item">
+                <a class="dashboard-stat dashboard-stat-v2 blue" href="#" style="background-color:@item.ColorCode;">
+                    <div class="visual">
+                        <i class="fa fa-comments"></i>
+                    </div>
+                    <div class="details">
+                        <div class="number">
+                            <span data-counter="counterup" data-value="1349">@item.UnreadCount / @item.TotalCount</span>
+                        </div>
+                        <div class="desc"> @item.Name </div>
+                    </div>
+                </a>
+            </div>
+            }
+
+
+
+        </div>
+<style>
+    .dashboard-item {
+            float: left;
+            width:25%;
+            position: relative;
+    min-height: 1px;
+    padding-left: 0px;
+    padding-right: 5px;
+        box-sizing: border-box;
+    margin: 0;
+    line-height: 1.5;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    
+</style>
+<div class="row" >
+    <div style="padding-left:10px;padding-right:10px;float:left;width:80%;" >
+        @(Html.Kendo().Grid<Task>()
+        .Name("gridDashBoard")
+        .HtmlAttributes(new { style = "height:550px" })
+        .Columns(columns =>
+        {
+            columns.Bound(o => o.TaskID).Visible(false);
+            columns.Bound(o => o.OptimeText).Hidden(true).Width(100).ClientGroupHeaderTemplate("<span style='margin-left:20px;'>#= value #</span>");
+            columns.Bound(o => o.TaskNo).Width(100);
+            columns.Bound(o => o.Subject).ClientTemplate(
+                    @"<div>#: Subject #</div>
+                    <br/>
+                    <div>#: Summary #</div>")
+              .Width(500);
+
+            columns.Bound(o => o.TypeID).ClientTemplate("<div>#=GetItemTextValue(TypeID,'GetTaskTypeText')#</div>").Width(100);
+            columns.Bound(o => o.PriorityID).ClientTemplate("<div>#=GetItemTextValue(PriorityID,'GetPriority')#</div>").Width(100);
+            columns.Bound(o => o.AtananSayisi).Width(50).ClientTemplate("<a href='javascript:void(0);' >#= AtananSayisi #</a>");
+            columns.Bound(o => o.StateID).ClientTemplate("<div>#=GetItemTextValue(StateID,'GetTaskStateText')#</div>").Width(100);
+            columns.Bound(p => p.StartDate).Format("{0:dd/MM/yyyy}").Width(100);
+            columns.Bound(p => p.FinishDate).Format("{0:dd/MM/yyyy}").Width(100);
+            //columns.Command(command => command.Custom("Guncelle").Click("GuncellePersonel")).Width(100);
+
+        })
+        .DataSource(dataSource => dataSource
+                                .Ajax()
+                                .Read(read => read.Action("Task_Read", "DashBoard"))
+                                .Events(events => events.Error("GridErrorHandler"))
+                                .PageSize(20)
+                                .Group(groups => groups.Add(p => p.OptimeText))
+                    )
+        .Scrollable()
+        .Groupable()
+        .Sortable(sortable => sortable
+            .AllowUnsort(true)
+            .SortMode(GridSortMode.MultipleColumn))
+        )
+
+
+
+    </div>
+    <div style="padding-left:10px;padding-right:10px;float:left;width:20%">
+        <div class="portlet light bordered">
+            <div class="portlet-title tabbable-line">
+                <div class="caption">
+                    <i class="icon-bubbles font-dark hide"></i>
+                    <span class="caption-subject font-dark bold uppercase">Yorumlar</span>
+                </div>
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#portlet_comments_1" data-toggle="tab"> Bekleyen </a>
+                    </li>
+                    <li>
+                        <a href="#portlet_comments_2" data-toggle="tab"> Cevaplanmış </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="portlet-body">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="portlet_comments_1">
+                        <!-- BEGIN: Comments -->
+                        <div class="mt-comments">
+                            <div class="mt-comment">
+                                <div class="mt-comment-img">
+                                    <img src="../assets/pages/media/users/avatar1.jpg">
+                                </div>
+                                <div class="mt-comment-body">
+                                    <div class="mt-comment-info">
+                                        <span class="mt-comment-author">Ahmet BAL</span>
+                                        <span class="mt-comment-date">26 Feb, 10:30AM</span>
+                                    </div>
+                                    <div class="mt-comment-text"> Lorem Ipsum is simply dummy text of the printing and typesetting industry. </div>
+                                    <div class="mt-comment-details">
+                                        <span class="mt-comment-status mt-comment-status-pending">Pending</span>
+                                        <ul class="mt-comment-actions">
+                                            <li>
+                                                <a href="#">Quick Edit</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">View</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Delete</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-comment">
+                                <div class="mt-comment-img">
+                                    <img src="../assets/pages/media/users/avatar6.jpg">
+                                </div>
+                                <div class="mt-comment-body">
+                                    <div class="mt-comment-info">
+                                        <span class="mt-comment-author">SADİ TEKİN</span>
+                                        <span class="mt-comment-date">12 Feb, 08:30AM</span>
+                                    </div>
+                                    <div class="mt-comment-text"> It is a long established fact that a reader will be distracted. </div>
+                                    <div class="mt-comment-details">
+                                        <span class="mt-comment-status mt-comment-status-rejected">Rejected</span>
+                                        <ul class="mt-comment-actions">
+                                            <li>
+                                                <a href="#">Quick Edit</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">View</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Delete</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-comment">
+                                <div class="mt-comment-img">
+                                    <img src="../assets/pages/media/users/avatar8.jpg">
+                                </div>
+                                <div class="mt-comment-body">
+                                    <div class="mt-comment-info">
+                                        <span class="mt-comment-author">YASİN SÖZERİ</span>
+                                        <span class="mt-comment-date">19 Dec,09:50 AM</span>
+                                    </div>
+                                    <div class="mt-comment-text"> The generated Lorem or non-characteristic Ipsum is therefore or non-characteristic. </div>
+                                    <div class="mt-comment-details">
+                                        <span class="mt-comment-status mt-comment-status-pending">Pending</span>
+                                        <ul class="mt-comment-actions">
+                                            <li>
+                                                <a href="#">Quick Edit</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">View</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Delete</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-comment">
+                                <div class="mt-comment-img">
+                                    <img src="../assets/pages/media/users/avatar4.jpg">
+                                </div>
+                                <div class="mt-comment-body">
+                                    <div class="mt-comment-info">
+                                        <span class="mt-comment-author">HAKAN ŞAHİN</span>
+                                        <span class="mt-comment-date">10 Dec, 09:20 AM</span>
+                                    </div>
+                                    <div class="mt-comment-text"> The standard chunk of Lorem or non-characteristic Ipsum used since the 1500s or non-characteristic. </div>
+                                    <div class="mt-comment-details">
+                                        <span class="mt-comment-status mt-comment-status-rejected">Rejected</span>
+                                        <ul class="mt-comment-actions">
+                                            <li>
+                                                <a href="#">Quick Edit</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">View</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Delete</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END: Comments -->
+                    </div>
+                    <div class="tab-pane" id="portlet_comments_2">
+                        <!-- BEGIN: Comments -->
+                        <div class="mt-comments">
+                            <div class="mt-comment">
+                                <div class="mt-comment-img">
+                                    <img src="../assets/pages/media/users/avatar4.jpg">
+                                </div>
+                                <div class="mt-comment-body">
+                                    <div class="mt-comment-info">
+                                        <span class="mt-comment-author">MURAT MERT</span>
+                                        <span class="mt-comment-date">26 Feb, 10:30AM</span>
+                                    </div>
+                                    <div class="mt-comment-text"> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy. </div>
+                                    <div class="mt-comment-details">
+                                        <span class="mt-comment-status mt-comment-status-approved">Approved</span>
+                                        <ul class="mt-comment-actions">
+                                            <li>
+                                                <a href="#">Quick Edit</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">View</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Delete</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-comment">
+                                <div class="mt-comment-img">
+                                    <img src="../assets/pages/media/users/avatar8.jpg">
+                                </div>
+                                <div class="mt-comment-body">
+                                    <div class="mt-comment-info">
+                                        <span class="mt-comment-author">HABİL ERSOY</span>
+                                        <span class="mt-comment-date">12 Feb, 08:30AM</span>
+                                    </div>
+                                    <div class="mt-comment-text"> It is a long established fact that a reader will be distracted by. </div>
+                                    <div class="mt-comment-details">
+                                        <span class="mt-comment-status mt-comment-status-approved">Approved</span>
+                                        <ul class="mt-comment-actions">
+                                            <li>
+                                                <a href="#">Quick Edit</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">View</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Delete</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-comment">
+                                <div class="mt-comment-img">
+                                    <img src="../assets/pages/media/users/avatar6.jpg">
+                                </div>
+                                <div class="mt-comment-body">
+                                    <div class="mt-comment-info">
+                                        <span class="mt-comment-author">DENİZ DERYA</span>
+                                        <span class="mt-comment-date">19 Dec,09:50 AM</span>
+                                    </div>
+                                    <div class="mt-comment-text"> The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc. </div>
+                                    <div class="mt-comment-details">
+                                        <span class="mt-comment-status mt-comment-status-approved">Approved</span>
+                                        <ul class="mt-comment-actions">
+                                            <li>
+                                                <a href="#">Quick Edit</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">View</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Delete</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-comment">
+                                <div class="mt-comment-img">
+                                    <img src="../assets/pages/media/users/avatar1.jpg">
+                                </div>
+                                <div class="mt-comment-body">
+                                    <div class="mt-comment-info">
+                                        <span class="mt-comment-author">BETÜL BEGÜM</span>
+                                        <span class="mt-comment-date">10 Dec, 09:20 AM</span>
+                                    </div>
+                                    <div class="mt-comment-text"> The standard chunk of Lorem Ipsum used since the 1500s </div>
+                                    <div class="mt-comment-details">
+                                        <span class="mt-comment-status mt-comment-status-approved">Approved</span>
+                                        <ul class="mt-comment-actions">
+                                            <li>
+                                                <a href="#">Quick Edit</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">View</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Delete</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END: Comments -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        @*<div class="col-lg-6 col-xs-12 col-sm-12">
+                <div class="portlet light bordered">
+                    <div class="portlet-title tabbable-line">
+                        <div class="caption">
+                            <i class=" icon-social-twitter font-dark hide"></i>
+                            <span class="caption-subject font-dark bold uppercase">Tasklar</span>
+                        </div>
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#tab_actions_pending" data-toggle="tab">Onay Bekleyen </a>
+                            </li>
+                            <li>
+                                <a href="#tab_actions_completed" data-toggle="tab"> Tamamlanmış </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab_actions_pending">
+                                <!-- BEGIN: Actions -->
+                                <div class="mt-actions">
+                                    <div class="mt-action">
+                                        <div class="mt-action-img">
+                                            <img src="../assets/pages/media/users/avatar10.jpg">
+                                        </div>
+                                        <div class="mt-action-body">
+                                            <div class="mt-action-row">
+                                                <div class="mt-action-info ">
+                                                    <div class="mt-action-icon ">
+                                                        <i class="icon-magnet"></i>
+                                                    </div>
+                                                    <div class="mt-action-details ">
+                                                        <span class="mt-action-author">Natasha Kim</span>
+                                                        <p class="mt-action-desc">Dummy text of the printing</p>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-action-datetime ">
+                                                    <span class="mt-action-date">3 jun</span>
+                                                    <span class="mt-action-dot bg-green"></span>
+                                                    <span class="mt=action-time">9:30-13:00</span>
+                                                </div>
+                                                <div class="mt-action-buttons ">
+                                                    <div class="btn-group btn-group-circle">
+                                                        <button type="button" class="btn btn-outline green btn-sm">Appove</button>
+                                                        <button type="button" class="btn btn-outline red btn-sm">Reject</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-action">
+                                        <div class="mt-action-img">
+                                            <img src="../assets/pages/media/users/avatar3.jpg">
+                                        </div>
+                                        <div class="mt-action-body">
+                                            <div class="mt-action-row">
+                                                <div class="mt-action-info ">
+                                                    <div class="mt-action-icon ">
+                                                        <i class=" icon-bubbles"></i>
+                                                    </div>
+                                                    <div class="mt-action-details ">
+                                                        <span class="mt-action-author">Gavin Bond</span>
+                                                        <p class="mt-action-desc">pending for approval</p>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-action-datetime ">
+                                                    <span class="mt-action-date">3 jun</span>
+                                                    <span class="mt-action-dot bg-red"></span>
+                                                    <span class="mt=action-time">9:30-13:00</span>
+                                                </div>
+                                                <div class="mt-action-buttons ">
+                                                    <div class="btn-group btn-group-circle">
+                                                        <button type="button" class="btn btn-outline green btn-sm">Appove</button>
+                                                        <button type="button" class="btn btn-outline red btn-sm">Reject</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-action">
+                                        <div class="mt-action-img">
+                                            <img src="../assets/pages/media/users/avatar2.jpg">
+                                        </div>
+                                        <div class="mt-action-body">
+                                            <div class="mt-action-row">
+                                                <div class="mt-action-info ">
+                                                    <div class="mt-action-icon ">
+                                                        <i class="icon-call-in"></i>
+                                                    </div>
+                                                    <div class="mt-action-details ">
+                                                        <span class="mt-action-author">Diana Berri</span>
+                                                        <p class="mt-action-desc">Lorem Ipsum is simply dummy text</p>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-action-datetime ">
+                                                    <span class="mt-action-date">3 jun</span>
+                                                    <span class="mt-action-dot bg-green"></span>
+                                                    <span class="mt=action-time">9:30-13:00</span>
+                                                </div>
+                                                <div class="mt-action-buttons ">
+                                                    <div class="btn-group btn-group-circle">
+                                                        <button type="button" class="btn btn-outline green btn-sm">Appove</button>
+                                                        <button type="button" class="btn btn-outline red btn-sm">Reject</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-action">
+                                        <div class="mt-action-img">
+                                            <img src="../assets/pages/media/users/avatar7.jpg">
+                                        </div>
+                                        <div class="mt-action-body">
+                                            <div class="mt-action-row">
+                                                <div class="mt-action-info ">
+                                                    <div class="mt-action-icon ">
+                                                        <i class=" icon-bell"></i>
+                                                    </div>
+                                                    <div class="mt-action-details ">
+                                                        <span class="mt-action-author">John Clark</span>
+                                                        <p class="mt-action-desc">Text of the printing and typesetting industry</p>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-action-datetime ">
+                                                    <span class="mt-action-date">3 jun</span>
+                                                    <span class="mt-action-dot bg-red"></span>
+                                                    <span class="mt=action-time">9:30-13:00</span>
+                                                </div>
+                                                <div class="mt-action-buttons ">
+                                                    <div class="btn-group btn-group-circle">
+                                                        <button type="button" class="btn btn-outline green btn-sm">Appove</button>
+                                                        <button type="button" class="btn btn-outline red btn-sm">Reject</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-action">
+                                        <div class="mt-action-img">
+                                            <img src="../assets/pages/media/users/avatar8.jpg">
+                                        </div>
+                                        <div class="mt-action-body">
+                                            <div class="mt-action-row">
+                                                <div class="mt-action-info ">
+                                                    <div class="mt-action-icon ">
+                                                        <i class="icon-magnet"></i>
+                                                    </div>
+                                                    <div class="mt-action-details ">
+                                                        <span class="mt-action-author">Donna Clarkson </span>
+                                                        <p class="mt-action-desc">Simply dummy text of the printing</p>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-action-datetime ">
+                                                    <span class="mt-action-date">3 jun</span>
+                                                    <span class="mt-action-dot bg-green"></span>
+                                                    <span class="mt=action-time">9:30-13:00</span>
+                                                </div>
+                                                <div class="mt-action-buttons ">
+                                                    <div class="btn-group btn-group-circle">
+                                                        <button type="button" class="btn btn-outline green btn-sm">Appove</button>
+                                                        <button type="button" class="btn btn-outline red btn-sm">Reject</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-action">
+                                        <div class="mt-action-img">
+                                            <img src="../assets/pages/media/users/avatar9.jpg">
+                                        </div>
+                                        <div class="mt-action-body">
+                                            <div class="mt-action-row">
+                                                <div class="mt-action-info ">
+                                                    <div class="mt-action-icon ">
+                                                        <i class="icon-magnet"></i>
+                                                    </div>
+                                                    <div class="mt-action-details ">
+                                                        <span class="mt-action-author">Tom Larson</span>
+                                                        <p class="mt-action-desc">Lorem Ipsum is simply dummy text</p>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-action-datetime ">
+                                                    <span class="mt-action-date">3 jun</span>
+                                                    <span class="mt-action-dot bg-green"></span>
+                                                    <span class="mt=action-time">9:30-13:00</span>
+                                                </div>
+                                                <div class="mt-action-buttons ">
+                                                    <div class="btn-group btn-group-circle">
+                                                        <button type="button" class="btn btn-outline green btn-sm">Appove</button>
+                                                        <button type="button" class="btn btn-outline red btn-sm">Reject</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- END: Actions -->
+                            </div>
+                            <div class="tab-pane" id="tab_actions_completed">
+                                <!-- BEGIN:Completed-->
+                                <div class="mt-actions">
+                                    <div class="mt-action">
+                                        <div class="mt-action-img">
+                                            <img src="../assets/pages/media/users/avatar1.jpg">
+                                        </div>
+                                        <div class="mt-action-body">
+                                            <div class="mt-action-row">
+                                                <div class="mt-action-info ">
+                                                    <div class="mt-action-icon ">
+                                                        <i class="icon-action-redo"></i>
+                                                    </div>
+                                                    <div class="mt-action-details ">
+                                                        <span class="mt-action-author">Frank Cameron</span>
+                                                        <p class="mt-action-desc">Lorem Ipsum is simply dummy</p>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-action-datetime ">
+                                                    <span class="mt-action-date">3 jun</span>
+                                                    <span class="mt-action-dot bg-red"></span>
+                                                    <span class="mt=action-time">9:30-13:00</span>
+                                                </div>
+                                                <div class="mt-action-buttons ">
+                                                    <div class="btn-group btn-group-circle">
+                                                        <button type="button" class="btn btn-outline green btn-sm">Appove</button>
+                                                        <button type="button" class="btn btn-outline red btn-sm">Reject</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-action">
+                                        <div class="mt-action-img">
+                                            <img src="../assets/pages/media/users/avatar8.jpg">
+                                        </div>
+                                        <div class="mt-action-body">
+                                            <div class="mt-action-row">
+                                                <div class="mt-action-info ">
+                                                    <div class="mt-action-icon ">
+                                                        <i class="icon-cup"></i>
+                                                    </div>
+                                                    <div class="mt-action-details ">
+                                                        <span class="mt-action-author">Ella Davidson </span>
+                                                        <p class="mt-action-desc">Text of the printing and typesetting industry</p>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-action-datetime ">
+                                                    <span class="mt-action-date">3 jun</span>
+                                                    <span class="mt-action-dot bg-green"></span>
+                                                    <span class="mt=action-time">9:30-13:00</span>
+                                                </div>
+                                                <div class="mt-action-buttons">
+                                                    <div class="btn-group btn-group-circle">
+                                                        <button type="button" class="btn btn-outline green btn-sm">Appove</button>
+                                                        <button type="button" class="btn btn-outline red btn-sm">Reject</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-action">
+                                        <div class="mt-action-img">
+                                            <img src="../assets/pages/media/users/avatar5.jpg">
+                                        </div>
+                                        <div class="mt-action-body">
+                                            <div class="mt-action-row">
+                                                <div class="mt-action-info ">
+                                                    <div class="mt-action-icon ">
+                                                        <i class=" icon-graduation"></i>
+                                                    </div>
+                                                    <div class="mt-action-details ">
+                                                        <span class="mt-action-author">Jason Dickens </span>
+                                                        <p class="mt-action-desc">Dummy text of the printing and typesetting industry</p>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-action-datetime ">
+                                                    <span class="mt-action-date">3 jun</span>
+                                                    <span class="mt-action-dot bg-red"></span>
+                                                    <span class="mt=action-time">9:30-13:00</span>
+                                                </div>
+                                                <div class="mt-action-buttons ">
+                                                    <div class="btn-group btn-group-circle">
+                                                        <button type="button" class="btn btn-outline green btn-sm">Appove</button>
+                                                        <button type="button" class="btn btn-outline red btn-sm">Reject</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-action">
+                                        <div class="mt-action-img">
+                                            <img src="../assets/pages/media/users/avatar2.jpg">
+                                        </div>
+                                        <div class="mt-action-body">
+                                            <div class="mt-action-row">
+                                                <div class="mt-action-info ">
+                                                    <div class="mt-action-icon ">
+                                                        <i class="icon-badge"></i>
+                                                    </div>
+                                                    <div class="mt-action-details ">
+                                                        <span class="mt-action-author">Jan Kim</span>
+                                                        <p class="mt-action-desc">Lorem Ipsum is simply dummy</p>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-action-datetime ">
+                                                    <span class="mt-action-date">3 jun</span>
+                                                    <span class="mt-action-dot bg-green"></span>
+                                                    <span class="mt=action-time">9:30-13:00</span>
+                                                </div>
+                                                <div class="mt-action-buttons ">
+                                                    <div class="btn-group btn-group-circle">
+                                                        <button type="button" class="btn btn-outline green btn-sm">Appove</button>
+                                                        <button type="button" class="btn btn-outline red btn-sm">Reject</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- END: Completed -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+    </div>
+

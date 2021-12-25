@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="WSD.TaskCloud.WcfServices.Implementation.GeneralDefinitionsService" CodeBehind="GeneralDefinitionsService.svc.cs" %>

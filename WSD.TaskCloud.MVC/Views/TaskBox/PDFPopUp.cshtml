@@ -1,0 +1,360 @@
+﻿
+
+
+
+@{
+    ViewBag.Title = "Talep İndir";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+
+
+@using WSD.TaskCloud.Contracts.EF
+@using WSD.TaskCloud.MVC.HelperClasses
+
+@model TaskRequest
+
+
+<style>
+    p {
+        page-break-after: always;
+    }
+
+
+</style>
+
+@*<button class="export-pdf k-button" onclick="getPDF('.pdf-page')">Export</button>*@
+
+<div style="width:inherit;height:inherit;overflow-y:scroll;">
+    <div id="dvPage" class="pdf-page size-a4">
+        <div class="pdf-header">
+            <div style="float:left;">
+                <img src="@Url.Content("~/Images/logo.png")" alt="TKGM logo" style="display:block;margin-left:0px;margin-right:auto" />
+            </div>
+            <div style="float:right;">
+                <img src="@Url.Content("~/Images/bakanlik2.png")" alt="Bakanlik logo" style="display:block;margin-right:0px;margin-left:auto;" />
+            </div>
+           
+
+        </div>
+
+
+        <div class="pdf-body">
+            <span class="task-from">@Model.Task.TaskNo</span>
+
+            <span class="task-number">@Model.Task.Optime.ToString("dd-MM-yyyy")</span>
+            <p>
+                <b><span class="task-from">KONU : @Model.Subject</span></b>
+            </p>
+            <br />
+            <p>
+                @Html.Raw(Model.Task.Description)
+            </p>
+            <p class="imza">
+                <span>@Model.TaskFrom.ToUpper()</span>
+                <br />
+                <span>@HtmlHelperExtensions.GetUserRoleName(Model.Task.Users)</span>
+                <br />
+                <img src="@Url.Action("GetSignImgFile", "TaskBox", new { taskRequestID = Model.TaskRequestID })" />
+                @*<img src="@HtmlHelperExtensions.GetSignImg(Model.Task.Users.SignImg)" />*@
+            </p>
+            @if (Model.Task.Attachments.Count() > 0)
+            {
+                <div class="ekler">
+
+
+                    <span><b>Ekler:</b></span>
+
+                    <br />
+                    @foreach (var item in Model.Task.Attachments)
+                {
+                        <p>
+                            <span>@item.Name</span>
+                        </p>
+
+                }
+
+
+                </div>
+        }
+            @*<div class="footer">Page: <span class="pagenum"></span></div>*@
+        </div>
+
+        <div class="pdf-footer">
+            <p>
+                http://www.tkgm.gov.tr <br />
+                +90 3124136000<br />
+                Dikmen Caddesi No: 14 Bakanlıklar 06100 ANKARA TÜRKİYE
+            </p>
+
+        </div>
+
+    </div>
+</div>
+<nav class="container">
+
+
+
+
+
+    <a class="buttons" tooltip="İndir" onclick="getPDF('.pdf-page')" href="#"></a>
+
+</nav>
+
+
+<div class="responsive-message"></div>
+
+<style>
+    /*
+        Use the DejaVu Sans font for display and embedding in the PDF file.
+        The standard PDF fonts have no support for Unicode characters.
+    */
+    .pdf-page {
+        font-family: "DejaVu Sans", "Arial", sans-serif;
+    }
+</style>
+
+
+
+
+
+<style>
+    
+     .footer { position: fixed; bottom: 0px; }
+      .pagenum:before { content: counter(page); }
+
+    .pdf-page {
+        margin: 0 auto;
+        box-sizing: border-box;
+        box-shadow: 0 5px 10px 0 rgba(0,0,0,.3);
+        background-color: #fff;
+        color: #333;
+        position: relative;
+    }
+
+    .pdf-header {
+        position: absolute;
+        top: .5in;
+        height: .6in;
+        left: .5in;
+        right: .5in;
+    }
+
+    .task-number {
+        padding-top: .17in;
+        float: right;
+    }
+
+    .task-from {
+        padding-top: .17in;
+        float: left;
+    }
+
+    .imza {
+        padding-top: .5in;
+        padding-right: .9in;
+        float: right;
+    }
+
+    .ekler {
+        position: absolute;
+        bottom: .1in;
+        height: auto;
+        left: 0in;
+        right: .5in;
+        padding-top: 10px;
+    
+        text-align: left;
+    
+        font-size: 12px;
+    }
+
+    .pdf-footer {
+        position: absolute;
+        bottom: .5in;
+        height: .6in;
+        left: .5in;
+        right: .5in;
+        padding-top: 10px;
+        border-top: 1px solid #e5e5e5;
+        text-align: left;
+        color: #787878;
+        font-size: 12px;
+    }
+
+    .pdf-body {
+        position: absolute;
+        top: 3.7in;
+        bottom: 1.2in;
+        left: .5in;
+        right: .5in;
+        font-size: 12px;
+    }
+
+    .size-a4 {
+        width: 8.3in;
+        height: 11.7in;
+    }
+
+    .size-letter {
+        width: 8.5in;
+        height: 11in;
+    }
+
+    .size-executive {
+        width: 7.25in;
+        height: 10.5in;
+    }
+
+    .company-logo {
+        font-size: 30px;
+        font-weight: bold;
+        color: #3aabf0;
+    }
+</style>
+
+<style>
+    /*
+        Use the DejaVu Sans font for display and embedding in the PDF file.
+        The standard PDF fonts have no support for Unicode characters.
+    */
+    .pdf-page {
+        font-family: "DejaVu Sans", "Arial", sans-serif;
+    }
+</style>
+
+<script>
+
+    $(document).ready(function () {
+
+        $('#dvPage').animate({ 'zoom': 0.8 }, 400)
+           
+    });
+
+    // Import DejaVu Sans font for embedding
+
+    // NOTE: Only required if the Kendo UI stylesheets are loaded
+    // from a different origin, e.g. cdn.kendostatic.com
+    kendo.pdf.defineFont({
+        "DejaVu Sans": "//kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans.ttf",
+        "DejaVu Sans|Bold": "//kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Bold.ttf",
+        "DejaVu Sans|Bold|Italic": "//kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf",
+        "DejaVu Sans|Italic": "//kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf"
+    });
+</script>
+
+@*<script src="@Url.Content("~/Content/js/kendo/2016.1.226/pako.min.js")"></script>*@
+<!-- Load Pako ZLIB library to enable PDF compression -->
+
+<script>
+
+    function getPDF(selector) {
+        kendo.drawing.drawDOM($(selector)).then(function (group) {
+            var fName = '@Model.TaskNo' + ".pdf";
+            kendo.drawing.pdf.saveAs(group, fName);
+            
+        });
+    }
+
+</script>
+
+<style>
+    .container {
+        top: 100px;
+        position: fixed;
+        right: -150px;
+    }
+
+    .buttons {
+        box-shadow: 0px 5px 11px -2px rgba(0, 0, 0, 0.18), 0px 4px 12px -7px rgba(0, 0, 0, 0.15);
+        border-radius: 50%;
+        display: block;
+        width: 56px;
+        height: 56px;
+        margin: 20px auto 0;
+        position: relative;
+        -webkit-transition: all .1s ease-out;
+        transition: all .1s ease-out;
+    }
+
+        .buttons:active,
+        .buttons:focus,
+        .buttons:hover {
+            box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);
+        }
+
+        .buttons:not(:last-child) {
+            width: 40px;
+            height: 40px;
+            margin: 20px auto 0;
+            opacity: 0;
+            -webkit-transform: translateY(50px);
+            -ms-transform: translateY(50px);
+            transform: translateY(50px);
+        }
+
+    .container:hover .buttons:not(:last-child) {
+        opacity: 1;
+        -webkit-transform: none;
+        -ms-transform: none;
+        transform: none;
+        margin: 15px auto 0;
+    }
+
+    /* Unessential styling for sliding up buttons at differnt speeds */
+
+    .buttons:nth-last-child(1) {
+        -webkit-transition-delay: 25ms;
+        transition-delay: 25ms;
+        background-image: url('../../Images/fileicons/download.svg');
+        background-size: contain;
+    }
+
+    .buttons:not(:last-child):nth-last-child(2) {
+        -webkit-transition-delay: 50ms;
+        transition-delay: 20ms;
+        background-image: url('http://cbwconline.com/IMG/Facebook-Flat.png');
+        background-size: contain;
+    }
+
+    .buttons:not(:last-child):nth-last-child(3) {
+        -webkit-transition-delay: 75ms;
+        transition-delay: 40ms;
+        background-image: url('http://cbwconline.com/IMG/Twitter-Flat.png');
+        background-size: contain;
+    }
+
+    .buttons:not(:last-child):nth-last-child(4) {
+        -webkit-transition-delay: 100ms;
+        transition-delay: 60ms;
+        background-image: url('http://cbwconline.com/IMG/Google%20Plus.svg');
+        background-size: contain;
+    }
+
+    /* Show tooltip content on hover */
+
+    [tooltip]:before {
+        bottom: 25%;
+        font-family: arial;
+        font-weight: 600;
+        border-radius: 2px;
+        background: #585858;
+        color: #fff;
+        content: attr(tooltip);
+        font-size: 12px;
+        visibility: hidden;
+        opacity: 0;
+        padding: 5px 7px;
+        margin-right: 12px;
+        position: absolute;
+        right: 100%;
+        white-space: nowrap;
+    }
+
+    [tooltip]:hover:before,
+    [tooltip]:hover:after {
+        visibility: visible;
+        opacity: 1;
+    }
+</style>

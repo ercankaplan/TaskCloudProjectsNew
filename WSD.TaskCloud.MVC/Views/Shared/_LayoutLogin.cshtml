@@ -1,0 +1,77 @@
+﻿
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Task Cloud Giriş</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content="Task Cloud" name="description" />
+    <meta content="Ercan Kaplan" name="author" />
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/css/font-awesome.min.css")" rel="stylesheet" type="text/css">
+    <link href="@Url.Content("~/Content/css/simple-line-icons.min.css")" rel="stylesheet" type="text/css">
+    <link href="@Url.Content("~/Content/css/bootstrap.min.css")" rel="stylesheet" type="text/css">
+    <link href="@Url.Content("~/Content/css/bootstrap-switch.min.css")" rel="stylesheet" type="text/css">
+    <!-- END GLOBAL MANDATORY STYLES -->
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <link href="@Url.Content("~/Content/css/select2.min.css")" rel="stylesheet" type="text/css">
+    <link href="@Url.Content("~/Content/css/select2-bootstrap.min.css")" rel="stylesheet" type="text/css">
+    <!-- END PAGE LEVEL PLUGINS -->
+    <!-- BEGIN THEME GLOBAL STYLES -->
+    <link href="@Url.Content("~/Content/css/components.min.css")" rel="stylesheet" id="style_components" type="text/css">
+    <link href="@Url.Content("~/Content/css/plugins.min.css")" rel="stylesheet" type="text/css">
+    <!-- END THEME GLOBAL STYLES -->
+    <!-- BEGIN THEME LAYOUT STYLES -->
+    <link href="@Url.Content("~/Content/css/login-5.min.css")" rel="stylesheet" type="text/css">
+    <link href="~/Content/css/custom.css" rel="stylesheet" />
+    <!-- END THEME LAYOUT STYLES -->
+
+</head>
+<!-- END HEAD -->
+
+<body class="login">
+    @RenderBody()
+
+    <!-- END : LOGIN PAGE 5-1 -->
+    <!--[if lt IE 9]>
+    <script src="../assets/global/plugins/respond.min.js"></script>
+    <script src="../assets/global/plugins/excanvas.min.js"></script>
+    <script src="../assets/global/plugins/ie8.fix.min.js"></script>
+    <![endif]-->
+    <!-- BEGIN CORE PLUGINS -->
+    <script src="@Url.Content("~/Content/js/jquery.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/js/bootstrap.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/js/js.cookie.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/js/bootstrap-hover-dropdown.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/js/jquery.slimscroll.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/js/jquery.blockui.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/js/bootstrap-switch.min.js")" type="text/javascript"></script>
+    <!-- END CORE PLUGINS -->
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <script src="@Url.Content("~/Content/js/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/js/additional-methods.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/js/select2.full.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/js/jquery.backstretch.min.js")" type="text/javascript"></script>
+    <!-- END PAGE LEVEL PLUGINS -->
+    <!-- BEGIN THEME GLOBAL SCRIPTS -->
+    <script src="@Url.Content("~/Content/js/app.min.js")" type="text/javascript"></script>
+    <!-- END THEME GLOBAL SCRIPTS -->
+    <!-- BEGIN PAGE LEVEL SCRIPTS -->
+    <script src="@Url.Content("~/Content/js/login-5.min.js")" type="text/javascript"></script>
+    <!-- END PAGE LEVEL SCRIPTS -->
+    <!-- BEGIN THEME LAYOUT SCRIPTS -->
+    <!-- END THEME LAYOUT SCRIPTS -->
+    <!-- End -->
+    <script src="~/Content/js/jquery.disable.autocomplete.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('input[type=password]').disableAutocomplete();
+        });
+    </script>
+</body>
+
+
+</html>

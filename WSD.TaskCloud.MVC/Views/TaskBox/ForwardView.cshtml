@@ -1,0 +1,176 @@
+﻿
+
+
+@using WSD.TaskCloud.Contracts.DataContracts.Task
+
+@model TaskForwardModel
+
+
+<script>
+    function OnResponseFileUploadError(e) {
+        debugger;
+        var errorData = $.parseJSON(e.XMLHttpRequest.responseText);
+
+        var errorMessages = [];
+        for (var key in errorData) {
+            errorMessages.push(errorData[key]);
+        }
+        var m = errorMessages.join("<br />");
+        ShowMessage(m,@WSD.TaskCloud.MVC.ClientContracts.EnumMessageType.Error.GetHashCode());
+
+    }
+
+
+    function OpenAssignUserWin() {
+
+        var t = '@Model.TaskTypeID';
+        debugger;
+
+        $.post('@Url.Action("AssignUsers", "Task")', { taskTypeID: t },
+                 function (data) {
+                     var tWindowElement = $('#userswindow');
+                     tWindowElement.data('kendoWindow').content(data);
+                     tWindowElement.data('kendoWindow').title("Görev Atama");
+                     tWindowElement.data('kendoWindow').center().open();
+                 }
+                , 'html');
+    }
+
+    function onCheckAssignedUsers(e) {
+
+        debugger;
+
+        var data = $('#treeview').data('kendoTreeView').dataItem(e.node);
+
+
+        $.post('@Url.Action("AddAssignedForwardUsers", "TaskBox")', { id: data.id, isChecked: data.checked },
+                    function (data) {
+
+                    }
+                   , 'html');
+
+    }
+
+
+
+
+
+    function RefreshGridAssignedUser() {
+        onCloseContentWND();
+        var tree = $("#treeviewAssignedUsers").data("kendoTreeView");
+
+        expandNextLevel();
+
+    }
+
+    function expandNextLevel() {
+        setTimeout(function () {
+            var treeview = $("#treeviewAssignedUsers").data("kendoTreeView");
+            var b = $('.k-item .k-plus').length;
+            treeview.expand(".k-item");
+            treeview.trigger('dataBound');
+            if (b > 0) {
+                expandNextLevel();
+            }
+
+        }, 200);
+    }
+
+</script>
+
+
+
+<div class="row rowStyle">
+    <div class="myDiv">
+
+
+        @using (Ajax.BeginForm("SaveForwardTask", "TaskBox", new AjaxOptions { InsertionMode = InsertionMode.Replace, HttpMethod = "Post", UpdateTargetId = "dvResult" }))
+        {
+
+            @*<input style="text-align:right" type="submit" value="Gönder" class="k-button k-button-icontext k-grid-add" />*@
+
+            @*@Html.TextAreaFor(model => model.Description, new { style = "width: 100%;min-height:200px;", @class = "TextBoxDateTime", @placeholder = "Cevabı buraya girin" })*@
+            @Html.HiddenFor(m => m.TaskRequestID)
+            <div class="col-md-2 paddingFixer0 row-sep">
+                @Html.StarredLabelFor(m => m.Subject)
+            </div>
+            <div class="col-md-10 paddingFixer0 row-sep">
+                @(Html.TextBoxFor(i => i.Subject, new { @class = "TextBoxClass", autocomplete = "off" }))
+            </div>
+            <div class="col-md-2 paddingFixer0 row-sep">
+                @Html.StarredLabelFor(m => m.AtananKullanicilar)
+            </div>
+            <div class="col-md-10 paddingFixer0 row-sep">
+                <a href="javascript:void(0);" onclick="OpenAssignUserWin();"><span>Kişiler</span></a><div id="treeviewAssignedUsers"></div>
+            </div>
+           
+            @(Html.Kendo().Editor()
+        .Tools(t => t.CustomTemplate(ct => ct.Template("<input type='submit' value='İlet' class='k-button k-button-icontext k-grid-add'>"))
+             )
+
+
+                                .Name("TaskDescription")
+                                .HtmlAttributes(new { style = "height:200px;text-transform:uppercase;", @class = "TextBoxDateTime" })
+                                .Resizable(resizable => resizable.Content(true).Toolbar(true))
+                                .ImageBrowser(imageBrowser => imageBrowser
+                                .Image("~/Content/UserFiles/Images/{0}")
+                                .Read("Read", "ImageBrowser")
+                                .Create("Create", "ImageBrowser")
+                                .Destroy("Destroy", "ImageBrowser")
+                                .Upload("Upload", "ImageBrowser")
+                                .Thumbnail("Thumbnail", "ImageBrowser")
+                                )
+                                .Value(@<text>
+
+                                </text>)
+            )
+
+            <br />
+
+
+            @(Html.Kendo().Upload()
+                                .Name("ResponseFiles")
+                                .Messages(m => m.Select("Dosya Seç"))
+                                .Events(evn => evn.Error("OnResponseFileUploadError"))
+                                .Async(async => async.Save("AttachFileForward", "TaskBox")
+                                            .Remove("RemoveFileForward", "TaskBox")
+                                            .SaveField("files")
+
+
+                                )
+
+                                //.TemplateId("fileTemplate")
+                                .Multiple(true)
+                                 .HtmlAttributes(new { style = "width: 100%;" })
+            )
+
+
+        }
+
+
+
+    </div>
+</div>
+
+@(Html.Kendo().Window()
+    .Name("userswindow")
+    .Title("Kullanıcılar")
+    .Content(@<text>
+
+    </text>)
+    .Draggable()
+    .Resizable()
+    .Width(500)
+    .Height(650)
+    .Actions(actions => actions.Close())
+    .Events(ev => ev.Close("RefreshGridAssignedUser").Open("onOpenContentWND"))
+    .HtmlAttributes(new { @style = "display: none; overflow-y: hidden; overflow-x: hidden;" })
+)
+
+
+
+
+
+
+
+

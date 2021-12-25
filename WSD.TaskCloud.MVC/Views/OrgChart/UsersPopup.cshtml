@@ -1,0 +1,38 @@
+﻿
+@using WSD.TaskCloud.Contracts.EF
+@model IEnumerable<Users>
+
+@(Html.Kendo().Grid<Users>()
+        .Name("gridUsersPopup")
+        .HtmlAttributes(new { style = "height:auto;" })
+        .Columns(columns =>
+        {
+            columns.Template(e => { }).ClientTemplate("<div class='employee-photo-popup' style='background-image:url(/Images/demo/1.jpg);'></div>");
+            columns.Bound(o => o.UserRoleData.RoleData.Name);
+            columns.Bound(o => o.Profile.RegistryNum);
+            columns.Bound(o => o.Profile.FirstName);
+            columns.Bound(o => o.Profile.LastName);
+        })
+
+        .DataSource(dataSource => dataSource
+               .Ajax()
+                .Read(read => read.Action("UsersPopup_Read", "OrgChart"))
+        .PageSize(20)
+        .ServerOperation(false)
+        )
+        .Scrollable()
+)
+<style>
+    .employee-photo-popup {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-size: 30px 35px;
+        background-position: center center;
+        vertical-align: middle;
+        line-height: 30px;
+        box-shadow: inset 0 0 1px #999, inset 0 0 10px rgba(0,0,0,.2);
+        margin-left: 5px;
+    }
+</style>

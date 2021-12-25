@@ -1,0 +1,69 @@
+﻿@{
+    Layout = null;
+}
+@model WSD.TaskCloud.Contracts.DataContracts.OrgChart.AddUserRequest
+
+@using (Html.BeginForm("ResetPasswordPost", "Account", FormMethod.Post, new { enctype = "multipart/form-data", id = "resetPassWordFrm" }))
+{
+    <div class="row rowStyle" align="center">
+        <fieldset>
+            <div class="row row-type2">
+                <div class="col-md-5 col-sm-5 row-sep">
+                    <div class="col-md-4 paddingFixer row-sep">
+                        @Html.StarredLabelFor(m => m.PasswordField)
+                    </div>
+                    <div class="col-md-8 paddingFixer row-sep">
+                        @(Html.TextBoxFor(i => i.PasswordField, new { @class = "TextBoxClass", type = "password", style = "max-width:290px" }))
+                    </div>
+                </div>
+                <div class="col-md-5 col-sm-5 row-sep">
+                    <div class="col-md-4 paddingFixer row-sep">
+                        @Html.StarredLabelFor(m => m.PasswordField2)
+                    </div>
+                    <div class="col-md-8 paddingFixer row-sep">
+                        @(Html.TextBoxFor(i => i.PasswordField2, new { @class = "TextBoxClass", type = "password", style = "max -width:290px" }))
+                    </div>
+                </div>
+            </div>
+            <div class="row row-type1 ">
+                <div class="col-md-4 col-sm col-sm-offset-2 col-sm-4 col-md-offset-4 paddingFixer0">
+                    <button type="submit" class="btn btn-success btn-block" id="sorgulaBtn" style="max-width:410px">Kaydet</button>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    @Html.HiddenFor(i => i.OpUserID)
+    @Html.HiddenFor(i => i.Password)
+}
+
+<script>
+
+    $(document).ready(function () {
+
+        $("#resetPassWordFrm").kendoValidator({
+            rules: {
+                verifyPasswords: function (input) {
+                    var ret = true;
+                    if (input.is("[name=PasswordField2]")) {
+                        ret = input.val() === $("#PasswordField").val();
+                    }
+                    return ret;
+                }
+            },
+            messages: {
+                verifyPasswords: "Şifre Eşleşmiyor"
+            }
+        });
+    });
+</script>
+<style>
+    .k-window-actions {
+        display: none;
+    }
+    div.k-window-content{
+        background-color:rgba(87, 147, 175, 0.2);
+    }
+    .row-type1{
+        background-color:none;
+    }
+</style>

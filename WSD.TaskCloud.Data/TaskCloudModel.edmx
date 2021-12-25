@@ -1,0 +1,1930 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TaskCloudModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ActionCode">
+          <Key>
+            <PropertyRef Name="ActionCode" />
+          </Key>
+          <Property Name="ActionCode" Type="char" MaxLength="20" Nullable="false" />
+          <Property Name="UpperActionCode" Type="char" MaxLength="20" />
+          <Property Name="DisplayName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Detail" Type="nvarchar" MaxLength="200" />
+          <Property Name="Controller" Type="nvarchar" MaxLength="100" />
+          <Property Name="ActionName" Type="nvarchar" MaxLength="100" />
+          <Property Name="IsMenu" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AppSettings">
+          <Key>
+            <PropertyRef Name="AppSettingsID" />
+          </Key>
+          <Property Name="AppSettingsID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Attachment">
+          <Key>
+            <PropertyRef Name="AttachmentID" />
+          </Key>
+          <Property Name="AttachmentID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ContentData256K" Type="varbinary(max)" />
+          <Property Name="FilePath" Type="nvarchar" MaxLength="200" />
+          <Property Name="Extend" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="UserRoleID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="Visible" Type="bit" Nullable="false" />
+          <Property Name="Optime" Type="smalldatetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="CategoryID" />
+          </Key>
+          <Property Name="CategoryID" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UpperCategoryID" Type="tinyint" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="IsTabMenu" Type="bit" Nullable="false" />
+          <Property Name="IsMenu" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Conversation">
+          <Key>
+            <PropertyRef Name="ConversationID" />
+          </Key>
+          <Property Name="ConversationID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="TaskID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="TextData" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="Optime" Type="smalldatetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="DepartmentID" />
+          </Key>
+          <Property Name="DepartmentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UpperDepartmentID" Type="int" />
+          <Property Name="Name" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Phone1" Type="nchar" MaxLength="11" />
+          <Property Name="Phone2" Type="nchar" MaxLength="11" />
+          <Property Name="Fax" Type="nchar" MaxLength="11" />
+          <Property Name="EMail" Type="varchar" MaxLength="100" />
+          <Property Name="AddressText" Type="nvarchar" MaxLength="200" />
+          <Property Name="AddressID" Type="int" />
+        </EntityType>
+        <EntityType Name="EmailRequest">
+          <Key>
+            <PropertyRef Name="EmailRequestID" />
+          </Key>
+          <Property Name="EmailRequestID" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Meeting">
+          <Key>
+            <PropertyRef Name="MeetingID" />
+          </Key>
+          <Property Name="MeetingID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TaskID" Type="uniqueidentifier" />
+          <Property Name="Subject" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="StartDateTime" Type="smalldatetime" Nullable="false" />
+          <Property Name="FinisDateTime" Type="smalldatetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Permission">
+          <Key>
+            <PropertyRef Name="ActionCode" />
+            <PropertyRef Name="UserRoleID" />
+          </Key>
+          <Property Name="ActionCode" Type="char" MaxLength="20" Nullable="false" />
+          <Property Name="UserRoleID" Type="int" Nullable="false" />
+          <Property Name="Optime" Type="smalldatetime" Nullable="false" />
+          <Property Name="OpMemberID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Personnel">
+          <Key>
+            <PropertyRef Name="PersonnelID" />
+          </Key>
+          <Property Name="PersonnelID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ProfessionNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DepartmentID" Type="int" Nullable="false" />
+          <Property Name="TitleID" Type="int" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="200" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="Mobile" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="PersonnelReference">
+          <Key>
+            <PropertyRef Name="PersonnelReferenceID" />
+          </Key>
+          <Property Name="PersonnelReferenceID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="TaskID" Type="uniqueidentifier" />
+          <Property Name="PersonnelID" Type="int" Nullable="false" />
+          <Property Name="ReferenceID" Type="int" Nullable="false" />
+          <Property Name="IsVisible" Type="bit" Nullable="false" />
+          <Property Name="AttachmentID" Type="uniqueidentifier" />
+          <Property Name="Optime" Type="smalldatetime" Nullable="false" />
+          <Property Name="OpUserID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PriorityType">
+          <Key>
+            <PropertyRef Name="PriorityTypeID" />
+          </Key>
+          <Property Name="PriorityTypeID" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PrivacyType">
+          <Key>
+            <PropertyRef Name="PrivacyTypeID" />
+          </Key>
+          <Property Name="PrivacyTypeID" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Profession">
+          <Key>
+            <PropertyRef Name="ProfessionID" />
+          </Key>
+          <Property Name="ProfessionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProxyUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="UserRoleID" Type="int" Nullable="false" />
+          <Property Name="StartDate" Type="smalldatetime" Nullable="false" />
+          <Property Name="FinishDate" Type="smalldatetime" />
+          <Property Name="OpUserID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Reference">
+          <Key>
+            <PropertyRef Name="ReferenceID" />
+          </Key>
+          <Property Name="ReferenceID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="TitleID" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="Comment" Type="nvarchar" MaxLength="200" />
+          <Property Name="Optime" Type="smalldatetime" Nullable="false" />
+          <Property Name="OpUserID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ResultType">
+          <Key>
+            <PropertyRef Name="ResultTypeID" />
+          </Key>
+          <Property Name="ResultTypeID" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SMSRequest">
+          <Key>
+            <PropertyRef Name="SMSRequestID" />
+          </Key>
+          <Property Name="SMSRequestID" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StateType">
+          <Key>
+            <PropertyRef Name="StateTypeID" />
+          </Key>
+          <Property Name="StateTypeID" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ColorCode" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Task">
+          <Key>
+            <PropertyRef Name="TaskID" />
+          </Key>
+          <Property Name="TaskID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UpperTaskID" Type="uniqueidentifier" />
+          <Property Name="TaskNo" Type="char" MaxLength="11" Nullable="false" />
+          <Property Name="Subject" Type="nvarchar" MaxLength="100" />
+          <Property Name="Summary" Type="nvarchar" MaxLength="500" />
+          <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="StartDate" Type="smalldatetime" />
+          <Property Name="Deadline" Type="smalldatetime" />
+          <Property Name="FinishDate" Type="smalldatetime" />
+          <Property Name="TypeID" Type="tinyint" Nullable="false" />
+          <Property Name="StateID" Type="tinyint" Nullable="false" />
+          <Property Name="PrivacyID" Type="tinyint" Nullable="false" />
+          <Property Name="PriorityID" Type="tinyint" Nullable="false" />
+          <Property Name="ResultID" Type="tinyint" />
+          <Property Name="UserRoleID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="ByID" Type="int" />
+          <Property Name="Optime" Type="smalldatetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TaskAttachment">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TaskID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="AttachmentID" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TaskBy">
+          <Key>
+            <PropertyRef Name="TaskByID" />
+          </Key>
+          <Property Name="TaskByID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TaskCategory">
+          <Key>
+            <PropertyRef Name="TaskCategoryID" />
+          </Key>
+          <Property Name="TaskCategoryID" Type="tinyint" Nullable="false" />
+          <Property Name="CategoryID" Type="tinyint" Nullable="false" />
+          <Property Name="TaskID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UserRoleID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TaskCodeType">
+          <Key>
+            <PropertyRef Name="TaskCodeTypeID" />
+          </Key>
+          <Property Name="TaskCodeTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TaskTypeID" Type="int" Nullable="false" />
+          <Property Name="Code" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TaskPersonnel">
+          <Key>
+            <PropertyRef Name="TaskPersonnelID" />
+          </Key>
+          <Property Name="TaskPersonnelID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="TaskID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="PersonnelID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TaskRequest">
+          <Key>
+            <PropertyRef Name="TaskRequestID" />
+          </Key>
+          <Property Name="TaskRequestID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="TaskID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ToUserID" Type="int" Nullable="false" />
+          <Property Name="ToUserRoleID" Type="int" Nullable="false" />
+          <Property Name="FromUserID" Type="int" Nullable="false" />
+          <Property Name="FromUserRoleID" Type="int" Nullable="false" />
+          <Property Name="CC" Type="bit" Nullable="false" />
+          <Property Name="Optime" Type="smalldatetime" Nullable="false" />
+          <Property Name="ViewState" Type="tinyint" Nullable="false" />
+          <Property Name="ResponseTypeID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TaskResponse">
+          <Key>
+            <PropertyRef Name="TaskResponseID" />
+          </Key>
+          <Property Name="TaskResponseID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="TaskRequestID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Subject" Type="nvarchar" MaxLength="100" />
+          <Property Name="Summary" Type="nvarchar" MaxLength="500" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="CCUserRoleID" Type="int" />
+          <Property Name="UserRoleID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="Optime" Type="smalldatetime" Nullable="false" />
+          <Property Name="ViewState" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="TaskResponseAttachment">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TaskResponseID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="AttachmentID" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TaskSource">
+          <Key>
+            <PropertyRef Name="TaskSourceID" />
+          </Key>
+          <Property Name="TaskSourceID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TaskID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Organization" Type="nvarchar" MaxLength="100" />
+          <Property Name="Title" Type="nvarchar" MaxLength="100" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="100" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="100" />
+          <Property Name="PersonnelID" Type="int" />
+          <Property Name="Visible" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TaskTemplate">
+          <Key>
+            <PropertyRef Name="TaskTemplateID" />
+          </Key>
+          <Property Name="TaskTemplateID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DraftData" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="TaskTypeID" Type="tinyint" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TaskType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TaskTypeID" Type="tinyint" Nullable="false" />
+          <Property Name="UpperTaskTypeID" Type="tinyint" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Title">
+          <Key>
+            <PropertyRef Name="TitleID" />
+          </Key>
+          <Property Name="TitleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserCalender">
+          <Key>
+            <PropertyRef Name="UserCalenderID" />
+          </Key>
+          <Property Name="UserCalenderID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="CalenderDate" Type="smalldatetime" Nullable="false" />
+          <Property Name="Description" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="Comment" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="UserGroup">
+          <Key>
+            <PropertyRef Name="UserGroupID" />
+          </Key>
+          <Property Name="UserGroupID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserProfile">
+          <Key>
+            <PropertyRef Name="UserProfileID" />
+          </Key>
+          <Property Name="UserProfileID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="RegistryNum" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Mobile" Type="nvarchar" MaxLength="16" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ImgUrl" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="UserRole">
+          <Key>
+            <PropertyRef Name="UserRoleID" />
+          </Key>
+          <Property Name="UserRoleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="DepartmentID" Type="int" Nullable="false" />
+          <Property Name="RoleID" Type="int" Nullable="false" />
+          <Property Name="StartDate" Type="smalldatetime" Nullable="false" />
+          <Property Name="FinishDate" Type="smalldatetime" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="ProxyUserID" Type="int" />
+          <Property Name="Optime" Type="smalldatetime" Nullable="false" />
+          <Property Name="OpUserID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="16" />
+          <Property Name="Password" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="PasswordQuestion" Type="nvarchar" MaxLength="256" />
+          <Property Name="PasswordAnswer" Type="nvarchar" MaxLength="128" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsLockedOut" Type="bit" Nullable="false" />
+          <Property Name="LastLoginDate" Type="smalldatetime" />
+          <Property Name="LastPasswordChangedDate" Type="smalldatetime" />
+          <Property Name="LastLockoutDate" Type="smalldatetime" />
+          <Property Name="FailedPasswordAttemptCount" Type="int" Nullable="false" />
+          <Property Name="CreateDate" Type="smalldatetime" Nullable="false" />
+          <Property Name="LastActivityDate" Type="smalldatetime" />
+          <Property Name="Comment" Type="nvarchar" MaxLength="256" />
+          <Property Name="Logo" Type="varbinary(max)" />
+          <Property Name="ISReset" Type="bit" />
+          <Property Name="UserGroupID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserSettings">
+          <Key>
+            <PropertyRef Name="UserSettingsID" />
+          </Key>
+          <Property Name="UserSettingsID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="WeeklyDashboard" Type="bit" Nullable="false" />
+          <Property Name="TaskReminderSMS" Type="bit" Nullable="false" />
+          <Property Name="TaskReminderEmail" Type="bit" Nullable="false" />
+          <Property Name="Background" Type="tinyint" Nullable="false" />
+          <Property Name="DefaultViewType" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserSignImg">
+          <Key>
+            <PropertyRef Name="UserSignImgID" />
+          </Key>
+          <Property Name="UserSignImgID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="SignImg" Type="varbinary(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="WorkCalender">
+          <Key>
+            <PropertyRef Name="WorkCalenderID" />
+          </Key>
+          <Property Name="WorkCalenderID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CalenderDate" Type="smalldatetime" Nullable="false" />
+          <Property Name="Comment" Type="nvarchar" MaxLength="200" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Permission_ActionCode">
+          <End Role="ActionCode" Type="Self.ActionCode" Multiplicity="1" />
+          <End Role="Permission" Type="Self.Permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ActionCode">
+              <PropertyRef Name="ActionCode" />
+            </Principal>
+            <Dependent Role="Permission">
+              <PropertyRef Name="ActionCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PersonnelReference_Personnel">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="1" />
+          <End Role="PersonnelReference" Type="Self.PersonnelReference" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="PersonnelID" />
+            </Principal>
+            <Dependent Role="PersonnelReference">
+              <PropertyRef Name="PersonnelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PersonnelReference_Reference">
+          <End Role="Reference" Type="Self.Reference" Multiplicity="1" />
+          <End Role="PersonnelReference" Type="Self.PersonnelReference" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Reference">
+              <PropertyRef Name="ReferenceID" />
+            </Principal>
+            <Dependent Role="PersonnelReference">
+              <PropertyRef Name="ReferenceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PersonnelReference_Task">
+          <End Role="Task" Type="Self.Task" Multiplicity="0..1" />
+          <End Role="PersonnelReference" Type="Self.PersonnelReference" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Task">
+              <PropertyRef Name="TaskID" />
+            </Principal>
+            <Dependent Role="PersonnelReference">
+              <PropertyRef Name="TaskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reference_Title">
+          <End Role="Title" Type="Self.Title" Multiplicity="1" />
+          <End Role="Reference" Type="Self.Reference" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Title">
+              <PropertyRef Name="TitleID" />
+            </Principal>
+            <Dependent Role="Reference">
+              <PropertyRef Name="TitleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Task_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Task" Type="Self.Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TaskAttachment_Attachment">
+          <End Role="Attachment" Type="Self.Attachment" Multiplicity="1" />
+          <End Role="TaskAttachment" Type="Self.TaskAttachment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Attachment">
+              <PropertyRef Name="AttachmentID" />
+            </Principal>
+            <Dependent Role="TaskAttachment">
+              <PropertyRef Name="AttachmentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TaskPersonnel_Personnel1">
+          <End Role="Personnel" Type="Self.Personnel" Multiplicity="1" />
+          <End Role="TaskPersonnel" Type="Self.TaskPersonnel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="PersonnelID" />
+            </Principal>
+            <Dependent Role="TaskPersonnel">
+              <PropertyRef Name="PersonnelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TaskPersonnel_Task">
+          <End Role="Task" Type="Self.Task" Multiplicity="1" />
+          <End Role="TaskPersonnel" Type="Self.TaskPersonnel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Task">
+              <PropertyRef Name="TaskID" />
+            </Principal>
+            <Dependent Role="TaskPersonnel">
+              <PropertyRef Name="TaskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TaskRequest_Task">
+          <End Role="Task" Type="Self.Task" Multiplicity="1" />
+          <End Role="TaskRequest" Type="Self.TaskRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Task">
+              <PropertyRef Name="TaskID" />
+            </Principal>
+            <Dependent Role="TaskRequest">
+              <PropertyRef Name="TaskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TaskResponse_TaskRequest">
+          <End Role="TaskRequest" Type="Self.TaskRequest" Multiplicity="1" />
+          <End Role="TaskResponse" Type="Self.TaskResponse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaskRequest">
+              <PropertyRef Name="TaskRequestID" />
+            </Principal>
+            <Dependent Role="TaskResponse">
+              <PropertyRef Name="TaskRequestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TaskResponseAttachment_Attachment">
+          <End Role="Attachment" Type="Self.Attachment" Multiplicity="1" />
+          <End Role="TaskResponseAttachment" Type="Self.TaskResponseAttachment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Attachment">
+              <PropertyRef Name="AttachmentID" />
+            </Principal>
+            <Dependent Role="TaskResponseAttachment">
+              <PropertyRef Name="AttachmentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserCalender_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="UserCalender" Type="Self.UserCalender" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="UserCalender">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserSettings_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="UserSettings" Type="Self.UserSettings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="UserSettings">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TaskCloudModelStoreContainer">
+          <EntitySet Name="ActionCode" EntityType="Self.ActionCode" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AppSettings" EntityType="Self.AppSettings" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Attachment" EntityType="Self.Attachment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Conversation" EntityType="Self.Conversation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmailRequest" EntityType="Self.EmailRequest" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Meeting" EntityType="Self.Meeting" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Permission" EntityType="Self.Permission" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Personnel" EntityType="Self.Personnel" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PersonnelReference" EntityType="Self.PersonnelReference" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PriorityType" EntityType="Self.PriorityType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PrivacyType" EntityType="Self.PrivacyType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Profession" EntityType="Self.Profession" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProxyUser" EntityType="Self.ProxyUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Reference" EntityType="Self.Reference" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResultType" EntityType="Self.ResultType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SMSRequest" EntityType="Self.SMSRequest" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StateType" EntityType="Self.StateType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Task" EntityType="Self.Task" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TaskAttachment" EntityType="Self.TaskAttachment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TaskBy" EntityType="Self.TaskBy" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TaskCategory" EntityType="Self.TaskCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TaskCodeType" EntityType="Self.TaskCodeType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TaskPersonnel" EntityType="Self.TaskPersonnel" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TaskRequest" EntityType="Self.TaskRequest" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TaskResponse" EntityType="Self.TaskResponse" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TaskResponseAttachment" EntityType="Self.TaskResponseAttachment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TaskSource" EntityType="Self.TaskSource" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TaskTemplate" EntityType="Self.TaskTemplate" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TaskType" EntityType="Self.TaskType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Title" EntityType="Self.Title" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserCalender" EntityType="Self.UserCalender" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserGroup" EntityType="Self.UserGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserProfile" EntityType="Self.UserProfile" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserRole" EntityType="Self.UserRole" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserSettings" EntityType="Self.UserSettings" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserSignImg" EntityType="Self.UserSignImg" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WorkCalender" EntityType="Self.WorkCalender" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Permission_ActionCode" Association="Self.FK_Permission_ActionCode">
+            <End Role="ActionCode" EntitySet="ActionCode" />
+            <End Role="Permission" EntitySet="Permission" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PersonnelReference_Personnel" Association="Self.FK_PersonnelReference_Personnel">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="PersonnelReference" EntitySet="PersonnelReference" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PersonnelReference_Reference" Association="Self.FK_PersonnelReference_Reference">
+            <End Role="Reference" EntitySet="Reference" />
+            <End Role="PersonnelReference" EntitySet="PersonnelReference" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PersonnelReference_Task" Association="Self.FK_PersonnelReference_Task">
+            <End Role="Task" EntitySet="Task" />
+            <End Role="PersonnelReference" EntitySet="PersonnelReference" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reference_Title" Association="Self.FK_Reference_Title">
+            <End Role="Title" EntitySet="Title" />
+            <End Role="Reference" EntitySet="Reference" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Task_Users" Association="Self.FK_Task_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Task" EntitySet="Task" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaskAttachment_Attachment" Association="Self.FK_TaskAttachment_Attachment">
+            <End Role="Attachment" EntitySet="Attachment" />
+            <End Role="TaskAttachment" EntitySet="TaskAttachment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaskPersonnel_Personnel1" Association="Self.FK_TaskPersonnel_Personnel1">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="TaskPersonnel" EntitySet="TaskPersonnel" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaskPersonnel_Task" Association="Self.FK_TaskPersonnel_Task">
+            <End Role="Task" EntitySet="Task" />
+            <End Role="TaskPersonnel" EntitySet="TaskPersonnel" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaskRequest_Task" Association="Self.FK_TaskRequest_Task">
+            <End Role="Task" EntitySet="Task" />
+            <End Role="TaskRequest" EntitySet="TaskRequest" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaskResponse_TaskRequest" Association="Self.FK_TaskResponse_TaskRequest">
+            <End Role="TaskRequest" EntitySet="TaskRequest" />
+            <End Role="TaskResponse" EntitySet="TaskResponse" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaskResponseAttachment_Attachment" Association="Self.FK_TaskResponseAttachment_Attachment">
+            <End Role="Attachment" EntitySet="Attachment" />
+            <End Role="TaskResponseAttachment" EntitySet="TaskResponseAttachment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserCalender_Users" Association="Self.FK_UserCalender_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserCalender" EntitySet="UserCalender" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserSettings_Users" Association="Self.FK_UserSettings_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserSettings" EntitySet="UserSettings" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TaskCloudModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="TaskCloudEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="ActionCode" EntityType="TaskCloudModel.ActionCode" />
+          <EntitySet Name="AppSettings" EntityType="TaskCloudModel.AppSettings" />
+          <EntitySet Name="Category" EntityType="TaskCloudModel.Category" />
+          <EntitySet Name="Conversation" EntityType="TaskCloudModel.Conversation" />
+          <EntitySet Name="Department" EntityType="TaskCloudModel.Department" />
+          <EntitySet Name="EmailRequest" EntityType="TaskCloudModel.EmailRequest" />
+          <EntitySet Name="Permission" EntityType="TaskCloudModel.Permission" />
+          <EntitySet Name="PriorityType" EntityType="TaskCloudModel.PriorityType" />
+          <EntitySet Name="PrivacyType" EntityType="TaskCloudModel.PrivacyType" />
+          <EntitySet Name="Profession" EntityType="TaskCloudModel.Profession" />
+          <EntitySet Name="ProxyUser" EntityType="TaskCloudModel.ProxyUser" />
+          <EntitySet Name="ResultType" EntityType="TaskCloudModel.ResultType" />
+          <EntitySet Name="Role" EntityType="TaskCloudModel.Role" />
+          <EntitySet Name="SMSRequest" EntityType="TaskCloudModel.SMSRequest" />
+          <EntitySet Name="StateType" EntityType="TaskCloudModel.StateType" />
+          <EntitySet Name="TaskCategory" EntityType="TaskCloudModel.TaskCategory" />
+          <EntitySet Name="TaskResponse" EntityType="TaskCloudModel.TaskResponse" />
+          <EntitySet Name="Title" EntityType="TaskCloudModel.Title" />
+          <EntitySet Name="UserCalender" EntityType="TaskCloudModel.UserCalender" />
+          <EntitySet Name="UserSettings" EntityType="TaskCloudModel.UserSettings" />
+          <EntitySet Name="WorkCalender" EntityType="TaskCloudModel.WorkCalender" />
+          <AssociationSet Name="FK_Permission_ActionCode" Association="TaskCloudModel.FK_Permission_ActionCode">
+            <End Role="ActionCode" EntitySet="ActionCode" />
+            <End Role="Permission" EntitySet="Permission" />
+          </AssociationSet>
+          <EntitySet Name="UserRole" EntityType="TaskCloudModel.UserRole" />
+          <EntitySet Name="UserProfile" EntityType="TaskCloudModel.UserProfile" />
+          <EntitySet Name="TaskPersonnel" EntityType="TaskCloudModel.TaskPersonnel" />
+          <EntitySet Name="Reference" EntityType="TaskCloudModel.Reference" />
+          <AssociationSet Name="FK_Reference_Title" Association="TaskCloudModel.FK_Reference_Title">
+            <End Role="Title" EntitySet="Title" />
+            <End Role="Reference" EntitySet="Reference" />
+          </AssociationSet>
+          <EntitySet Name="TaskResponseAttachment" EntityType="TaskCloudModel.TaskResponseAttachment" />
+          <EntitySet Name="PersonnelReference" EntityType="TaskCloudModel.PersonnelReference" />
+          <EntitySet Name="TaskTemplate" EntityType="TaskCloudModel.TaskTemplate" />
+          <AssociationSet Name="FK_PersonnelReference_Reference" Association="TaskCloudModel.FK_PersonnelReference_Reference">
+            <End Role="Reference" EntitySet="Reference" />
+            <End Role="PersonnelReference" EntitySet="PersonnelReference" />
+          </AssociationSet>
+          <EntitySet Name="TaskType" EntityType="TaskCloudModel.TaskType" />
+          <EntitySet Name="Meeting" EntityType="TaskCloudModel.Meeting" />
+          <EntitySet Name="UserSignImg" EntityType="TaskCloudModel.UserSignImg" />
+          <EntitySet Name="Task" EntityType="TaskCloudModel.Task" />
+          <EntitySet Name="TaskBy" EntityType="TaskCloudModel.TaskBy" />
+          <AssociationSet Name="FK_PersonnelReference_Task" Association="TaskCloudModel.FK_PersonnelReference_Task">
+            <End Role="Task" EntitySet="Task" />
+            <End Role="PersonnelReference" EntitySet="PersonnelReference" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaskPersonnel_Task" Association="TaskCloudModel.FK_TaskPersonnel_Task">
+            <End Role="Task" EntitySet="Task" />
+            <End Role="TaskPersonnel" EntitySet="TaskPersonnel" />
+          </AssociationSet>
+          <EntitySet Name="TaskCodeType" EntityType="TaskCloudModel.TaskCodeType" />
+          <EntitySet Name="TaskSource" EntityType="TaskCloudModel.TaskSource" />
+          <EntitySet Name="Personnel" EntityType="TaskCloudModel.Personnel" />
+          <AssociationSet Name="FK_PersonnelReference_Personnel" Association="TaskCloudModel.FK_PersonnelReference_Personnel">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="PersonnelReference" EntitySet="PersonnelReference" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaskPersonnel_Personnel1" Association="TaskCloudModel.FK_TaskPersonnel_Personnel1">
+            <End Role="Personnel" EntitySet="Personnel" />
+            <End Role="TaskPersonnel" EntitySet="TaskPersonnel" />
+          </AssociationSet>
+          <EntitySet Name="Attachment" EntityType="TaskCloudModel.Attachment" />
+          <AssociationSet Name="FK_TaskResponseAttachment_Attachment" Association="TaskCloudModel.FK_TaskResponseAttachment_Attachment">
+            <End Role="Attachment" EntitySet="Attachment" />
+            <End Role="TaskResponseAttachment" EntitySet="TaskResponseAttachment" />
+          </AssociationSet>
+          <EntitySet Name="TaskAttachment" EntityType="TaskCloudModel.TaskAttachment" />
+          <AssociationSet Name="FK_TaskAttachment_Attachment" Association="TaskCloudModel.FK_TaskAttachment_Attachment">
+            <End Role="Attachment" EntitySet="Attachment" />
+            <End Role="TaskAttachment" EntitySet="TaskAttachment" />
+          </AssociationSet>
+          <EntitySet Name="TaskRequest" EntityType="TaskCloudModel.TaskRequest" />
+          <EntitySet Name="UserGroup" EntityType="TaskCloudModel.UserGroup" />
+          <EntitySet Name="Users" EntityType="TaskCloudModel.Users" />
+          <AssociationSet Name="FK_Task_Users" Association="TaskCloudModel.FK_Task_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Task" EntitySet="Task" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaskRequest_Task" Association="TaskCloudModel.FK_TaskRequest_Task">
+            <End Role="Task" EntitySet="Task" />
+            <End Role="TaskRequest" EntitySet="TaskRequest" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaskResponse_TaskRequest" Association="TaskCloudModel.FK_TaskResponse_TaskRequest">
+            <End Role="TaskRequest" EntitySet="TaskRequest" />
+            <End Role="TaskResponse" EntitySet="TaskResponse" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserCalender_Users" Association="TaskCloudModel.FK_UserCalender_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserCalender" EntitySet="UserCalender" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserSettings_Users" Association="TaskCloudModel.FK_UserSettings_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserSettings" EntitySet="UserSettings" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="ActionCode">
+          <Key>
+            <PropertyRef Name="ActionCode1" />
+          </Key>
+          <Property Name="ActionCode1" Type="String" Nullable="false" MaxLength="20" FixedLength="true" Unicode="false" />
+          <Property Name="UpperActionCode" Type="String" MaxLength="20" FixedLength="true" Unicode="false" />
+          <Property Name="DisplayName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Detail" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Controller" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ActionName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IsMenu" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Permission" Relationship="TaskCloudModel.FK_Permission_ActionCode" FromRole="ActionCode" ToRole="Permission" />
+        </EntityType>
+        <EntityType Name="AppSettings">
+          <Key>
+            <PropertyRef Name="AppSettingsID" />
+          </Key>
+          <Property Name="AppSettingsID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="CategoryID" />
+          </Key>
+          <Property Name="CategoryID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UpperCategoryID" Type="Byte" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="IsTabMenu" Type="Boolean" Nullable="false" />
+          <Property Name="IsMenu" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Conversation">
+          <Key>
+            <PropertyRef Name="ConversationID" />
+          </Key>
+          <Property Name="ConversationID" Type="Guid" Nullable="false" />
+          <Property Name="TaskID" Type="Guid" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="TextData" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Optime" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="DepartmentID" />
+          </Key>
+          <Property Name="DepartmentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UpperDepartmentID" Type="Int32" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Phone1" Type="String" MaxLength="11" FixedLength="true" Unicode="true" />
+          <Property Name="Phone2" Type="String" MaxLength="11" FixedLength="true" Unicode="true" />
+          <Property Name="Fax" Type="String" MaxLength="11" FixedLength="true" Unicode="true" />
+          <Property Name="EMail" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="AddressText" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AddressID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="EmailRequest">
+          <Key>
+            <PropertyRef Name="EmailRequestID" />
+          </Key>
+          <Property Name="EmailRequestID" Type="Guid" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Permission">
+          <Key>
+            <PropertyRef Name="ActionCode" />
+            <PropertyRef Name="UserRoleID" />
+          </Key>
+          <Property Name="ActionCode" Type="String" Nullable="false" MaxLength="20" FixedLength="true" Unicode="false" />
+          <Property Name="UserRoleID" Type="Int32" Nullable="false" />
+          <Property Name="Optime" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="OpMemberID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ActionCode1" Relationship="TaskCloudModel.FK_Permission_ActionCode" FromRole="Permission" ToRole="ActionCode" />
+        </EntityType>
+        <EntityType Name="PriorityType">
+          <Key>
+            <PropertyRef Name="PriorityTypeID" />
+          </Key>
+          <Property Name="PriorityTypeID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="PrivacyType">
+          <Key>
+            <PropertyRef Name="PrivacyTypeID" />
+          </Key>
+          <Property Name="PrivacyTypeID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Profession">
+          <Key>
+            <PropertyRef Name="ProfessionID" />
+          </Key>
+          <Property Name="ProfessionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ProxyUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="UserRoleID" Type="Int32" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="FinishDate" Type="DateTime" Precision="0" />
+          <Property Name="OpUserID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ResultType">
+          <Key>
+            <PropertyRef Name="ResultTypeID" />
+          </Key>
+          <Property Name="ResultTypeID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SMSRequest">
+          <Key>
+            <PropertyRef Name="SMSRequestID" />
+          </Key>
+          <Property Name="SMSRequestID" Type="Guid" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StateType">
+          <Key>
+            <PropertyRef Name="StateTypeID" />
+          </Key>
+          <Property Name="StateTypeID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ColorCode" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <EntityType Name="TaskCategory">
+          <Key>
+            <PropertyRef Name="TaskCategoryID" />
+          </Key>
+          <Property Name="TaskCategoryID" Type="Byte" Nullable="false" />
+          <Property Name="CategoryID" Type="Byte" Nullable="false" />
+          <Property Name="TaskID" Type="Guid" Nullable="false" />
+          <Property Name="UserRoleID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TaskResponse">
+          <Key>
+            <PropertyRef Name="TaskResponseID" />
+          </Key>
+          <Property Name="TaskResponseID" Type="Guid" Nullable="false" />
+          <Property Name="TaskRequestID" Type="Guid" Nullable="false" />
+          <Property Name="Subject" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Summary" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CCUserRoleID" Type="Int32" />
+          <Property Name="UserRoleID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="Optime" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ViewState" Type="Byte" />
+          <NavigationProperty Name="TaskRequest" Relationship="TaskCloudModel.FK_TaskResponse_TaskRequest" FromRole="TaskResponse" ToRole="TaskRequest" />
+        </EntityType>
+        <EntityType Name="Title">
+          <Key>
+            <PropertyRef Name="TitleID" />
+          </Key>
+          <Property Name="TitleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Reference" Relationship="TaskCloudModel.FK_Reference_Title" FromRole="Title" ToRole="Reference" />
+        </EntityType>
+        <EntityType Name="UserCalender">
+          <Key>
+            <PropertyRef Name="UserCalenderID" />
+          </Key>
+          <Property Name="UserCalenderID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="CalenderDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="Comment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Users" Relationship="TaskCloudModel.FK_UserCalender_Users" FromRole="UserCalender" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="UserSettings">
+          <Key>
+            <PropertyRef Name="UserSettingsID" />
+          </Key>
+          <Property Name="UserSettingsID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="WeeklyDashboard" Type="Boolean" Nullable="false" />
+          <Property Name="TaskReminderSMS" Type="Boolean" Nullable="false" />
+          <Property Name="TaskReminderEmail" Type="Boolean" Nullable="false" />
+          <Property Name="Background" Type="Byte" Nullable="false" />
+          <Property Name="DefaultViewType" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="Users" Relationship="TaskCloudModel.FK_UserSettings_Users" FromRole="UserSettings" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="WorkCalender">
+          <Key>
+            <PropertyRef Name="WorkCalenderID" />
+          </Key>
+          <Property Name="WorkCalenderID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CalenderDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Comment" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_Permission_ActionCode">
+          <End Type="TaskCloudModel.ActionCode" Role="ActionCode" Multiplicity="1" />
+          <End Type="TaskCloudModel.Permission" Role="Permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ActionCode">
+              <PropertyRef Name="ActionCode1" />
+            </Principal>
+            <Dependent Role="Permission">
+              <PropertyRef Name="ActionCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="UserRole">
+          <Key>
+            <PropertyRef Name="UserRoleID" />
+          </Key>
+          <Property Name="UserRoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="DepartmentID" Type="Int32" Nullable="false" />
+          <Property Name="RoleID" Type="Int32" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="FinishDate" Type="DateTime" Precision="0" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="ProxyUserID" Type="Int32" />
+          <Property Name="Optime" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="OpUserID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserProfile">
+          <Key>
+            <PropertyRef Name="UserProfileID" />
+          </Key>
+          <Property Name="UserProfileID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="RegistryNum" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Mobile" Type="String" Nullable="false" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ImgUrl" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="TaskPersonnel">
+          <Key>
+            <PropertyRef Name="TaskPersonnelID" />
+          </Key>
+          <Property Name="TaskPersonnelID" Type="Guid" Nullable="false" />
+          <Property Name="TaskID" Type="Guid" Nullable="false" />
+          <Property Name="PersonnelID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Task" Relationship="TaskCloudModel.FK_TaskPersonnel_Task" FromRole="TaskPersonnel" ToRole="Task" />
+          <NavigationProperty Name="Personnel" Relationship="TaskCloudModel.FK_TaskPersonnel_Personnel1" FromRole="TaskPersonnel" ToRole="Personnel" />
+        </EntityType>
+        <EntityType Name="Reference">
+          <Key>
+            <PropertyRef Name="ReferenceID" />
+          </Key>
+          <Property Name="ReferenceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TitleID" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="Comment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Optime" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="OpUserID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Title" Relationship="TaskCloudModel.FK_Reference_Title" FromRole="Reference" ToRole="Title" />
+          <NavigationProperty Name="PersonnelReference" Relationship="TaskCloudModel.FK_PersonnelReference_Reference" FromRole="Reference" ToRole="PersonnelReference" />
+        </EntityType>
+        <Association Name="FK_Reference_Title">
+          <End Type="TaskCloudModel.Title" Role="Title" Multiplicity="1" />
+          <End Type="TaskCloudModel.Reference" Role="Reference" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Title">
+              <PropertyRef Name="TitleID" />
+            </Principal>
+            <Dependent Role="Reference">
+              <PropertyRef Name="TitleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="TaskResponseAttachment">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TaskResponseID" Type="Guid" Nullable="false" />
+          <Property Name="AttachmentID" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="Attachment" Relationship="TaskCloudModel.FK_TaskResponseAttachment_Attachment" FromRole="TaskResponseAttachment" ToRole="Attachment" />
+        </EntityType>
+        <EntityType Name="PersonnelReference">
+          <Key>
+            <PropertyRef Name="PersonnelReferenceID" />
+          </Key>
+          <Property Name="PersonnelReferenceID" Type="Guid" Nullable="false" />
+          <Property Name="TaskID" Type="Guid" />
+          <Property Name="PersonnelID" Type="Int32" Nullable="false" />
+          <Property Name="ReferenceID" Type="Int32" Nullable="false" />
+          <Property Name="IsVisible" Type="Boolean" Nullable="false" />
+          <Property Name="AttachmentID" Type="Guid" />
+          <Property Name="Optime" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="OpUserID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Reference" Relationship="TaskCloudModel.FK_PersonnelReference_Reference" FromRole="PersonnelReference" ToRole="Reference" />
+          <NavigationProperty Name="Task" Relationship="TaskCloudModel.FK_PersonnelReference_Task" FromRole="PersonnelReference" ToRole="Task" />
+          <NavigationProperty Name="Personnel" Relationship="TaskCloudModel.FK_PersonnelReference_Personnel" FromRole="PersonnelReference" ToRole="Personnel" />
+        </EntityType>
+        <EntityType Name="TaskTemplate">
+          <Key>
+            <PropertyRef Name="TaskTemplateID" />
+          </Key>
+          <Property Name="TaskTemplateID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DraftData" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TaskTypeID" Type="Byte" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_PersonnelReference_Reference">
+          <End Type="TaskCloudModel.Reference" Role="Reference" Multiplicity="1" />
+          <End Type="TaskCloudModel.PersonnelReference" Role="PersonnelReference" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Reference">
+              <PropertyRef Name="ReferenceID" />
+            </Principal>
+            <Dependent Role="PersonnelReference">
+              <PropertyRef Name="ReferenceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="TaskType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TaskTypeID" Type="Byte" Nullable="false" />
+          <Property Name="UpperTaskTypeID" Type="Byte" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Meeting">
+          <Key>
+            <PropertyRef Name="MeetingID" />
+          </Key>
+          <Property Name="MeetingID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TaskID" Type="Guid" />
+          <Property Name="Subject" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="StartDateTime" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="FinisDateTime" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
+        <EntityType Name="UserSignImg">
+          <Key>
+            <PropertyRef Name="UserSignImgID" />
+          </Key>
+          <Property Name="UserSignImgID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="SignImg" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Task">
+          <Key>
+            <PropertyRef Name="TaskID" />
+          </Key>
+          <Property Name="TaskID" Type="Guid" Nullable="false" />
+          <Property Name="UpperTaskID" Type="Guid" />
+          <Property Name="TaskNo" Type="String" Nullable="false" MaxLength="11" FixedLength="true" Unicode="false" />
+          <Property Name="Subject" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Summary" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="StartDate" Type="DateTime" Precision="0" />
+          <Property Name="Deadline" Type="DateTime" Precision="0" />
+          <Property Name="FinishDate" Type="DateTime" Precision="0" />
+          <Property Name="TypeID" Type="Byte" Nullable="false" />
+          <Property Name="StateID" Type="Byte" Nullable="false" />
+          <Property Name="PrivacyID" Type="Byte" Nullable="false" />
+          <Property Name="PriorityID" Type="Byte" Nullable="false" />
+          <Property Name="ResultID" Type="Byte" />
+          <Property Name="UserRoleID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="ByID" Type="Int32" />
+          <Property Name="Optime" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="PersonnelReference" Relationship="TaskCloudModel.FK_PersonnelReference_Task" FromRole="Task" ToRole="PersonnelReference" />
+          <NavigationProperty Name="TaskPersonnel" Relationship="TaskCloudModel.FK_TaskPersonnel_Task" FromRole="Task" ToRole="TaskPersonnel" />
+          <NavigationProperty Name="Users" Relationship="TaskCloudModel.FK_Task_Users" FromRole="Task" ToRole="Users" />
+          <NavigationProperty Name="TaskRequest" Relationship="TaskCloudModel.FK_TaskRequest_Task" FromRole="Task" ToRole="TaskRequest" />
+        </EntityType>
+        <EntityType Name="TaskBy">
+          <Key>
+            <PropertyRef Name="TaskByID" />
+          </Key>
+          <Property Name="TaskByID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_PersonnelReference_Task">
+          <End Type="TaskCloudModel.Task" Role="Task" Multiplicity="0..1" />
+          <End Type="TaskCloudModel.PersonnelReference" Role="PersonnelReference" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Task">
+              <PropertyRef Name="TaskID" />
+            </Principal>
+            <Dependent Role="PersonnelReference">
+              <PropertyRef Name="TaskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TaskPersonnel_Task">
+          <End Type="TaskCloudModel.Task" Role="Task" Multiplicity="1" />
+          <End Type="TaskCloudModel.TaskPersonnel" Role="TaskPersonnel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Task">
+              <PropertyRef Name="TaskID" />
+            </Principal>
+            <Dependent Role="TaskPersonnel">
+              <PropertyRef Name="TaskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="TaskCodeType">
+          <Key>
+            <PropertyRef Name="TaskCodeTypeID" />
+          </Key>
+          <Property Name="TaskCodeTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TaskTypeID" Type="Int32" Nullable="false" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <EntityType Name="TaskSource">
+          <Key>
+            <PropertyRef Name="TaskSourceID" />
+          </Key>
+          <Property Name="TaskSourceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TaskID" Type="Guid" Nullable="false" />
+          <Property Name="Organization" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PersonnelID" Type="Int32" />
+          <Property Name="Visible" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Personnel">
+          <Key>
+            <PropertyRef Name="PersonnelID" />
+          </Key>
+          <Property Name="PersonnelID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ProfessionNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DepartmentID" Type="Int32" Nullable="false" />
+          <Property Name="TitleID" Type="Int32" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Mobile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PersonnelReference" Relationship="TaskCloudModel.FK_PersonnelReference_Personnel" FromRole="Personnel" ToRole="PersonnelReference" />
+          <NavigationProperty Name="TaskPersonnel" Relationship="TaskCloudModel.FK_TaskPersonnel_Personnel1" FromRole="Personnel" ToRole="TaskPersonnel" />
+        </EntityType>
+        <Association Name="FK_PersonnelReference_Personnel">
+          <End Type="TaskCloudModel.Personnel" Role="Personnel" Multiplicity="1" />
+          <End Type="TaskCloudModel.PersonnelReference" Role="PersonnelReference" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="PersonnelID" />
+            </Principal>
+            <Dependent Role="PersonnelReference">
+              <PropertyRef Name="PersonnelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TaskPersonnel_Personnel1">
+          <End Type="TaskCloudModel.Personnel" Role="Personnel" Multiplicity="1" />
+          <End Type="TaskCloudModel.TaskPersonnel" Role="TaskPersonnel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personnel">
+              <PropertyRef Name="PersonnelID" />
+            </Principal>
+            <Dependent Role="TaskPersonnel">
+              <PropertyRef Name="PersonnelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Attachment">
+          <Key>
+            <PropertyRef Name="AttachmentID" />
+          </Key>
+          <Property Name="AttachmentID" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ContentData256K" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="FilePath" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Extend" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="UserRoleID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="Visible" Type="Boolean" Nullable="false" />
+          <Property Name="Optime" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="TaskResponseAttachment" Relationship="TaskCloudModel.FK_TaskResponseAttachment_Attachment" FromRole="Attachment" ToRole="TaskResponseAttachment" />
+          <NavigationProperty Name="TaskAttachment" Relationship="TaskCloudModel.FK_TaskAttachment_Attachment" FromRole="Attachment" ToRole="TaskAttachment" />
+        </EntityType>
+        <Association Name="FK_TaskResponseAttachment_Attachment">
+          <End Type="TaskCloudModel.Attachment" Role="Attachment" Multiplicity="1" />
+          <End Type="TaskCloudModel.TaskResponseAttachment" Role="TaskResponseAttachment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Attachment">
+              <PropertyRef Name="AttachmentID" />
+            </Principal>
+            <Dependent Role="TaskResponseAttachment">
+              <PropertyRef Name="AttachmentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="TaskAttachment">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TaskID" Type="Guid" Nullable="false" />
+          <Property Name="AttachmentID" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="Attachment" Relationship="TaskCloudModel.FK_TaskAttachment_Attachment" FromRole="TaskAttachment" ToRole="Attachment" />
+        </EntityType>
+        <Association Name="FK_TaskAttachment_Attachment">
+          <End Type="TaskCloudModel.Attachment" Role="Attachment" Multiplicity="1" />
+          <End Type="TaskCloudModel.TaskAttachment" Role="TaskAttachment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Attachment">
+              <PropertyRef Name="AttachmentID" />
+            </Principal>
+            <Dependent Role="TaskAttachment">
+              <PropertyRef Name="AttachmentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="TaskRequest">
+          <Key>
+            <PropertyRef Name="TaskRequestID" />
+          </Key>
+          <Property Name="TaskRequestID" Type="Guid" Nullable="false" />
+          <Property Name="TaskID" Type="Guid" Nullable="false" />
+          <Property Name="ToUserID" Type="Int32" Nullable="false" />
+          <Property Name="ToUserRoleID" Type="Int32" Nullable="false" />
+          <Property Name="FromUserID" Type="Int32" Nullable="false" />
+          <Property Name="FromUserRoleID" Type="Int32" Nullable="false" />
+          <Property Name="CC" Type="Boolean" Nullable="false" />
+          <Property Name="Optime" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ViewState" Type="Byte" Nullable="false" />
+          <Property Name="ResponseTypeID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Task" Relationship="TaskCloudModel.FK_TaskRequest_Task" FromRole="TaskRequest" ToRole="Task" />
+          <NavigationProperty Name="TaskResponse" Relationship="TaskCloudModel.FK_TaskResponse_TaskRequest" FromRole="TaskRequest" ToRole="TaskResponse" />
+        </EntityType>
+        <EntityType Name="UserGroup">
+          <Key>
+            <PropertyRef Name="UserGroupID" />
+          </Key>
+          <Property Name="UserGroupID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="PasswordQuestion" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="PasswordAnswer" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsLockedOut" Type="Boolean" Nullable="false" />
+          <Property Name="LastLoginDate" Type="DateTime" Precision="0" />
+          <Property Name="LastPasswordChangedDate" Type="DateTime" Precision="0" />
+          <Property Name="LastLockoutDate" Type="DateTime" Precision="0" />
+          <Property Name="FailedPasswordAttemptCount" Type="Int32" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="LastActivityDate" Type="DateTime" Precision="0" />
+          <Property Name="Comment" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Logo" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="ISReset" Type="Boolean" />
+          <Property Name="UserGroupID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Task" Relationship="TaskCloudModel.FK_Task_Users" FromRole="Users" ToRole="Task" />
+          <NavigationProperty Name="UserCalender" Relationship="TaskCloudModel.FK_UserCalender_Users" FromRole="Users" ToRole="UserCalender" />
+          <NavigationProperty Name="UserSettings" Relationship="TaskCloudModel.FK_UserSettings_Users" FromRole="Users" ToRole="UserSettings" />
+        </EntityType>
+        <Association Name="FK_Task_Users">
+          <End Type="TaskCloudModel.Users" Role="Users" Multiplicity="1" />
+          <End Type="TaskCloudModel.Task" Role="Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TaskRequest_Task">
+          <End Type="TaskCloudModel.Task" Role="Task" Multiplicity="1" />
+          <End Type="TaskCloudModel.TaskRequest" Role="TaskRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Task">
+              <PropertyRef Name="TaskID" />
+            </Principal>
+            <Dependent Role="TaskRequest">
+              <PropertyRef Name="TaskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TaskResponse_TaskRequest">
+          <End Type="TaskCloudModel.TaskRequest" Role="TaskRequest" Multiplicity="1" />
+          <End Type="TaskCloudModel.TaskResponse" Role="TaskResponse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaskRequest">
+              <PropertyRef Name="TaskRequestID" />
+            </Principal>
+            <Dependent Role="TaskResponse">
+              <PropertyRef Name="TaskRequestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserCalender_Users">
+          <End Type="TaskCloudModel.Users" Role="Users" Multiplicity="1" />
+          <End Type="TaskCloudModel.UserCalender" Role="UserCalender" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="UserCalender">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserSettings_Users">
+          <End Type="TaskCloudModel.Users" Role="Users" Multiplicity="0..1" />
+          <End Type="TaskCloudModel.UserSettings" Role="UserSettings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="UserSettings">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TaskCloudModelStoreContainer" CdmEntityContainer="TaskCloudEntities">
+          <EntitySetMapping Name="ActionCode">
+            <EntityTypeMapping TypeName="TaskCloudModel.ActionCode">
+              <MappingFragment StoreEntitySet="ActionCode">
+                <ScalarProperty Name="IsMenu" ColumnName="IsMenu" />
+                <ScalarProperty Name="ActionName" ColumnName="ActionName" />
+                <ScalarProperty Name="Controller" ColumnName="Controller" />
+                <ScalarProperty Name="Detail" ColumnName="Detail" />
+                <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
+                <ScalarProperty Name="UpperActionCode" ColumnName="UpperActionCode" />
+                <ScalarProperty Name="ActionCode1" ColumnName="ActionCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AppSettings">
+            <EntityTypeMapping TypeName="TaskCloudModel.AppSettings">
+              <MappingFragment StoreEntitySet="AppSettings">
+                <ScalarProperty Name="AppSettingsID" ColumnName="AppSettingsID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Category">
+            <EntityTypeMapping TypeName="TaskCloudModel.Category">
+              <MappingFragment StoreEntitySet="Category">
+                <ScalarProperty Name="IsMenu" ColumnName="IsMenu" />
+                <ScalarProperty Name="IsTabMenu" ColumnName="IsTabMenu" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="UpperCategoryID" ColumnName="UpperCategoryID" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Conversation">
+            <EntityTypeMapping TypeName="TaskCloudModel.Conversation">
+              <MappingFragment StoreEntitySet="Conversation">
+                <ScalarProperty Name="Optime" ColumnName="Optime" />
+                <ScalarProperty Name="TextData" ColumnName="TextData" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="TaskID" ColumnName="TaskID" />
+                <ScalarProperty Name="ConversationID" ColumnName="ConversationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Department">
+            <EntityTypeMapping TypeName="TaskCloudModel.Department">
+              <MappingFragment StoreEntitySet="Department">
+                <ScalarProperty Name="AddressID" ColumnName="AddressID" />
+                <ScalarProperty Name="AddressText" ColumnName="AddressText" />
+                <ScalarProperty Name="EMail" ColumnName="EMail" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Phone2" ColumnName="Phone2" />
+                <ScalarProperty Name="Phone1" ColumnName="Phone1" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="UpperDepartmentID" ColumnName="UpperDepartmentID" />
+                <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmailRequest">
+            <EntityTypeMapping TypeName="TaskCloudModel.EmailRequest">
+              <MappingFragment StoreEntitySet="EmailRequest">
+                <ScalarProperty Name="EmailRequestID" ColumnName="EmailRequestID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Permission">
+            <EntityTypeMapping TypeName="TaskCloudModel.Permission">
+              <MappingFragment StoreEntitySet="Permission">
+                <ScalarProperty Name="OpMemberID" ColumnName="OpMemberID" />
+                <ScalarProperty Name="Optime" ColumnName="Optime" />
+                <ScalarProperty Name="UserRoleID" ColumnName="UserRoleID" />
+                <ScalarProperty Name="ActionCode" ColumnName="ActionCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PriorityType">
+            <EntityTypeMapping TypeName="TaskCloudModel.PriorityType">
+              <MappingFragment StoreEntitySet="PriorityType">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="PriorityTypeID" ColumnName="PriorityTypeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PrivacyType">
+            <EntityTypeMapping TypeName="TaskCloudModel.PrivacyType">
+              <MappingFragment StoreEntitySet="PrivacyType">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="PrivacyTypeID" ColumnName="PrivacyTypeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Profession">
+            <EntityTypeMapping TypeName="TaskCloudModel.Profession">
+              <MappingFragment StoreEntitySet="Profession">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ProfessionID" ColumnName="ProfessionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProxyUser">
+            <EntityTypeMapping TypeName="TaskCloudModel.ProxyUser">
+              <MappingFragment StoreEntitySet="ProxyUser">
+                <ScalarProperty Name="OpUserID" ColumnName="OpUserID" />
+                <ScalarProperty Name="FinishDate" ColumnName="FinishDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="UserRoleID" ColumnName="UserRoleID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResultType">
+            <EntityTypeMapping TypeName="TaskCloudModel.ResultType">
+              <MappingFragment StoreEntitySet="ResultType">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ResultTypeID" ColumnName="ResultTypeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Role">
+            <EntityTypeMapping TypeName="TaskCloudModel.Role">
+              <MappingFragment StoreEntitySet="Role">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SMSRequest">
+            <EntityTypeMapping TypeName="TaskCloudModel.SMSRequest">
+              <MappingFragment StoreEntitySet="SMSRequest">
+                <ScalarProperty Name="SMSRequestID" ColumnName="SMSRequestID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StateType">
+            <EntityTypeMapping TypeName="TaskCloudModel.StateType">
+              <MappingFragment StoreEntitySet="StateType">
+                <ScalarProperty Name="ColorCode" ColumnName="ColorCode" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="StateTypeID" ColumnName="StateTypeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TaskCategory">
+            <EntityTypeMapping TypeName="TaskCloudModel.TaskCategory">
+              <MappingFragment StoreEntitySet="TaskCategory">
+                <ScalarProperty Name="UserRoleID" ColumnName="UserRoleID" />
+                <ScalarProperty Name="TaskID" ColumnName="TaskID" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="TaskCategoryID" ColumnName="TaskCategoryID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TaskResponse">
+            <EntityTypeMapping TypeName="TaskCloudModel.TaskResponse">
+              <MappingFragment StoreEntitySet="TaskResponse">
+                <ScalarProperty Name="ViewState" ColumnName="ViewState" />
+                <ScalarProperty Name="Optime" ColumnName="Optime" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserRoleID" ColumnName="UserRoleID" />
+                <ScalarProperty Name="CCUserRoleID" ColumnName="CCUserRoleID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Summary" ColumnName="Summary" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="TaskRequestID" ColumnName="TaskRequestID" />
+                <ScalarProperty Name="TaskResponseID" ColumnName="TaskResponseID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Title">
+            <EntityTypeMapping TypeName="TaskCloudModel.Title">
+              <MappingFragment StoreEntitySet="Title">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="TitleID" ColumnName="TitleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserCalender">
+            <EntityTypeMapping TypeName="TaskCloudModel.UserCalender">
+              <MappingFragment StoreEntitySet="UserCalender">
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="CalenderDate" ColumnName="CalenderDate" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserCalenderID" ColumnName="UserCalenderID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserSettings">
+            <EntityTypeMapping TypeName="TaskCloudModel.UserSettings">
+              <MappingFragment StoreEntitySet="UserSettings">
+                <ScalarProperty Name="DefaultViewType" ColumnName="DefaultViewType" />
+                <ScalarProperty Name="Background" ColumnName="Background" />
+                <ScalarProperty Name="TaskReminderEmail" ColumnName="TaskReminderEmail" />
+                <ScalarProperty Name="TaskReminderSMS" ColumnName="TaskReminderSMS" />
+                <ScalarProperty Name="WeeklyDashboard" ColumnName="WeeklyDashboard" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserSettingsID" ColumnName="UserSettingsID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WorkCalender">
+            <EntityTypeMapping TypeName="TaskCloudModel.WorkCalender">
+              <MappingFragment StoreEntitySet="WorkCalender">
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="CalenderDate" ColumnName="CalenderDate" />
+                <ScalarProperty Name="WorkCalenderID" ColumnName="WorkCalenderID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserRole">
+            <EntityTypeMapping TypeName="TaskCloudModel.UserRole">
+              <MappingFragment StoreEntitySet="UserRole">
+                <ScalarProperty Name="OpUserID" ColumnName="OpUserID" />
+                <ScalarProperty Name="Optime" ColumnName="Optime" />
+                <ScalarProperty Name="ProxyUserID" ColumnName="ProxyUserID" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="FinishDate" ColumnName="FinishDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserRoleID" ColumnName="UserRoleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserProfile">
+            <EntityTypeMapping TypeName="TaskCloudModel.UserProfile">
+              <MappingFragment StoreEntitySet="UserProfile">
+                <ScalarProperty Name="ImgUrl" ColumnName="ImgUrl" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="RegistryNum" ColumnName="RegistryNum" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserProfileID" ColumnName="UserProfileID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TaskPersonnel">
+            <EntityTypeMapping TypeName="TaskCloudModel.TaskPersonnel">
+              <MappingFragment StoreEntitySet="TaskPersonnel">
+                <ScalarProperty Name="PersonnelID" ColumnName="PersonnelID" />
+                <ScalarProperty Name="TaskID" ColumnName="TaskID" />
+                <ScalarProperty Name="TaskPersonnelID" ColumnName="TaskPersonnelID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Reference">
+            <EntityTypeMapping TypeName="TaskCloudModel.Reference">
+              <MappingFragment StoreEntitySet="Reference">
+                <ScalarProperty Name="OpUserID" ColumnName="OpUserID" />
+                <ScalarProperty Name="Optime" ColumnName="Optime" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="TitleID" ColumnName="TitleID" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="ReferenceID" ColumnName="ReferenceID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TaskResponseAttachment">
+            <EntityTypeMapping TypeName="TaskCloudModel.TaskResponseAttachment">
+              <MappingFragment StoreEntitySet="TaskResponseAttachment">
+                <ScalarProperty Name="AttachmentID" ColumnName="AttachmentID" />
+                <ScalarProperty Name="TaskResponseID" ColumnName="TaskResponseID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PersonnelReference">
+            <EntityTypeMapping TypeName="TaskCloudModel.PersonnelReference">
+              <MappingFragment StoreEntitySet="PersonnelReference">
+                <ScalarProperty Name="OpUserID" ColumnName="OpUserID" />
+                <ScalarProperty Name="Optime" ColumnName="Optime" />
+                <ScalarProperty Name="AttachmentID" ColumnName="AttachmentID" />
+                <ScalarProperty Name="IsVisible" ColumnName="IsVisible" />
+                <ScalarProperty Name="ReferenceID" ColumnName="ReferenceID" />
+                <ScalarProperty Name="PersonnelID" ColumnName="PersonnelID" />
+                <ScalarProperty Name="TaskID" ColumnName="TaskID" />
+                <ScalarProperty Name="PersonnelReferenceID" ColumnName="PersonnelReferenceID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TaskTemplate">
+            <EntityTypeMapping TypeName="TaskCloudModel.TaskTemplate">
+              <MappingFragment StoreEntitySet="TaskTemplate">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="TaskTypeID" ColumnName="TaskTypeID" />
+                <ScalarProperty Name="DraftData" ColumnName="DraftData" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="TaskTemplateID" ColumnName="TaskTemplateID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TaskType">
+            <EntityTypeMapping TypeName="TaskCloudModel.TaskType">
+              <MappingFragment StoreEntitySet="TaskType">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="UpperTaskTypeID" ColumnName="UpperTaskTypeID" />
+                <ScalarProperty Name="TaskTypeID" ColumnName="TaskTypeID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Meeting">
+            <EntityTypeMapping TypeName="TaskCloudModel.Meeting">
+              <MappingFragment StoreEntitySet="Meeting">
+                <ScalarProperty Name="FinisDateTime" ColumnName="FinisDateTime" />
+                <ScalarProperty Name="StartDateTime" ColumnName="StartDateTime" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="TaskID" ColumnName="TaskID" />
+                <ScalarProperty Name="MeetingID" ColumnName="MeetingID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserSignImg">
+            <EntityTypeMapping TypeName="TaskCloudModel.UserSignImg">
+              <MappingFragment StoreEntitySet="UserSignImg">
+                <ScalarProperty Name="SignImg" ColumnName="SignImg" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserSignImgID" ColumnName="UserSignImgID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Task">
+            <EntityTypeMapping TypeName="TaskCloudModel.Task">
+              <MappingFragment StoreEntitySet="Task">
+                <ScalarProperty Name="Optime" ColumnName="Optime" />
+                <ScalarProperty Name="ByID" ColumnName="ByID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserRoleID" ColumnName="UserRoleID" />
+                <ScalarProperty Name="ResultID" ColumnName="ResultID" />
+                <ScalarProperty Name="PriorityID" ColumnName="PriorityID" />
+                <ScalarProperty Name="PrivacyID" ColumnName="PrivacyID" />
+                <ScalarProperty Name="StateID" ColumnName="StateID" />
+                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+                <ScalarProperty Name="FinishDate" ColumnName="FinishDate" />
+                <ScalarProperty Name="Deadline" ColumnName="Deadline" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Summary" ColumnName="Summary" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="TaskNo" ColumnName="TaskNo" />
+                <ScalarProperty Name="UpperTaskID" ColumnName="UpperTaskID" />
+                <ScalarProperty Name="TaskID" ColumnName="TaskID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TaskBy">
+            <EntityTypeMapping TypeName="TaskCloudModel.TaskBy">
+              <MappingFragment StoreEntitySet="TaskBy">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="TaskByID" ColumnName="TaskByID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TaskCodeType">
+            <EntityTypeMapping TypeName="TaskCloudModel.TaskCodeType">
+              <MappingFragment StoreEntitySet="TaskCodeType">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="TaskTypeID" ColumnName="TaskTypeID" />
+                <ScalarProperty Name="TaskCodeTypeID" ColumnName="TaskCodeTypeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TaskSource">
+            <EntityTypeMapping TypeName="TaskCloudModel.TaskSource">
+              <MappingFragment StoreEntitySet="TaskSource">
+                <ScalarProperty Name="Visible" ColumnName="Visible" />
+                <ScalarProperty Name="PersonnelID" ColumnName="PersonnelID" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Organization" ColumnName="Organization" />
+                <ScalarProperty Name="TaskID" ColumnName="TaskID" />
+                <ScalarProperty Name="TaskSourceID" ColumnName="TaskSourceID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Personnel">
+            <EntityTypeMapping TypeName="TaskCloudModel.Personnel">
+              <MappingFragment StoreEntitySet="Personnel">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="TitleID" ColumnName="TitleID" />
+                <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+                <ScalarProperty Name="ProfessionNumber" ColumnName="ProfessionNumber" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="PersonnelID" ColumnName="PersonnelID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Attachment">
+            <EntityTypeMapping TypeName="TaskCloudModel.Attachment">
+              <MappingFragment StoreEntitySet="Attachment">
+                <ScalarProperty Name="Optime" ColumnName="Optime" />
+                <ScalarProperty Name="Visible" ColumnName="Visible" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserRoleID" ColumnName="UserRoleID" />
+                <ScalarProperty Name="Extend" ColumnName="Extend" />
+                <ScalarProperty Name="FilePath" ColumnName="FilePath" />
+                <ScalarProperty Name="ContentData256K" ColumnName="ContentData256K" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="AttachmentID" ColumnName="AttachmentID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TaskAttachment">
+            <EntityTypeMapping TypeName="TaskCloudModel.TaskAttachment">
+              <MappingFragment StoreEntitySet="TaskAttachment">
+                <ScalarProperty Name="AttachmentID" ColumnName="AttachmentID" />
+                <ScalarProperty Name="TaskID" ColumnName="TaskID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TaskRequest">
+            <EntityTypeMapping TypeName="TaskCloudModel.TaskRequest">
+              <MappingFragment StoreEntitySet="TaskRequest">
+                <ScalarProperty Name="ResponseTypeID" ColumnName="ResponseTypeID" />
+                <ScalarProperty Name="ViewState" ColumnName="ViewState" />
+                <ScalarProperty Name="Optime" ColumnName="Optime" />
+                <ScalarProperty Name="CC" ColumnName="CC" />
+                <ScalarProperty Name="FromUserRoleID" ColumnName="FromUserRoleID" />
+                <ScalarProperty Name="FromUserID" ColumnName="FromUserID" />
+                <ScalarProperty Name="ToUserRoleID" ColumnName="ToUserRoleID" />
+                <ScalarProperty Name="ToUserID" ColumnName="ToUserID" />
+                <ScalarProperty Name="TaskID" ColumnName="TaskID" />
+                <ScalarProperty Name="TaskRequestID" ColumnName="TaskRequestID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserGroup">
+            <EntityTypeMapping TypeName="TaskCloudModel.UserGroup">
+              <MappingFragment StoreEntitySet="UserGroup">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="UserGroupID" ColumnName="UserGroupID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="TaskCloudModel.Users">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="UserGroupID" ColumnName="UserGroupID" />
+                <ScalarProperty Name="ISReset" ColumnName="ISReset" />
+                <ScalarProperty Name="Logo" ColumnName="Logo" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="LastActivityDate" ColumnName="LastActivityDate" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="FailedPasswordAttemptCount" ColumnName="FailedPasswordAttemptCount" />
+                <ScalarProperty Name="LastLockoutDate" ColumnName="LastLockoutDate" />
+                <ScalarProperty Name="LastPasswordChangedDate" ColumnName="LastPasswordChangedDate" />
+                <ScalarProperty Name="LastLoginDate" ColumnName="LastLoginDate" />
+                <ScalarProperty Name="IsLockedOut" ColumnName="IsLockedOut" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="PasswordAnswer" ColumnName="PasswordAnswer" />
+                <ScalarProperty Name="PasswordQuestion" ColumnName="PasswordQuestion" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,265 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{76391C3B-DCD2-40D9-9EE9-73E9BC61A5C2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WSD.TaskCloud.Contracts</RootNamespace>
+    <AssemblyName>WSD.TaskCloud.Contracts</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DataContracts\Dashboard\DashboardTaskFilter.cs" />
+    <Compile Include="DataContracts\Enums.cs" />
+    <Compile Include="DataContracts\NodeViewModel.cs" />
+    <Compile Include="DataContracts\OrgChart\AddUserRequest.cs" />
+    <Compile Include="DataContracts\SignalRUser.cs" />
+    <Compile Include="DataContracts\TaskBox\MyTaskFilter.cs" />
+    <Compile Include="DataContracts\TaskBox\TaskBoxMenuItem.cs" />
+    <Compile Include="DataContracts\Task\AttachedFile.cs" />
+    <Compile Include="DataContracts\Task\PersonnelReferenceRequest.cs" />
+    <Compile Include="DataContracts\Personel\PersonnelRequest.cs" />
+    <Compile Include="DataContracts\Task\TaskForwardModel.cs" />
+    <Compile Include="DataContracts\Task\TaskRequestFilter.cs" />
+    <Compile Include="DataContracts\Task\TaskRequestModel.cs" />
+    <Compile Include="DataContracts\Referans\ReferenceRequest.cs" />
+    <Compile Include="DataContracts\Task\TaskResponseModel.cs" />
+    <Compile Include="DataContracts\Task\TreeSchema.cs" />
+    <Compile Include="EF\ActionCode.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\AppSettings.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\Attachment.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\Category.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\Conversation.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\Department.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\EmailRequest.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\Meeting.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\Metadata\DepartmentMetadata.cs" />
+    <Compile Include="EF\Metadata\PersonnelMetadata.cs" />
+    <Compile Include="EF\Metadata\ReferenceMetadata.cs" />
+    <Compile Include="EF\Metadata\StateTypeMetadata.cs" />
+    <Compile Include="EF\Metadata\TaskMetadata.cs" />
+    <Compile Include="EF\Metadata\TaskRequestMetadata.cs" />
+    <Compile Include="EF\Metadata\TaskResponseMetadata.cs" />
+    <Compile Include="EF\Metadata\TaskSourceMetadata.cs" />
+    <Compile Include="EF\Metadata\TaskTypeMetadata.cs" />
+    <Compile Include="EF\Metadata\UserProfileMetadata.cs" />
+    <Compile Include="EF\Metadata\UsersMetadata.cs" />
+    <Compile Include="EF\Permission.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\Personnel.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\PersonnelReference.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\PriorityType.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\PrivacyType.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\Profession.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\ProxyUser.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\Reference.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\ResultType.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\Role.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\SMSRequest.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\StateType.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\Task.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\TaskAttachment.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\TaskBy.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\TaskCategory.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\TaskCodeType.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\TaskModel1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\TaskPersonnel.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\TaskRequest.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\TaskResponse.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\TaskResponseAttachment.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\TaskSource.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\TaskTemplate.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\TaskType.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\Title.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\UserCalender.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\UserGroup.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\UserProfile.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\UserRole.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\Users.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\UserSettings.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\UserSignImg.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\WorkCalender.cs">
+      <DependentUpon>TaskModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Namespaces.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceContracts\IAuthenticationService.cs" />
+    <Compile Include="ServiceContracts\IAccountService.cs" />
+    <Compile Include="ServiceContracts\ICacheService.cs" />
+    <Compile Include="ServiceContracts\IDashboardService.cs" />
+    <Compile Include="ServiceContracts\IGeneralDefinitionsService.cs" />
+    <Compile Include="ServiceContracts\ITaskBoxService.cs" />
+    <Compile Include="ServiceContracts\ITaskService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
+    <None Include="DLL\TaskCloudDB.bak" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DLL\AutoMapper.dll" />
+    <Content Include="DLL\CachingInfra.dll" />
+    <Content Include="DLL\Common.dll" />
+    <Content Include="DLL\DataServerInfra.dll" />
+    <Content Include="DLL\Kendo.Mvc.dll" />
+    <Content Include="EF\TaskModel1.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>TaskModel1.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

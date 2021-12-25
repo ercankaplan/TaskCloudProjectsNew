@@ -1,0 +1,60 @@
+﻿@using WSD.TaskCloud.Contracts.EF
+@using WSD.TaskCloud.MVC.ClientContracts
+@model List<StateType>
+
+<script>
+
+    function oncolorchanged(e)
+    {
+        var x = e;
+    }
+
+
+</script>
+
+
+
+
+@(Html.Kendo().Grid<StateType>()
+    .Name("gridStateType")
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.Name);
+        columns.Bound(p=>p.ColorCode).EditorTemplateName("ColorEditor").Width(75).ClientTemplate("<div id='colorDiv' style='background:#=ColorCode#;width: 50px; height: 19px;' ></div>");
+        columns.Command(command => { command.Destroy().Text("Kaydı Sil"); }).Width(100);
+    })
+    .ToolBar(toolBar =>
+    {
+        toolBar.Create().Text("Yeni Kayıt");
+        toolBar.Save().SaveText("Değişiklikleri Kaydet").CancelText("Değişiklikleri İptal Et");
+    })
+    .Editable(editable => editable.Mode(GridEditMode.InCell))
+    .Pageable()
+    .Sortable()
+    .Scrollable()
+    .HtmlAttributes(new { style = "height:550px;" })
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Read(o => o.Action("StateTypes_Read", "GeneralDefinitions"))
+        .Batch(true)
+        .PageSize(20)
+        .Events(events => events.Error("GridErrorHandler"))
+        .Model(model =>
+        {
+
+            model.Id(p => p.StateTypeID);
+            model.Field(p => p.StateTypeID).Editable(false);
+            model.Field(p => p.ColorCode).DefaultValue("#7092be");
+
+
+
+
+        })
+        .Create(o => o.Action("StateTypes_Create", "GeneralDefinitions"))
+        .Update(o => o.Action("StateTypes_Update", "GeneralDefinitions"))
+        .Destroy(o => o.Action("StateTypes_Destroy", "GeneralDefinitions"))
+    )
+)
+
+
+

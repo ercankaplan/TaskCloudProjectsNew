@@ -1,0 +1,90 @@
+﻿
+
+
+@using WSD.TaskCloud.Contracts.DataContracts.Task
+
+@model TaskResponseModel
+
+
+<script>
+    function OnResponseFileUploadError(e) {
+        debugger;
+        var errorData = $.parseJSON(e.XMLHttpRequest.responseText);
+
+        var errorMessages = [];
+        for (var key in errorData) {
+            errorMessages.push(errorData[key]);
+        }
+        var m = errorMessages.join("<br />");
+        ShowMessage(m,@WSD.TaskCloud.MVC.ClientContracts.EnumMessageType.Error.GetHashCode());
+
+    }
+</script>
+
+
+<div class="row rowStyle">
+    <div class="myDiv">
+
+
+        @using (Ajax.BeginForm("SaveTaskResponse", "TaskBox", new AjaxOptions { InsertionMode = InsertionMode.Replace, HttpMethod = "Post", UpdateTargetId = "dvResult" }))
+        {
+
+            @*<input style="text-align:right" type="submit" value="Gönder" class="k-button k-button-icontext k-grid-add" />*@
+
+            @*@Html.TextAreaFor(model => model.Description, new { style = "width: 100%;min-height:200px;", @class = "TextBoxDateTime", @placeholder = "Cevabı buraya girin" })*@
+            @Html.HiddenFor(m => m.TaskRequestID)
+            <div class="col-md-2 paddingFixer0 row-sep">
+                @Html.StarredLabelFor(m => m.Subject)
+            </div>
+            <div class="col-md-10 paddingFixer0 row-sep">
+                @(Html.TextBoxFor(i => i.Subject, new { @class = "TextBoxClass", autocomplete = "off" }))
+            </div>
+            @(Html.Kendo().Editor()
+        .Tools(t => t.CustomTemplate(ct => ct.Template("<input type='submit' value='Gönder' class='k-button k-button-icontext k-grid-add'>"))
+             )
+
+
+                                .Name("ResponseDescription")
+                                .HtmlAttributes(new { style = "height:200px;text-transform:uppercase;", @class = "TextBoxDateTime" })
+                                .Resizable(resizable => resizable.Content(true).Toolbar(true))
+                                .ImageBrowser(imageBrowser => imageBrowser
+                                .Image("~/Content/UserFiles/Images/{0}")
+                                .Read("Read", "ImageBrowser")
+                                .Create("Create", "ImageBrowser")
+                                .Destroy("Destroy", "ImageBrowser")
+                                .Upload("Upload", "ImageBrowser")
+                                .Thumbnail("Thumbnail", "ImageBrowser")
+                                )
+                                .Value(@<text>
+
+                                </text>)
+            )
+
+            <br />
+
+
+                            @(Html.Kendo().Upload()
+                                .Name("ResponseFiles")
+                                .Messages(m => m.Select("Dosya Seç"))
+                                .Events(evn => evn.Error("OnResponseFileUploadError"))
+                                .Async(async => async.Save("AttachFile", "TaskBox")
+                                            .Remove("RemoveFile", "TaskBox")
+                                            .SaveField("files")
+
+
+                                )
+
+                                //.TemplateId("fileTemplate")
+                                .Multiple(true)
+                                 .HtmlAttributes(new { style = "width: 100%;" })
+                            )
+
+
+        }
+
+
+
+    </div>
+</div>
+
+

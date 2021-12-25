@@ -1,0 +1,132 @@
+﻿@using WSD.TaskCloud.Contracts.DataContracts.Task
+
+@model PersonnelReferenceRequest
+
+<script>
+    function onReferenceSelected(e) {
+
+        debugger;
+        var dataItem = this.dataItem(e.item.index());
+
+
+        $('#RefID').val(dataItem.ReferenceID);
+        $.ajax({
+            url: '@Url.Action("GetTitle", "Cache")',
+            type: 'GET',
+            data: { key: dataItem.TitleID },
+            success: function (d) {
+
+
+                $('#dvReferenceTitle').text(d);
+
+            }
+        });
+
+    }
+
+    function OnUploadFile(e) {
+
+        e.data = { refID: $("#RefID").val() };
+
+    }
+
+</script>
+<script>
+    $(document).ready(function () {
+        var validator = $("#perRefForm").kendoValidator({
+            rules: {
+                upload: function (input) {
+                    if (input[0].type === "file") {
+                        return input.closest(".k-upload").find(".k-file").length;
+                    }
+                    return true;
+                }
+            }, messages: {
+                upload: "Dosya Seçilmeli!!",
+            }
+        }).data("kendoValidator");
+
+        $("form").submit(function (event) {
+            if (!validator.validate()) {
+                status.innerHTML = "Invalid Responses";
+                event.preventDefault();
+            }
+        });
+    });
+</script>
+@using (Ajax.BeginForm("PersonnelReferenceAddNew", "Task", new AjaxOptions { InsertionMode = InsertionMode.Replace, HttpMethod = "Post", UpdateTargetId = "dvResult" },new { id="perRefForm"}))
+{
+
+    <div class="row">
+        <div class="row row-type1 row-sep5">
+            <div class="col-md-3 col-md-offset-1 paddingFixer0 row-sep">
+                @Html.StarredLabelFor(m => m.AddReferenceID)
+            </div>
+            <div class="col-md-7 paddingFixer0 row-sep">
+                @(Html.Kendo().AutoComplete()
+                            .Name("AddReferenceID")
+                            .DataTextField("FullName")
+                            .HtmlAttributes(new { @class = "TextBoxDropDown", style = "width:100%" })
+                            .Filter("contains")
+                            .Events(evnt => evnt.Select("onReferenceSelected"))
+                            .DataSource(source =>
+                            {
+                                source.Read(read =>
+                                {
+                                    read.Action("_GetReferences", "Task");
+                                })
+                                .ServerFiltering(false);
+                            }))
+                @Html.HiddenFor(model=> model.RefID)
+               
+                <div id="dvReferenceTitle">
+                </div>
+            </div>
+        </div>
+        <div class="row row-type1 row-sep5">
+            <div class="col-md-3 col-md-offset-1 paddingFixer0 row-sep">
+                @Html.StarredLabelFor(m => m.AttachedReferenceFile)
+            </div>
+            <div class="col-md-7 paddingFixer0 row-sep">
+                <div id="dvReferenceFile" class="k-content">
+                    @(Html.Kendo().Upload()
+                                .Name("AttachedReferenceFile")
+                                .Messages(m => m.Select("Dosya Seç"))
+                                .Multiple(false)
+                                .Async(async => async.Save("AttachReferenceFile", "Task")
+                                            .Remove("RemoveReferenceFile", "Task")
+                                            .SaveField("files")
+
+                                )
+                                .Events(evn =>
+                                {
+                                    evn.Error("OnUploadError");
+                                    evn.Upload("OnUploadFile");
+
+                                }
+                                )
+
+                                 .HtmlAttributes(new { style = "width: 80%;" })
+                    )
+                     @Html.ValidationMessageFor(i=>i.AttachedReferenceFile)
+                </div>
+            </div>
+        </div>
+        <div class="row row-type1 row-sep5">
+            <div class="col-md-3 col-md-offset-1 paddingFixer0 row-sep">
+                @Html.StarredLabelFor(m => m.IsVisible)
+            </div>
+            <div class="col-md-7 paddingFixer0 row-sep">
+                <div id="dvReferenceFile" class="k-content">
+                    @(Html.CheckBoxFor(m=> m.IsVisible))
+                </div>
+            </div>
+        </div>
+        <div class="row row-type1 row-sep5">
+            <div class="col-md-5  col-md-offset-4 paddingFixer0 row-sep" style="vertical-align:bottom">
+                <input type="submit" value="Referans Ekle" style="width:100px;" class="btn-info btn" />
+            </div></div>
+        </div>
+
+
+}

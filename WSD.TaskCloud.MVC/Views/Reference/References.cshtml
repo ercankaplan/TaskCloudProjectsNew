@@ -1,0 +1,279 @@
+﻿
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+@using WSD.TaskCloud.Contracts.EF
+@model WSD.TaskCloud.Contracts.DataContracts.Referans.ReferenceRequest
+<script>
+    $(document).ready(function () {
+
+        $('#FilterFirstName').bind('input', function () {
+            FilterReference();
+        });
+        $('#FilterLastName').bind('input', function () {
+            FilterReference();
+        });
+        $("#FilterIsActive").change(function () {
+            FilterReference();
+        });
+
+    });
+
+
+    function RefreshGrid() {
+
+        $('#gridReferences').data('kendoGrid').dataSource.read();
+        $('#gridReferences').data('kendoGrid').refresh();
+
+    }
+
+    function FilterReference() {
+
+        debugger;
+
+        var grid = $("#gridReferences").data("kendoGrid");
+
+        fields = new Array();
+        var i = 0;
+
+        var fname = $('#FilterFirstName')[0].value;
+
+        if (fname != null && fname != '') {
+            fields[i] = { field: "FirstName", operator: "contains", value: fname };
+            i++;
+        }
+        var lname = $('#FilterLastName')[0].value;
+        if (lname != null && lname != '') {
+            fields[i] = { field: "LastName", operator: "contains", value: lname };
+            i++;
+        }
+
+        var act = $('#FilterIsActive')[0].checked;
+        fields[i] = { field: "IsActive", operator: "eq", value: act };
+        i++;
+
+        var tit = $('#FilterTitleID').data("kendoDropDownList").value();
+        if (parseInt(tit) > 0) {
+            fields[i] = { field: "TitleID", operator: "eq", value: parseInt(tit) };
+        }
+
+        if (fields.length > 0) {
+            grid.dataSource.filter(fields);
+        } else {
+            grid.dataSource.filter({});
+        }
+
+    }
+
+    function refOnFailure(e) {
+
+    }
+
+    function refOnSuccess(e){
+        if(e=="Success")
+        {
+            var mainWindow = $("#contentWND").data("kendoWindow");
+            mainWindow.close();
+            RefreshGrid();
+        }
+    }
+    function Guncelle(e) {
+        e.preventDefault();
+        var tr = $(e.target).closest("tr");
+        var data = this.dataItem(tr);
+        $('#contentWNDDiv').load('@Url.Action("ReferenceUpdatePopup", "Reference")', { refID: data.ReferenceID });
+        var mainWindow = $("#contentWND").data("kendoWindow");
+        mainWindow.center().open();
+        mainWindow.title("Referans Güncelle");
+        mainWindow.setOptions({ height: 160 });
+    }
+
+    function AddCustomLink(oReference) {
+        var html = kendo.format("<a href='javascript:void(0);' onclick='PopupUpdateWin({0})'>Güncelle</a>",
+           oReference.ReferenceID
+       );
+
+        return html;
+    }
+
+
+
+</script>
+@using (Ajax.BeginForm("ReferenceAddNew", "Reference", new AjaxOptions { InsertionMode = InsertionMode.Replace, HttpMethod = "Post", UpdateTargetId = "dvResult" }, new { id = "refForm" }))
+{
+    <div class="row rowStyle" align="left" style="padding:20px;" >
+        <fieldset>
+            <legend>Yeni Referans</legend>
+            <div class="row row-type1">
+                <div class="col-md-5 col-sm-5 col-md-offset-1  row-sep">
+                    <div class="col-md-4 paddingFixer row-sep">
+                        @Html.StarredLabelFor(m => m.FirstName)
+                    </div>
+                    <div class="col-md-8 paddingFixer row-sep">
+                        @(Html.TextBoxFor(i => i.FirstName, new { @class = "TextBoxClass", style = "max-width:310px", autocomplete = "off" }))
+                    </div>
+                </div>
+                <div class="col-md-5 col-sm-5 row-sep">
+                    <div class="col-md-4 paddingFixer row-sep">
+                        @Html.StarredLabelFor(m => m.LastName)
+                    </div>
+                    <div class="col-md-8 paddingFixer row-sep">
+                        @(Html.TextBoxFor(i => i.LastName, new { @class = "TextBoxClass", style = "max-width:310px", autocomplete = "off" }))
+                    </div>
+                </div>
+            </div>
+            <div class="row row-type1">
+                <div class="col-md-5 col-sm-5 col-md-offset-1 row-sep">
+                    <div class="col-md-4 paddingFixer row-sep">
+                        @Html.StarredLabelFor(m => m.TitleID)
+                    </div>
+                    <div class="col-md-8 paddingFixer row-sep">
+                        @(Html.Kendo().DropDownListFor(i => i.TitleID)
+                  .DataTextField("Name")
+                  .DataValueField("TitleID")
+                  .OptionLabel("Seçiniz")
+                  .DataSource(source =>
+                  {
+                      source.Read(read =>
+                      {
+                          read.Action("_GetTitles", "Task");
+                      });
+                  })
+                 .HtmlAttributes(new { @class = "TextBoxDropDown", style = "max-width:310px" })
+                        )
+                        @Html.ValidationMessageFor(i => i.TitleID)
+                    </div>
+                </div>
+                <div class="col-md-5 col-sm-5 row-sep">
+                    <div class="col-md-4 paddingFixer row-sep">
+                        @Html.StarredLabelFor(m => m.Comment)
+                    </div>
+                    <div class="col-md-8 paddingFixer row-sep">
+                        @(Html.TextAreaFor(i => i.Comment, new { @class = "classTextArea", style = "max-width:310px", autocomplete = "off" }))
+                    </div>
+                </div>
+
+            </div>
+            <div class="row row-type1">
+                <div class="col-md-3 col-sm col-sm-offset-2 col-sm-4 col-md-offset-4">
+                    <button type="submit" class="btn btn-success btn-block" id="sorgulaBtn" style="max-width:310px;">Kaydet</button>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <script>
+    $(function () {
+        var validator = $("#refForm").kendoValidator().data("kendoValidator");
+    });
+
+    </script>
+}
+
+<div id="dvResult"></div>
+
+
+<br />
+
+<div style="padding:20px;">
+    <fieldset>
+        <legend>Referanslar</legend>
+
+    @(Html.Kendo().Grid<Reference>()
+                .Name("gridReferences")
+               .Scrollable(s => s.Height("auto"))
+                .Columns(columns =>
+                {
+                    columns.Bound(o => o.ReferenceID).Visible(false).Title("ID");
+                    columns.Bound(o => o.FirstName).Title("Adı");
+                    columns.Bound(o => o.LastName).Title("Soyadı");
+                    columns.Bound(o => o.TitleID).Title("Ünvan").ClientTemplate("<div>#=GetItemTextValue(TitleID,'GetTitle')#</div>");
+                    columns.Bound(o => o.Comment).Title("Yorum");
+                    columns.Bound(o => o.IsActive).Title("Durum").ClientTemplate("<div>#=GetItemTextValue(IsActive,'GetBoolean')#</div>");
+                    columns.Bound(p => p.Optime).Format("{0:dd/MM/yyyy}").Title("Tarih");
+                    columns.Command(command => command.Custom("Guncelle").Click("Guncelle")).Width(100);
+                })
+
+                .ToolBar(toolbar =>
+                {
+                toolbar.Template(@<text>
+        <div class="row row-type1">
+            <div class="col-md-5 col-md-offset-1 row-sep">
+                <div class="col-md-4 paddingFixer row-sep">
+                    Adı
+                </div>
+                <div class="col-md-8 paddingFixer row-sep">
+                    @(Html.TextBox("FilterFirstName", "", new { @class = "TextBoxClass", style = "max-width:310px", autocomplete = "off" }))
+                </div>
+            </div>
+            <div class="col-md-5 row-sep">
+                <div class="col-md-4 paddingFixer row-sep">
+                    Soyadı
+                </div>
+                <div class="col-md-8 paddingFixer row-sep">
+                    @(Html.TextBox("FilterLastName", "", new { @class = "TextBoxClass", style = "max-width:310px", autocomplete = "off" }))
+                </div>
+            </div>
+        </div>
+        <div class="row row-type1">
+            <div class="col-md-5 col-md-offset-1 row-sep">
+                <div class="col-md-4 paddingFixer row-sep">
+                    @Html.StarredLabelFor(m => m.Comment)
+                </div>
+                <div class="col-md-8 paddingFixer row-sep">
+
+                    @(Html.Kendo().DropDownList()
+                                    .Name("FilterTitleID")
+                                    .OptionLabel("Tümü")
+                                    .DataTextField("Name")
+                                    .DataValueField("TitleID")
+                                    .AutoBind(false)
+                                    .Events(e => e.Change("FilterReference"))
+                                   .HtmlAttributes(new { @class = "TextBoxDropDown", style = "max-width:310px" })
+                                    .DataSource(ds =>
+                                    {
+                                        ds.Read("_GetTitles", "Task");
+                                    })
+                    )
+                </div>
+            </div>
+            <div class="col-md-5 row-sep">
+                <div class="col-md-4 paddingFixer row-sep">
+                    @Html.StarredLabelFor(m => m.Comment)
+                </div>
+                <div class="col-md-8 paddingFixer row-sep">
+                    @Html.Kendo().CheckBox().Name("FilterIsActive").Checked(true)
+                </div>
+            </div>
+        </div>
+            </text>);
+                })
+
+
+                .DataSource(dataSource => dataSource
+                                        .Ajax()
+                                        .Read(read => read.Action("References_Read", "Reference"))
+                                        .Events(events => events.Error("GridErrorHandler"))
+                                        .PageSize(10)
+                            )
+                .Scrollable()
+                .Pageable(pager => pager
+            .PageSizes(new[] { 10, 25, 50 }))
+        .Sortable(sortable => sortable
+            .AllowUnsort(true)
+            .SortMode(GridSortMode.MultipleColumn))
+    )
+    </fieldset>
+</div>
+
+
+<style>
+    .k-grid-content {
+        min-height: 250px !important;
+    }
+</style>
+

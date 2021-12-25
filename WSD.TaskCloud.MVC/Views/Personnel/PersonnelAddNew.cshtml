@@ -1,0 +1,134 @@
+﻿
+@using WSD.TaskCloud.Contracts.EF
+
+
+
+
+@model WSD.TaskCloud.Contracts.DataContracts.Personel.PersonnelRequest
+
+
+
+<script>
+
+    function RefreshGrid() {
+
+        $('#gridReferences').data('kendoGrid').dataSource.read();
+        $('#gridReferences').data('kendoGrid').refresh();
+
+    }
+
+</script>
+
+
+
+@using (Ajax.BeginForm("PersonnelAddNew", "Personnel", new AjaxOptions { InsertionMode = InsertionMode.Replace, HttpMethod = "Post", UpdateTargetId = "dvResult" }))
+{
+
+    <div>
+        <table>
+            <tr>
+                <td>@Html.LabelFor(model => model.DepartmentID)</td>
+                <td>
+                    <div>
+                        @(Html.Kendo().DropDownList()
+  .Name("UpdateDepartmentID")
+  .DataTextField("Name")
+  .DataValueField("DepartmentID")
+  .OptionLabel("Seçiniz")
+  .DataSource(source =>
+  {
+      source.Read(read =>
+      {
+          read.Action("_GetDepartments", "Task");
+      });
+  })
+  .HtmlAttributes(new { style = "width: 200px;" })
+                        )
+                        @Html.ValidationMessageFor(model => model.DepartmentID)
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>@Html.LabelFor(model => model.ProfessionNumber)</td>
+                <td>
+                    <div>
+                        @Html.TextBoxFor(model => model.ProfessionNumber)
+                        @Html.ValidationMessageFor(model => model.ProfessionNumber)
+                    </div>
+                </td>
+
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(model => model.FirstName)</td>
+                <td>
+                    <div>
+                        @Html.TextBoxFor(model => model.FirstName)
+                        @Html.ValidationMessageFor(model => model.FirstName)
+                    </div>
+                </td>
+
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(model => model.LastName)</td>
+                <td>
+                    <div>
+                        @Html.TextBoxFor(model => model.LastName)
+                        @Html.ValidationMessageFor(model => model.LastName)
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(model => model.Address)</td>
+                <td>
+                    <div>
+                        @Html.TextBoxFor(model => model.Address)
+
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(model => model.Phone)</td>
+                <td>
+                    <div>
+                        @Html.TextBoxFor(model => model.Phone)
+
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(model => model.Mobile)</td>
+                <td>
+                    <div>
+                        @Html.TextBoxFor(model => model.Mobile)
+
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(model => model.Email)</td>
+                <td>
+                    <div>
+                        @Html.TextBoxFor(model => model.Email)
+
+                    </div>
+                </td>
+            </tr>
+
+
+        </table>
+
+    </div>
+    <div>
+
+        <input type="submit" value="Kaydet" class="k-button k-button-icontext k-grid-add" />
+
+    </div>
+
+
+}
+
+<div id="dvResult"></div>
+
+
+<br />

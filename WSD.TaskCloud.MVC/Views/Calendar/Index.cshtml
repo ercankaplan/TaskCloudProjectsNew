@@ -1,0 +1,86 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using WSD.TaskCloud.Contracts.DataContracts.Task
+
+<div class="row rowStyle">
+    <fieldset>
+        <div class="row row-type1">
+            <div class="col-md-12">
+                @(Html.Kendo().Scheduler<TaskScheModel>()
+    .Name("scheduler")
+    .Date(new DateTime(2013, 6, 13))
+    .StartTime(new DateTime(2013, 6, 13, 7, 00, 00))
+    .Height(600)
+    .Views(views =>
+    {
+        views.DayView();
+        views.WorkWeekView();
+        views.WeekView();
+        views.MonthView(workWeekView => workWeekView.Selected(true));
+        views.AgendaView();
+        views.TimelineView();
+    })
+    .Timezone("Etc/UTC")
+    .Resources(resource =>
+    {
+        resource.Add(m => m.UserID)
+            .Title("Owner")
+            .DataTextField("Text")
+            .DataValueField("Value")
+            .DataColorField("Color")
+            .BindTo(new[] {
+                new { Text = "Alex", Value = 1, Color = "#f8a398" } ,
+                new { Text = "Bob", Value = 2, Color = "#51a0ed" } ,
+                new { Text = "Charlie", Value = 3, Color = "#56ca85" }
+            });
+    })
+    .DataSource(d => d
+        .Model(m =>
+        {
+            m.Id(f => f.TaskID);
+            m.Field(f => f.Description).DefaultValue("No title");
+            m.Field(f => f.UserID).DefaultValue(1);
+            m.Field(f => f.StartDate).DefaultValue("No title");
+        })
+        .Read("Read", "Calendar")
+        .Create("Create", "Calendar")
+        .Destroy("Destroy", "Calendar")
+        .Update("Update", "Calendar")
+        .Filter(filters =>
+        {
+            filters.Add(model => model.UserID).IsEqualTo(1).Or().IsEqualTo(2);
+        })
+    )
+                )
+
+                <script type="text/javascript">
+                    $(function () {
+                        $("#people :checkbox").change(function (e) {
+                            var checked = $.map($("#people :checked"), function (checkbox) {
+                                return parseInt($(checkbox).val());
+                            });
+
+                            var filter = {
+                                logic: "or",
+                                filters: $.map(checked, function (value) {
+                                    return {
+                                        operator: "eq",
+                                        field: "OwnerID",
+                                        value: value
+                                    };
+                                })
+                            };
+
+                            var scheduler = $("#scheduler").data("kendoScheduler");
+
+                            scheduler.dataSource.filter(filter);
+                        });
+                    })
+                </script>
+            </div>
+        </div>
+    </fieldset>
+</div>

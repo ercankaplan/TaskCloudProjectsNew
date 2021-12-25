@@ -1,0 +1,117 @@
+﻿@{
+    Layout = null;
+}
+@model WSD.TaskCloud.Contracts.DataContracts.OrgChart.AddUserRequest
+<div>
+
+    @using (Html.BeginForm("UpdatePost", "Account", FormMethod.Post, new { enctype = "multipart/form-data", id = "updateKayit" }))
+    {
+        <div class="row rowStyle" align="center">
+            <fieldset>
+                <div class="row row-type1">
+                    <div class="col-md-5 col-sm-5 row-sep">
+                        <div class="col-md-4 paddingFixer row-sep">
+                            @Html.StarredLabelFor(m => m.FirstName)
+                        </div>
+                        <div class="col-md-8 paddingFixer row-sep">
+                            @(Html.TextBoxFor(i => i.FirstName, new { @class = "TextBoxClass", style = "max-width:290px" }))
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-sm-5 row-sep">
+                        <div class="col-md-4 paddingFixer row-sep">
+                            @Html.StarredLabelFor(m => m.LastName)
+                        </div>
+                        <div class="col-md-8 paddingFixer row-sep">
+                            @(Html.TextBoxFor(i => i.LastName, new { @class = "TextBoxClass", style = "max-width:290px" }))
+                        </div>
+                    </div>
+                </div>
+                <div class="row row-type2">
+                    <div class="col-md-5 col-sm-5 row-sep">
+                        <div class="col-md-4 paddingFixer row-sep">
+                            @Html.StarredLabelFor(m => m.Mobile)
+                        </div>
+                        <div class="col-md-8 paddingFixer row-sep">
+                            @(Html.Kendo().MaskedTextBoxFor(i => i.Mobile)
+                             .Mask("(999) 000-0000")
+                             .HtmlAttributes(new { @class = "TextBoxClass" })
+                            )
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-sm-5 row-sep">
+                        <div class="col-md-4 paddingFixer row-sep">
+                            @Html.StarredLabelFor(m => m.Email)
+                        </div>
+                        <div class="col-md-8 paddingFixer row-sep">
+                            @(Html.TextBoxFor(i => i.Email, new { @class = "TextBoxClass", style = "max-width:290px" }))
+                        </div>
+                    </div>
+                </div>
+                <div class="row row-type2">
+                    <div class="col-md-5 col-sm-5 row-sep">
+                        <div class="col-md-4 paddingFixer row-sep">
+                            @Html.StarredLabelFor(m => m.Password)
+                        </div>
+                        <div class="col-md-8 paddingFixer row-sep">
+                            @(Html.TextBoxFor(i => i.Password, new { @class = "TextBoxClass", type = "password", style = "max-width:290px" }))
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-sm-5 row-sep">
+                        <div class="col-md-4 paddingFixer row-sep">
+                            @Html.StarredLabelFor(m => m.RegistryNum)
+                        </div>
+                        <div class="col-md-8 paddingFixer row-sep">
+                            @(Html.TextBoxFor(i => i.RegistryNum, new { @class = "TextBoxClass", style = "max-width:290px" }))
+                        </div>
+                    </div>
+                </div>
+                <div class="row row-type1 paddingFixer">
+                    <div class="col-md-5 col-sm-5 row-sep">
+                        <div class="col-md-4 paddingFixer row-sep">
+                            @Html.StarredLabelFor(m => m.Logo)
+                        </div>
+                        <div class="col-md-8 paddingFixer row-sep">
+                            @(Html.Kendo().Upload()
+                                .Name("LogoImg")
+                                .Multiple(false)
+                                .HtmlAttributes(new { id = "files", style = "max-width:290px", accept = ".jpg" })
+                                .Events(i => i.Select("SelectedFile").Remove("RemovedFile"))
+                            )
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-sm-5 row-sep" align="center">
+                        <div id="imgDiv">
+                            @{
+                                if (Model.Logo != null)
+                                {
+                                    var base64 = Convert.ToBase64String(Model.Logo);
+                                    var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                                    <img src="@imgSrc" />
+                                }
+                                else
+                                {
+                                    <img src="/Content/img/no-avatar.jpg" width="50" style="padding-left:110px;" />
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+                @Html.HiddenFor(i => i.OpUserID)
+            </fieldset>
+            <div class="row row-type1">
+                <div class="col-md-4 col-sm col-sm-offset-2 col-sm-4 col-md-offset-4">
+                    <button type="submit" class="btn btn-success btn-block" id="sorgulaBtn" style="max-width:410px">Kaydet</button>
+                </div>
+            </div>
+        </div>
+                                }
+</div>
+
+<script>
+    $(function () {
+        var validator = $("#updateKayit").kendoValidator().data("kendoValidator");
+        var mainWindow = $("#contentWND").data("kendoWindow");
+        mainWindow.center().open();
+        mainWindow.title("Kullanıcı Yeni Kayıt");
+    });
+</script>

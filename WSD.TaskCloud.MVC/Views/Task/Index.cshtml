@@ -1,0 +1,42 @@
+﻿
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row rowStyle">
+    <fieldset>
+        <div class="row row-type1">
+            @(Html.Kendo().TabStrip()
+            .TabPosition(TabStripTabPosition.Left)
+              .Name("tabstrip")
+              .Animation(animation =>
+              {
+                  animation.Open(config =>
+                  {
+                      config.Fade(FadeDirection.In);
+                  });
+              })
+    .SelectedIndex(0)
+              .Items(tabstrip =>
+              {
+                  tabstrip.Add().Text("Referanslar")
+                      .LoadContentFrom("References", "Task").HtmlAttributes(new { style = "height:100px;" });
+
+                  tabstrip.Add().Text("Personeller")
+                      .LoadContentFrom("Personnels", "Task").HtmlAttributes(new { style = "height:100px;" });
+
+
+
+              })
+
+            )
+        </div>
+    </fieldset>
+</div>
+<script>
+    $(document).ready(function () {
+        var vph = $(window).height();
+        $('div#tabstrip').css({ 'height': (vph - 150) + 'px' });
+    });
+</script>

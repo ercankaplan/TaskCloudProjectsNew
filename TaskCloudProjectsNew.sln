@@ -1,0 +1,70 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.572
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WcfServices", "WcfServices", "{717EE9C4-275B-4F91-8FBF-0CD7EA9A3DD0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{3F6DFF5F-C0D8-4CA5-96F4-2122A347A86F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WSD.TaskCloud.Contracts", "WSD.TaskCloud.Contracts\WSD.TaskCloud.Contracts.csproj", "{76391C3B-DCD2-40D9-9EE9-73E9BC61A5C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WSD.TaskCloud.Data", "WSD.TaskCloud.Data\WSD.TaskCloud.Data.csproj", "{AC9AFEF1-B698-425C-A58E-EE38B158EBE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WSD.TaskCloud.WcfServices", "WSD.TaskCloud.WcfServices\WSD.TaskCloud.WcfServices.csproj", "{6ECFE463-F827-4795-8C44-E572FB52AEAD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WSD.TaskCloud.MVC", "WSD.TaskCloud.MVC\WSD.TaskCloud.MVC.csproj", "{76D1AA95-EDB6-4963-88E2-E44C3A02C090}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{76391C3B-DCD2-40D9-9EE9-73E9BC61A5C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76391C3B-DCD2-40D9-9EE9-73E9BC61A5C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76391C3B-DCD2-40D9-9EE9-73E9BC61A5C2}.Debug|x86.ActiveCfg = Debug|x86
+		{76391C3B-DCD2-40D9-9EE9-73E9BC61A5C2}.Debug|x86.Build.0 = Debug|x86
+		{76391C3B-DCD2-40D9-9EE9-73E9BC61A5C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76391C3B-DCD2-40D9-9EE9-73E9BC61A5C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76391C3B-DCD2-40D9-9EE9-73E9BC61A5C2}.Release|x86.ActiveCfg = Release|x86
+		{76391C3B-DCD2-40D9-9EE9-73E9BC61A5C2}.Release|x86.Build.0 = Release|x86
+		{AC9AFEF1-B698-425C-A58E-EE38B158EBE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC9AFEF1-B698-425C-A58E-EE38B158EBE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC9AFEF1-B698-425C-A58E-EE38B158EBE8}.Debug|x86.ActiveCfg = Debug|x86
+		{AC9AFEF1-B698-425C-A58E-EE38B158EBE8}.Debug|x86.Build.0 = Debug|x86
+		{AC9AFEF1-B698-425C-A58E-EE38B158EBE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC9AFEF1-B698-425C-A58E-EE38B158EBE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC9AFEF1-B698-425C-A58E-EE38B158EBE8}.Release|x86.ActiveCfg = Release|x86
+		{AC9AFEF1-B698-425C-A58E-EE38B158EBE8}.Release|x86.Build.0 = Release|x86
+		{6ECFE463-F827-4795-8C44-E572FB52AEAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6ECFE463-F827-4795-8C44-E572FB52AEAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6ECFE463-F827-4795-8C44-E572FB52AEAD}.Debug|x86.ActiveCfg = Debug|x86
+		{6ECFE463-F827-4795-8C44-E572FB52AEAD}.Debug|x86.Build.0 = Debug|x86
+		{6ECFE463-F827-4795-8C44-E572FB52AEAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6ECFE463-F827-4795-8C44-E572FB52AEAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6ECFE463-F827-4795-8C44-E572FB52AEAD}.Release|x86.ActiveCfg = Release|x86
+		{6ECFE463-F827-4795-8C44-E572FB52AEAD}.Release|x86.Build.0 = Release|x86
+		{76D1AA95-EDB6-4963-88E2-E44C3A02C090}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76D1AA95-EDB6-4963-88E2-E44C3A02C090}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76D1AA95-EDB6-4963-88E2-E44C3A02C090}.Debug|x86.ActiveCfg = Debug|x86
+		{76D1AA95-EDB6-4963-88E2-E44C3A02C090}.Debug|x86.Build.0 = Debug|x86
+		{76D1AA95-EDB6-4963-88E2-E44C3A02C090}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76D1AA95-EDB6-4963-88E2-E44C3A02C090}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76D1AA95-EDB6-4963-88E2-E44C3A02C090}.Release|x86.ActiveCfg = Release|x86
+		{76D1AA95-EDB6-4963-88E2-E44C3A02C090}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{76391C3B-DCD2-40D9-9EE9-73E9BC61A5C2} = {717EE9C4-275B-4F91-8FBF-0CD7EA9A3DD0}
+		{AC9AFEF1-B698-425C-A58E-EE38B158EBE8} = {717EE9C4-275B-4F91-8FBF-0CD7EA9A3DD0}
+		{6ECFE463-F827-4795-8C44-E572FB52AEAD} = {717EE9C4-275B-4F91-8FBF-0CD7EA9A3DD0}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A46CF910-D5BB-414C-8030-2CB18D16EC22}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,220 @@
+﻿
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using WSD.TaskCloud.Contracts.EF
+@model WSD.TaskCloud.Contracts.DataContracts.Personel.PersonnelRequest
+<script>
+    function GuncellePersonel(e) {
+        e.preventDefault();
+        var tr = $(e.target).closest("tr");
+        var data = this.dataItem(tr);
+        $('#contentWNDDiv').load('@Url.Action("PersonelUpdatePopup", "Personnel")', { ProfessionNumber: data.ProfessionNumber });
+        var mainWindow = $("#contentWND").data("kendoWindow");
+        mainWindow.center().open();
+        mainWindow.title("Personel Güncelleme");
+        mainWindow.setOptions({ height: 285 });
+    }
+
+</script>
+@using (Ajax.BeginForm("PersonnelAddNew", "Task", new AjaxOptions { InsertionMode = InsertionMode.Replace, HttpMethod = "Post", UpdateTargetId = "dvResult" }, new { id = "perForm" }))
+{
+    <div style="padding:20px;">
+        <fieldset>
+            <legend>Yeni Personel</legend>
+            <div class="row rowStyle" align="left">
+                <fieldset>
+                    <div class="row row-type1">
+                        <div class="col-md-5 col-sm-5 col-md-offset-1  row-sep">
+                            <div class="col-md-4 paddingFixer row-sep">
+                                @Html.StarredLabelFor(m => m.FirstName)
+                            </div>
+                            <div class="col-md-8 paddingFixer row-sep">
+                                @(Html.TextBoxFor(i => i.FirstName, new { @class = "TextBoxClass", style = "max-width:310px", autocomplete = "off" }))
+                            </div>
+                        </div>
+                        <div class="col-md-5 col-sm-5 row-sep">
+                            <div class="col-md-4 paddingFixer row-sep">
+                                @Html.StarredLabelFor(m => m.LastName)
+                            </div>
+                            <div class="col-md-8 paddingFixer row-sep">
+                                @(Html.TextBoxFor(i => i.LastName, new { @class = "TextBoxClass", style = "max-width:310px", autocomplete = "off" }))
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-type1">
+                        <div class="col-md-5 col-sm-5 col-md-offset-1  row-sep">
+                            <div class="col-md-4 paddingFixer row-sep">
+                                @Html.StarredLabelFor(m => m.DepartmentID)
+                            </div>
+                            <div class="col-md-8 paddingFixer row-sep">
+                                @(Html.Kendo().DropDownList()
+                          .Name("DepartmentID")
+                          .DataTextField("Name")
+                          .DataValueField("DepartmentID")
+                          .DataSource(source =>
+                          {
+                              source.Read(read =>
+                              {
+                                  read.Action("_GetDepartments", "Task");
+                              });
+                          })
+                           .HtmlAttributes(new { @class = "TextBoxDropDown", style = "max-width:310px" })
+                                )
+                            </div>
+                        </div>
+                        <div class="col-md-5 col-sm-5 row-sep">
+                            <div class="col-md-4 paddingFixer row-sep">
+                                @Html.StarredLabelFor(m => m.ProfessionNumber)
+                            </div>
+                            <div class="col-md-8 paddingFixer row-sep">
+                                @(Html.TextBoxFor(i => i.ProfessionNumber, new { @class = "TextBoxClass", style = "max-width:310px", autocomplete = "off" }))
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-type1">
+                        <div class="col-md-5 col-sm-5 col-md-offset-1  row-sep">
+                            <div class="col-md-4 paddingFixer row-sep">
+                                @Html.StarredLabelFor(m => m.Mobile)
+                            </div>
+                            <div class="col-md-8 paddingFixer row-sep">
+                                @(Html.Kendo().MaskedTextBoxFor(i => i.Mobile)
+                        .Mask("(999) 000-0000")
+                        .HtmlAttributes(new { @class = "TextBoxDropDown", style = "max-width:310px" })
+                                )
+                            </div>
+                        </div>
+                        <div class="col-md-5 col-sm-5 row-sep">
+                            <div class="col-md-4 paddingFixer row-sep">
+                                @Html.StarredLabelFor(m => m.Phone)
+                            </div>
+                            <div class="col-md-8 paddingFixer row-sep">
+                                @(Html.Kendo().MaskedTextBoxFor(i => i.Phone)
+                        .Mask("(999) 000-0000")
+                        .HtmlAttributes(new { @class = "TextBoxDropDown", style = "max-width:310px" })
+                                )
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-type1">
+                        <div class="col-md-5 col-sm-5 col-md-offset-1  row-sep">
+                            <div class="col-md-4 paddingFixer row-sep">
+                                @Html.StarredLabelFor(m => m.Email)
+                            </div>
+                            <div class="col-md-8 paddingFixer row-sep">
+                                @(Html.TextBoxFor(i => i.Email, new { @class = "TextBoxClass", style = "max-width:310px", autocomplete = "off" }))
+                            </div>
+                        </div>
+                        <div class="col-md-5 col-sm-5 row-sep">
+                            <div class="col-md-4 paddingFixer row-sep">
+                                @Html.StarredLabelFor(m => m.Address)
+                            </div>
+                            <div class="col-md-8 paddingFixer row-sep">
+                                @(Html.TextAreaFor(i => i.Address, new { @class = "classTextArea", style = "max-width:310px", autocomplete = "off" }))
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-type1">
+                        <div class="col-md-5 col-sm-5 col-md-offset-1  row-sep">
+                            <div class="col-md-4 paddingFixer row-sep">
+                                @Html.StarredLabelFor(m => m.TitleID)
+                            </div>
+                            <div class="col-md-8 paddingFixer row-sep">
+                                @(Html.Kendo().DropDownList()
+                          .Name("TitleID")
+                          .DataTextField("Name")
+                          .DataValueField("TitleID")
+                          .DataSource(source =>
+                          {
+                              source.Read(read =>
+                              {
+                                  read.Action("_GetTitles", "Task");
+                              });
+                          })
+                           .HtmlAttributes(new { @class = "TextBoxDropDown", style = "max-width:310px" })
+                                )
+                            </div>
+                        </div>
+                        <div class="col-md-5 col-sm-5 row-sep">
+                            <div class="col-md-4 paddingFixer row-sep">
+
+                            </div>
+                            <div class="col-md-8 paddingFixer row-sep">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-type1">
+                        <div class="col-md-3 col-sm col-sm-offset-2 col-sm-4 col-md-offset-4">
+                            <button type="submit" class="btn btn-success btn-block" id="sorgulaBtn" style="max-width:310px;">Kaydet</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+</fieldset>
+        </div>
+            }
+            <div id="dvResult"></div>
+            <br />
+            <div style="padding:20px;">
+                <fieldset>
+                    <legend>Personeller</legend>
+
+                    @(Html.Kendo().Grid<Personnel>()
+        .Name("gridPersonnels")
+        .Scrollable(s => s.Height("auto"))
+        .Columns(columns =>
+        {
+            columns.Bound(o => o.PersonnelID).Visible(false);
+            columns.Bound(o => o.FirstName).Title("Adı");
+            columns.Bound(o => o.LastName).Title("Soyadı");
+            columns.Bound(o => o.ProfessionNumber).Title("Sicil No");
+            columns.Bound(o => o.DepartmentID).ClientTemplate("<div>#=GetItemTextValue(DepartmentID,'GetDepartment')#</div>").Title("Çalıştığı Birim");
+            columns.Bound(o => o.TitleID).ClientTemplate("<div>#=GetItemTextValue(TitleID,'GetTitle')#</div>").Title("Ünvan");
+            columns.Bound(o => o.Address).Title("Adres");
+            columns.Bound(o => o.Phone).Title("Telefon");
+            columns.Bound(p => p.Mobile).Title("Cep Telefon");
+            columns.Bound(p => p.Email).Title("E-Posta");
+            columns.Command(command => command.Custom("Guncelle").Click("GuncellePersonel")).Width(100);
+
+        })
+        .DataSource(dataSource => dataSource
+                                .Ajax()
+                                .Read(read => read.Action("Personnels_Read", "Personnel"))
+                                .Events(events => events.Error("GridErrorHandler"))
+                                .PageSize(10)
+                    )
+        .Scrollable()
+            .Pageable(pager => pager
+            .PageSizes(new[] { 10, 25, 50 }))
+        .Sortable(sortable => sortable
+            .AllowUnsort(true)
+            .SortMode(GridSortMode.MultipleColumn))
+                    )
+                </fieldset>
+            </div>
+            <script>
+
+                $(function () {
+                    var validator = $("#perForm").kendoValidator().data("kendoValidator");
+                });
+                function RefreshGrid() {
+
+                    $('#gridPersonnels').data('kendoGrid').dataSource.read();
+                    $('#gridPersonnels').data('kendoGrid').refresh();
+
+                }
+                function refOnFailure(e) {
+
+                }
+
+                function refOnSuccess(e) {
+                    if (e == "Success") {
+                        var mainWindow = $("#contentWND").data("kendoWindow");
+                        mainWindow.close();
+                        RefreshGrid();
+                    }
+                }
+            </script>

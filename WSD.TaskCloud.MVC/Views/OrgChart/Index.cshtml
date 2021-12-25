@@ -1,0 +1,83 @@
+﻿
+<script>
+
+    function onCloseUsersWin() {
+
+    }
+
+
+
+    function OpenAddUserToDepartmentWin() {
+
+        $.post('@Url.Action("UsersPopup", "OrgChart")', {},
+                 function (data) {
+                     var tWindowElement = $('#userswindow');
+                     tWindowElement.data('kendoWindow').content(data);
+                     tWindowElement.data('kendoWindow').title("Kullanıcı Ekle");
+                     tWindowElement.data('kendoWindow').center().open();
+                 }
+                , 'html');
+    }
+
+
+</script>
+
+
+<div class="row rowStyle" align="center">
+    <fieldset>
+        <div class="row row-type1">
+            <div class="col-md-12">
+                @(Html.Kendo().TabStrip()
+                .TabPosition(TabStripTabPosition.Left)
+                .Name("tabstrip")
+                .SelectedIndex(0)
+                .HtmlAttributes(new { style="height:100%;"})
+                .Items(tabstrip =>
+                {
+                    //tabstrip.Add().Text("Organisation Chart").LoadContentFrom("Departments", "OrgChart").HtmlAttributes(new { style = "height:100px;" });
+                    tabstrip.Add().Text("Roles").LoadContentFrom("Roles", "OrgChart").HtmlAttributes(new { style = "height:100px;" });
+                    tabstrip.Add().Text("Users").LoadContentFrom("Users", "OrgChart").HtmlAttributes(new { style = "height:100px;" });
+                    tabstrip.Add().Text("Add New User").LoadContentFrom("AddUser", "OrgChart").HtmlAttributes(new { style = "height:100px;" });
+                })
+                )
+            </div>
+        </div>
+    </fieldset>
+</div>
+
+
+@(Html.Kendo().Window()
+    .Name("userswindow")
+    .Title("Kullanıcılar")
+    .Content(@<text>
+
+    </text>)
+    .Draggable()
+    .Resizable()
+    .Width(600)
+    .Actions(actions => actions.Pin().Minimize().Maximize().Close())
+    .Events(ev => ev.Close("onCloseUsersWin"))
+    .HtmlAttributes(new { @style = "display: none;" })
+)
+
+
+<style>
+    .employee-photo {
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-size: 50px 55px;
+        background-position: center center;
+        vertical-align: middle;
+        line-height: 50px;
+        box-shadow: inset 0 0 1px #999, inset 0 0 10px rgba(0,0,0,.2);
+        margin-left: 5px;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        var vph = $(window).height();
+        $('div#tabstrip').css({'height': (vph-150) + 'px'});
+    });
+</script>

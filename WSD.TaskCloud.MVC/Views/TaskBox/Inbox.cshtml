@@ -1,0 +1,210 @@
+﻿@using WSD.TaskCloud.Contracts.EF
+@model List<TaskRequest>
+
+<script>
+
+    function OnDataBound() {
+        //debugger;
+
+        //$('#gridTaskRequest k-grouping-row td p').each(function () {
+        //    debugger;
+        //    var text = $(this).text();
+        //    $(this).text(text.replace('dog', 'doll'));
+        //});
+
+        
+       
+        //$(".k-grouping-row td p").html('<a class="k-icon k-i-collapse" href="#" tabindex="-1"></a>' + $(".k-grouping-row td p").text().replace("OptimeText:", ""))
+
+    }
+</script>
+ 
+
+
+<div id="dvTaskBoxList"    class="col-md-3 paddingFixer0">
+    @(Html.Kendo().Grid<TaskRequest>()
+        .Name("gridTaskRequest")
+        .HtmlAttributes(new { style = "height:800px;" })
+        .Columns(columns =>
+        {
+            //columns.Bound(o => o.OptimeText).Hidden(true).Width(50).ClientGroupHeaderTemplate("<span style='margin-left:20px;'>#= value #</span>");
+            columns.Template(e => { }).ClientTemplate(" ").Width(140).Title("");
+        })
+        .ClientRowTemplate(
+
+                        "<tr role='row' >" +
+                        "<td class='k-group-cell' style='visibility:hidden;'></td>" +
+                        "<td> <a href='javascript:void(0);' onclick=GetTaskDetail('#: TaskID #') > " +
+
+                           "# if ( ViewState == 0) { #" +
+                                   "<div class='clearfix' style='border-left-width:30px;border-left-color:blue;border-left:solid;padding-left:20px;' > " +
+                                   "<p class='pull-left m0'>" +
+                                        "<b>" +
+                                            "<div style='text-transform: uppercase;color:gray;font-size:large;' >#: TaskFrom #</div>" +
+                                            "<div >#: TaskNo # #: Subject #  <span style='float:right'>#: OptimeText2 #</span></div>" +
+                                        "</b>" +
+                                            "<div style='text-overflow: ellipsis;width:70%; white-space: nowrap; overflow:hidden;color:gray;' >#= Summary #</div>" +
+                                    "</p>" +
+                                    "</div> " +
+                           "# } else { #" +
+                                    "<div class='clearfix'  style='padding-left:20px;' > " +
+                                    "<p class='pull-left m0'>" +
+                                            "<div style='text-transform: uppercase;color:gray;font-size:large;' >#: TaskFrom #</div>" +
+                                            "<div style='color:gray;' >#: TaskNo # &nbsp; #: Subject #  <span style='float:right'>#: OptimeText2 #</span></div>" +
+                                            "<div style='text-overflow: ellipsis;width:70%; white-space: nowrap; overflow:hidden;color:gray;' >#= Summary #</div>" +
+                                    "</p>" +
+                                    "</div> " +
+                            "# } #" +
+                           // "<div>#= htmlDecode(Summary) #</div>" +
+
+
+
+                           //"<p class='pull-right m0'>" +
+
+                           //#: kendo.toString(Optime, 'hh:mm')  #
+                           //  //"<span>#: kendo.toString(Optime, 'dd/MM/yyyy')  #</span>" +
+
+                           //  "</p>" +
+
+                           "</a></td> </tr> "
+
+
+        )
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Action("_GetCurrentUserTask_Read", "TaskBox"))
+        .Group(groups => groups.Add(p => p.Tarih))
+        ).Events(ev => ev.DataBound("OnDataBound"))
+        .Selectable()
+        .Scrollable()
+        .Sortable(m =>{m.SortMode(GridSortMode.SingleColumn);
+
+        })
+    )
+</div>
+
+
+<div id="dvTaskDetail" class="col-md-9 paddingFixer0" style="min-height: 600px;
+    overflow-y: auto;">
+
+
+</div>
+
+
+
+<style>
+
+
+
+    .unread {
+
+border-left-width:50px; 
+border-left-color:#0486ee;
+border-left:solid;
+
+    
+    }
+
+     #gridTaskRequest .k-header {
+        display: none;
+    }
+
+    .k-grid tr td {
+        border-bottom: solid;
+        border-bottom-color: lightgray;
+        border-bottom-width: thin;
+       
+    }
+
+     .k-grid tr td a {
+       
+        text-decoration: none;
+    }
+
+    .k-grid .k-group-col, .k-grid .k-hierarchy-col {
+    width: 0.1px;
+}
+    .k-state-selected {
+        background-color: rgba(162, 208, 228, 0.73);
+    }
+
+  
+    .rowDesign {
+        padding-top: 5px;
+        padding-bottom: 5px;
+        background-color: #d4f5ff;
+        text-align: left;
+        font-weight: bold;
+        font-family: -webkit-body;
+    }
+
+    .rowSaat {
+        padding-top: 10px;
+        padding-bottom: 10px;
+      color: #3e3939 !important;
+      font-family:Calibri, Segoe, Arial, Verdana, Tahoma, Sans-Serif;
+    }
+
+        .rowSaat a {
+            color: #3e3939 !important;
+            font-size: 12px;
+        }
+
+    .rowContent {
+        font-size: 12px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+         color: #3e3939 !important;
+         font-family:Calibri, Segoe, Arial, Verdana, Tahoma, Sans-Serif;
+    }
+
+        .rowContent a {
+             color: #3e3939 !important;
+            font-size: 12px;
+        }
+
+    .rowSub {
+        font-size: 14px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        text-transform: uppercase;
+         color: #3e3939 !important;
+         font-family:Calibri, Segoe, Arial, Verdana, Tahoma, Sans-Serif;
+    }
+</style>
+
+<script>
+
+    //$(document).ready(function () {
+
+    //    debugger;
+    //    $(".k-grouping-row").html();
+    //    $('.k-grouping-row td p').each(function () {
+    //        var text = $(this).text();
+    //        alert(text);
+    //        $(this).text(text.replace('OptimeText:', ''));
+    //    });
+
+    //    //$(".k-grouping-row").html($(".k-grouping-row").html().replace("OptimeText:", ""))
+
+
+    //});
+
+    
+
+   
+
+    function GetTaskDetail(tID)
+    {
+        
+        $('#dvTaskDetail').load('@Url.Action("TaskDetail", "TaskBox")', 'taskID=' + tID);
+
+     
+
+    }
+
+    function htmlDecode(value) {
+        return value.replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+    }
+
+</script>

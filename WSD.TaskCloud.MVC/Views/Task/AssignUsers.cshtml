@@ -1,0 +1,237 @@
+﻿
+@using WSD.TaskCloud.Contracts.DataContracts;
+
+<script>
+
+    function onSelect(e) {
+
+        var x = e.item;
+
+    }
+
+    
+
+    $("#filterText").keyup(function (e) {
+        var filterText = $(this).val();
+
+        if (filterText !== "") {
+            $(".selectAll").css("visibility", "hidden");
+            $("#treeview .k-group .k-group .k-in").closest("li").hide();
+            $("#treeview .k-group .k-group .k-in:contains(" + filterText.toUpperCase() + ")").each(function () {
+                $(this).parents("ul, li").each(function () {
+                    $(this).show();
+                });
+            });
+        }
+        else {
+            $("#treeview .k-group").find("li").show();
+            $(".selectAll").css("visibility", "visible");
+        }
+    });
+    $.expr[":"].contains = $.expr.createPseudo(function (arg) {
+        return function (elem) {
+            return $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
+        };
+    });
+</script>
+<div class="windowdiv">
+
+    <div class="kisilercontent">
+        <input id="filterText" type="text" class="TextBoxClass" style="width:inherit" placeholder="Kişiler" />
+        @(
+
+     Html.Kendo().TreeView()
+                 .Name("treeview")
+                 .Checkboxes(checkboxes => checkboxes
+                        .Name("checkedFiles")
+                        .CheckChildren(true))
+                        .Events(e =>
+                        {
+                            e.Select("onSelect");
+                            e.Check("onCheckAssignedUsers");
+                        })
+    .BindTo((IEnumerable<NodeViewModel>
+    )ViewBag.TreeSource, (Kendo.Mvc.UI.Fluent.NavigationBindingFactory<TreeViewItem>
+        mappings) =>
+    {
+        mappings.For<NodeViewModel>
+            (binding => binding.ItemDataBound((item, node) =>
+            {
+                item.Id = node.Id.ToString();
+
+                item.Text = node.Role + "\n " + node.Name;
+                item.Expanded = node.Expanded;
+                item.Checked = node.IsChecked;
+                item.ImageUrl = node.ImgUrl;
+
+
+            })
+            .Children(node => node.Children));
+    })
+        )
+    </div>
+    
+    <div class="buttons" align="center">
+        <div class="col-md-5 row-sep">
+            <button type="submit" class="btn btn-primary btn-block" id="ptlBTN">İptal</button>
+        </div>
+        <div class="col-md-5 row-sep">
+            <button type="submit" class="btn btn-success btn-block" id="secBtn">Seç</button>
+        </div>
+    </div>
+</div>
+<style>
+    .kisilercontent {
+        height: 90%;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        border-bottom:solid 1px;
+        border-bottom-color:lightgray;
+    }
+
+    .windowdiv {
+        border: solid;
+        border-width: 1px;
+        border-color: lightgray;
+        height: inherit;
+    
+    }
+
+    .buttons {
+    
+        margin-top:12px;
+        vertical-align:central;
+    
+    }
+
+    div.k-window-content {
+    position: relative;
+    height: 100%;
+    padding: 1.58em;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    outline: 0;
+}
+
+</style>
+<script>
+    $(document).ready(function () {
+        var seko = 1;
+        $("#ptlBTN").click(function () {
+            var tWindowElement = $('#userswindow');
+            tWindowElement.data('kendoWindow').close();
+        });
+        $("#secBtn").click(function () {
+            var tWindowElement = $('#userswindow');
+            var items = $('#treeview').data('kendoTreeView').getCheckedItems();
+            var isdefined = $('#treeviewAssignedUsers').data('kendoTreeView');
+            if (isdefined == undefined) {
+                $('#treeviewAssignedUsers').html("");
+                var inline = new kendo.data.HierarchicalDataSource({
+                    data: items,
+                    schema: {
+                        model: {
+                            id: "id",
+                            children: "child",
+                            hasChildren: "hasChildren"
+                        }
+                    }
+                });
+
+                $("#treeviewAssignedUsers").kendoTreeView({
+                    dataSource: inline,
+                    dataTextField: ["text", "text"]
+                });
+                $("#treeview").data("kendoTreeView").dataSource.read();
+                tWindowElement.data('kendoWindow').close();
+            }
+            else {
+                $('#treeviewAssignedUsers').html("");
+                var inline = new kendo.data.HierarchicalDataSource({
+                    data: items,
+                    schema: {
+                        model: {
+                            id: "id",
+                            children: "child",
+                            hasChildren: "hasChildren"
+                        }
+                    }
+                });
+
+                $("#treeviewAssignedUsers").kendoTreeView({
+                    dataSource: inline,
+                    dataTextField: ["text", "text"]
+                });
+                $("#treeview").data("kendoTreeView").dataSource.read();
+                tWindowElement.data('kendoWindow').close();
+                $('#treeviewAssignedUsers').html("");
+                var inline = new kendo.data.HierarchicalDataSource({
+                    data: items,
+                    schema: {
+                        model: {
+                            id: "id",
+                            children: "child",
+                            hasChildren: "hasChildren"
+                        }
+                    }
+                });
+
+                $("#treeviewAssignedUsers").kendoTreeView({
+                    dataSource: inline,
+                    dataTextField: ["text", "text"]
+                });
+                $("#treeview").data("kendoTreeView").dataSource.read();
+                tWindowElement.data('kendoWindow').close();
+            }
+            });
+    });
+
+    kendo.ui.TreeView.prototype.getCheckedItems = (function () {
+
+        function getCheckedItems() {
+            var nodes = this.dataSource.view();
+            return getCheckedNodes(nodes,1);
+        }
+
+        function getCheckedNodes(nodes,level) {
+                var node, childCheckedNodes;
+                var checkedNodes = [];
+                debugger;
+                for (var i = 0; i < nodes.length; i++) {
+                    node = nodes[i];
+                    if (node.hasChildren) {
+                        childCheckedNodes = getCheckedNodes(node.children.view(),level+1);
+                        if (childCheckedNodes.length > 0) {
+                            var obj = {
+                                id: node.id,
+                                text: node.text,
+                                uid: node.uid,
+                                child: childCheckedNodes,
+                                hasChildren:true,
+                                level: function () { return level; }
+                            };
+                            checkedNodes.push(obj);
+                        }
+                    }
+                    else {
+                        if (node.checked) {
+                            var obj = {
+                                id:node.id,
+                                text:node.text,
+                                uid:node.uid,
+                                child: null,
+                                hasChildren: false,
+                                level: function () { return level; }
+                            };
+                            checkedNodes.push(obj);
+
+                        }
+                    }
+                }
+
+                return checkedNodes;
+            }
+
+            return getCheckedItems;
+        })();
+</script>

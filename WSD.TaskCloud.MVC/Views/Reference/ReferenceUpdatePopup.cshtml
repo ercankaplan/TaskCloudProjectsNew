@@ -1,0 +1,74 @@
+﻿@model WSD.TaskCloud.Contracts.DataContracts.Referans.ReferenceRequest
+
+
+@using (Ajax.BeginForm("ReferenceUpdate", "Reference", new AjaxOptions { InsertionMode = InsertionMode.Replace, HttpMethod = "Post", UpdateTargetId = "dvResult", OnSuccess = "refOnSuccess", OnFailure = "refOnFailure" }, new { id = "refUpForm" }))
+{
+    <div class="row rowStyle" align="left">
+        <fieldset>
+            <div class="row row-type1">
+                <div class="col-md-5 col-sm-5 col-md-offset-1  row-sep">
+                    <div class="col-md-4 paddingFixer row-sep">
+                        @Html.StarredLabelFor(m => m.FirstName)
+                    </div>
+                    <div class="col-md-8 paddingFixer row-sep">
+                        @(Html.TextBoxFor(i => i.FirstName, new { @class = "TextBoxClass", style = "max-width:310px", autocomplete = "off" }))
+                    </div>
+                </div>
+                <div class="col-md-5 col-sm-5 row-sep">
+                    <div class="col-md-4 paddingFixer row-sep">
+                        @Html.StarredLabelFor(m => m.LastName)
+                    </div>
+                    <div class="col-md-8 paddingFixer row-sep">
+                        @(Html.TextBoxFor(i => i.LastName, new { @class = "TextBoxClass", style = "max-width:310px", autocomplete = "off" }))
+                    </div>
+                </div>
+            </div>
+            <div class="row row-type1">
+                <div class="col-md-5 col-sm-5 col-md-offset-1 row-sep">
+                    <div class="col-md-4 paddingFixer row-sep">
+                        @Html.StarredLabelFor(m => m.TitleID2)
+                    </div>
+                    <div class="col-md-8 paddingFixer row-sep">
+                        @(Html.Kendo().DropDownListFor(i => i.TitleID2)
+                          .DataTextField("Name")
+                          .DataValueField("TitleID")
+                          .OptionLabel("Seçiniz")
+                          .DataSource(source =>
+                          {
+                              source.Read(read =>
+                              {
+                                  read.Action("_GetTitles", "Task");
+                              });
+                          })
+                         .HtmlAttributes(new { @class = "TextBoxDropDown", style = "max-width:310px" })
+                        )
+                        @Html.ValidationMessageFor(i => i.TitleID2)
+                    </div>
+                </div>
+                <div class="col-md-5 col-sm-5 row-sep">
+                    <div class="col-md-4 paddingFixer row-sep">
+                        @Html.StarredLabelFor(m => m.Comment)
+                    </div>
+                    <div class="col-md-8 paddingFixer row-sep">
+                        @(Html.TextAreaFor(i => i.Comment, new { @class = "classTextArea", style = "max-width:310px", autocomplete = "off" }))
+                    </div>
+                </div>
+
+            </div>
+            <div class="row row-type1">
+                <div class="col-md-3 col-sm col-sm-offset-2 col-sm-4 col-md-offset-4">
+                    <button type="submit" class="btn btn-success btn-block" id="sorgulaBtn" style="max-width:310px;">Güncelle</button>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <script>
+    $(function () {
+        var validator = $("#refUpForm").kendoValidator().data("kendoValidator");
+    });
+
+    </script>
+}
+
+
+
